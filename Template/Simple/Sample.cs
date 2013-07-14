@@ -21,8 +21,8 @@ namespace SimpleBefore
 
         public void Dispose()
         {
+            //must be empty
         }
-
     }
 
 }
@@ -62,7 +62,6 @@ namespace SimpleAfter
                 stream = null;
             }
         }
-
     }
 }
 

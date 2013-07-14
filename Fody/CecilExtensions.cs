@@ -8,7 +8,7 @@ public static class CecilExtensions
 {
     public static bool ContainsSkipWeaving(this IEnumerable<CustomAttribute> attributes)
     {
-        return attributes.Any(x => x.AttributeType.DeclaringType.FullName == "Janitor.SkipWeaving");
+        return attributes.Any(x => x.AttributeType.FullName == "Janitor.SkipWeaving");
     }
     public static void RemoveSkipWeaving(this Collection<CustomAttribute> attributes)
     {

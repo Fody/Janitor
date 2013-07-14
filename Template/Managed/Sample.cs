@@ -75,6 +75,5 @@ namespace ManagedAfter
                 stream = null;
             }
         }
-
     }
 }
