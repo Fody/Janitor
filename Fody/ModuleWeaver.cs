@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 
 public partial class ModuleWeaver
 {
@@ -38,7 +39,7 @@ public partial class ModuleWeaver
             }
             var disposeMethod = disposeMethods.First();
 
-            if (disposeMethod.Body.Instructions.Count > 1)
+            if (disposeMethod.Body.Instructions.Count(x=>x.OpCode !=  OpCodes.Nop) > 1)
             {
                 var message = string.Format("Type `{0}` contains a `Dispose` method with code. Either remove the code or add a `[Janitor.SkipWeaving]` attribute to the type.", type.FullName);
                 throw new WeavingException(message);
