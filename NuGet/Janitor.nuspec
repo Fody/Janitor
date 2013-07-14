@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Janitor.Fody</id>
+    <version>$version$</version>
+    <title>Janitor.Fody</title>
+    <authors>Simon Cropp</authors>
+    <owners>Simon Cropp</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>http://github.com/Fody/Janitor</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://raw.github.com/Fody/Janitor/master/Icons/package_icon.png</iconUrl>
+    <description>Fody add-in that helps with implementing IDisposable.</description>
+    <language>en-AU</language>
+    <tags>IDisposable, Dispose, ILWeaving, Fody, Cecil</tags>
+    <dependencies>
+      <dependency id="Fody"/>
+    </dependencies>
+  </metadata>
+</package>
