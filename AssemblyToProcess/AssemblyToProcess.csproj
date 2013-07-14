@@ -43,6 +43,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="WithAttributeToBeRemoved.cs" />
     <Compile Include="WithUnmanagedAndDisposableField.cs" />
     <Compile Include="DisposeInBase\Child.cs" />
     <Compile Include="DisposeInBase\Parent.cs" />

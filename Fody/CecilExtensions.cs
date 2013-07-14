@@ -12,7 +12,7 @@ public static class CecilExtensions
     }
     public static void RemoveSkipWeaving(this Collection<CustomAttribute> attributes)
     {
-        var attribute = attributes.FirstOrDefault(x => x.AttributeType.DeclaringType.FullName == "Janitor.SkipWeaving");
+        var attribute = attributes.FirstOrDefault(x => x.AttributeType.FullName == "Janitor.SkipWeaving");
         if (attribute != null)
         {
             attributes.Remove(attribute);
