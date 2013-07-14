@@ -1,6 +1,7 @@
 ## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
 
 ![Icon](https://raw.github.com/Fody/Janitor/master/Icons/package_icon.png)
+![Icon](https://raw.github.com/Fody/Janitor/master/Icons/Janitor.jpg)
 
 Simplifies the implementation of [IDisposable](http://msdn.microsoft.com/en-us/library/system.idisposable.aspx).
 
@@ -159,7 +160,7 @@ In some cases you may want to have custom code that cleans up your managed resou
 
 ### Custom unmanaged handling 
 
-In some cases you may want to have custom code that cleans up your unmanaged resources. If this is the case add a method `void Disposeunmanaged()`
+In some cases you may want to have custom code that cleans up your unmanaged resources. If this is the case add a method `void DisposeUnmanaged()`
 
 #### Your Code
 
