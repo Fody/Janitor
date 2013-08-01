@@ -95,15 +95,15 @@ namespace ManagedAndUnmanagedAfter
 
         void ThrowIfDisposed()
         {
-            if (IsDisposed())
+            if (disposeSignaled != 0)
             {
-                throw new ObjectDisposedException("Sample");
+                throw new ObjectDisposedException("TemplateClass");
             }
         }
 
         public void Dispose(bool disposing)
         {
-            if (IsDisposed())
+            if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
             {
                 return;
             }
@@ -112,11 +112,6 @@ namespace ManagedAndUnmanagedAfter
                 DisposeManaged();
             }
             DisposeUnmanaged();
-        }
-
-        bool IsDisposed()
-        {
-            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
         }
 
         ~Sample()

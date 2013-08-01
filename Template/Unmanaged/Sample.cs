@@ -38,7 +38,7 @@ namespace UnmanagedBefore
 
 namespace UnmanagedAfter
 {
- 
+
     public class Sample : IDisposable
     {
         IntPtr handle;
@@ -66,15 +66,15 @@ namespace UnmanagedAfter
 
         void ThrowIfDisposed()
         {
-            if (IsDisposed())
+            if (disposeSignaled != 0)
             {
-                throw new ObjectDisposedException("Sample");
+                throw new ObjectDisposedException("TemplateClass");
             }
         }
 
         public void Dispose()
         {
-            if (IsDisposed())
+            if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
             {
                 return;
             }
@@ -82,10 +82,6 @@ namespace UnmanagedAfter
             GC.SuppressFinalize(this);
         }
 
-        bool IsDisposed()
-        {
-            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
-        }
 
         ~Sample()
         {

@@ -66,24 +66,20 @@ namespace ManagedAfter
 
         void ThrowIfDisposed()
         {
-            if (IsDisposed())
+            if (disposeSignaled != 0)
             {
-                throw new ObjectDisposedException("Sample");
+                throw new ObjectDisposedException("TemplateClass");
             }
         }
 
         public void Dispose()
         {
-            if (IsDisposed())
+            if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
             {
                 return;
             }
             DisposeManaged();
         }
 
-        bool IsDisposed()
-        {
-            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
-        }
     }
 }

@@ -14,7 +14,6 @@ public class TypeProcessor
     TypeSystem typeSystem;
     FieldDefinition signaledField;
     MethodDefinition throwIfDisposed;
-    MethodDefinition isDisposedMethod;
 
     public void Process()
     {
@@ -30,7 +29,6 @@ public class TypeProcessor
         }
 
         CreateSignaledField();
-        CreateIsDisposedMethod();
         CreateThrowIfDisposed();
 
         if (disposeUnmanagedMethod == null && disposeManagedMethod == null)
@@ -131,7 +129,9 @@ public class TypeProcessor
     {
         var skipReturnInstruction = Instruction.Create(OpCodes.Nop);
         yield return Instruction.Create(OpCodes.Ldarg_0);
-        yield return Instruction.Create(OpCodes.Call, isDisposedMethod);
+        yield return Instruction.Create(OpCodes.Ldflda, signaledField);
+        yield return Instruction.Create(OpCodes.Ldc_I4_1);
+        yield return Instruction.Create(OpCodes.Call, ModuleWeaver.ExchangeMethodReference);
         yield return Instruction.Create(OpCodes.Brfalse_S, skipReturnInstruction);
         yield return Instruction.Create(OpCodes.Ret);
         yield return skipReturnInstruction;
@@ -231,29 +231,12 @@ public class TypeProcessor
         var collection = throwIfDisposed.Body.Instructions;
         var returnInstruction = Instruction.Create(OpCodes.Ret);
         collection.Add(Instruction.Create(OpCodes.Ldarg_0));
-        collection.Add(Instruction.Create(OpCodes.Call,isDisposedMethod));
+        collection.Add(Instruction.Create(OpCodes.Volatile));
+        collection.Add(Instruction.Create(OpCodes.Ldfld,signaledField));
         collection.Add(Instruction.Create(OpCodes.Brfalse_S, returnInstruction));
         collection.Add(Instruction.Create(OpCodes.Ldstr, TargetType.Name));
         collection.Add(Instruction.Create(OpCodes.Newobj, ModuleWeaver.ExceptionConstructorReference));
         collection.Add(Instruction.Create(OpCodes.Throw));
-        collection.Add(returnInstruction);
-
-    }
-    public void CreateIsDisposedMethod()
-    {
-        TargetType.ThrowIfMethodExists("IsDisposed");
-        isDisposedMethod = new MethodDefinition("IsDisposed", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.Boolean);
-        TargetType.Methods.Add(isDisposedMethod);
-        var collection = isDisposedMethod.Body.Instructions;
-        var returnInstruction = Instruction.Create(OpCodes.Ret);
-        collection.Add(Instruction.Create(OpCodes.Ldarg_0));
-        collection.Add(Instruction.Create(OpCodes.Ldflda, signaledField));
-        collection.Add(Instruction.Create(OpCodes.Ldc_I4_1));
-        collection.Add(Instruction.Create(OpCodes.Call, ModuleWeaver.ExchangeMethodReference));
-        collection.Add(Instruction.Create(OpCodes.Ldc_I4_0));
-        collection.Add(Instruction.Create(OpCodes.Ceq));
-        collection.Add(Instruction.Create(OpCodes.Ldc_I4_0));
-        collection.Add(Instruction.Create(OpCodes.Ceq));
         collection.Add(returnInstruction);
 
     }
