@@ -23,7 +23,7 @@ public class TemplateClass : IDisposable
 
     void ThrowIfDisposed()
     {
-        if (IsDisposed())
+        if (disposeSignaled !=0)
         {
             throw new ObjectDisposedException("TemplateClass");
         }
@@ -37,7 +37,7 @@ public class TemplateClass : IDisposable
 
     public void Dispose(bool disposing)
     {
-        if (IsDisposed())
+        if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
         {
             return;
         }
@@ -46,11 +46,6 @@ public class TemplateClass : IDisposable
             DisposeManaged();
         }
         DisposeUnmanaged();
-    }
-
-    bool IsDisposed()
-    {
-        return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
     }
 
     void DisposeUnmanaged()

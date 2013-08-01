@@ -66,15 +66,15 @@ All instance fields will be cleaned up in the `Dispose` method.
 
         void ThrowIfDisposed()
         {
-            if (IsDisposed())
+            if (disposeSignaled !=0)
             {
-                throw new ObjectDisposedException("Sample");
+                throw new ObjectDisposedException("TemplateClass");
             }
         }
 
         public void Dispose()
         {
-            if (IsDisposed())
+            if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
             {
                 return;
             }
@@ -83,11 +83,6 @@ All instance fields will be cleaned up in the `Dispose` method.
                 stream.Dispose();
                 stream = null;
             }
-        }
-
-        bool IsDisposed()
-        {
-            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
         }
     }
     
@@ -155,24 +150,19 @@ In some cases you may want to have custom code that cleans up your managed resou
 
         void ThrowIfDisposed()
         {
-            if (IsDisposed())
+            if (disposeSignaled !=0)
             {
-                throw new ObjectDisposedException("Sample");
+                throw new ObjectDisposedException("TemplateClass");
             }
         }
 
         public void Dispose()
         {
-            if (IsDisposed())
+            if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
             {
                 return;
             }
             DisposeManaged();
-        }
-
-        bool IsDisposed()
-        {
-            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
         }
     }
 
@@ -240,25 +230,20 @@ In some cases you may want to have custom code that cleans up your unmanaged res
 
         void ThrowIfDisposed()
         {
-            if (IsDisposed())
+            if (disposeSignaled !=0)
             {
-                throw new ObjectDisposedException("Sample");
+                throw new ObjectDisposedException("TemplateClass");
             }
         }
 
         public void Dispose()
         {
-            if (IsDisposed())
+            if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
             {
                 return;
             }
             DisposeUnmanaged();
             GC.SuppressFinalize(this);
-        }
-
-        bool IsDisposed()
-        {
-            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
         }
 
         ~Sample()
@@ -359,15 +344,15 @@ Combining the above two scenarios will give you the following
 
         void ThrowIfDisposed()
         {
-            if (IsDisposed())
+            if (disposeSignaled !=0)
             {
-                throw new ObjectDisposedException("Sample");
+                throw new ObjectDisposedException("TemplateClass");
             }
         }
 
         public void Dispose(bool disposing)
         {
-            if (IsDisposed())
+            if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
             {
                 return;
             }
@@ -376,11 +361,6 @@ Combining the above two scenarios will give you the following
                 DisposeManaged();
             }
             DisposeUnmanaged();
-        }
-
-        bool IsDisposed()
-        {
-            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
         }
 
         ~Sample()
