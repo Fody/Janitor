@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 
 // ReSharper disable NotAccessedField.Local
 namespace SimpleBefore
@@ -33,7 +34,7 @@ namespace SimpleAfter
     public class Sample : IDisposable
     {
         MemoryStream stream;
-        bool isDisposed;
+        volatile int disposeSignaled;
 
         public Sample()
         {
@@ -42,25 +43,34 @@ namespace SimpleAfter
 
         public void Method()
         {
-            if (isDisposed)
+            ThrowIfDisposed();
+            //Some code
+        }
+
+        void ThrowIfDisposed()
+        {
+            if (IsDisposed())
             {
                 throw new ObjectDisposedException("Sample");
             }
-            //Some code
         }
 
         public void Dispose()
         {
-            if (isDisposed)
+            if (IsDisposed())
             {
                 return;
             }
-            isDisposed = true;
             if (stream != null)
             {
                 stream.Dispose();
                 stream = null;
             }
+        }
+
+        bool IsDisposed()
+        {
+            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
         }
     }
 }

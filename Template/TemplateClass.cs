@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 public class TemplateClass : IDisposable
 {
     MemoryStream stream;
-    bool isDisposed;
     IntPtr handle;
+    volatile int disposeSignaled;
 
     public TemplateClass()
     {
@@ -15,11 +17,16 @@ public class TemplateClass : IDisposable
 
     public void Method()
     {
-        if (isDisposed)
+        ThrowIfDisposed();
+        stream.ReadByte();
+    }
+
+    void ThrowIfDisposed()
+    {
+        if (IsDisposed())
         {
             throw new ObjectDisposedException("TemplateClass");
         }
-        stream.ReadByte();
     }
 
     public void Dispose()
@@ -30,16 +37,20 @@ public class TemplateClass : IDisposable
 
     public void Dispose(bool disposing)
     {
-        if (isDisposed)
+        if (IsDisposed())
         {
             return;
         }
-        isDisposed = true;
         if (disposing)
         {
             DisposeManaged();
         }
         DisposeUnmanaged();
+    }
+
+    bool IsDisposed()
+    {
+        return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
     }
 
     void DisposeUnmanaged()
@@ -56,8 +67,9 @@ public class TemplateClass : IDisposable
             stream = null;
         }
     }
-
-    static extern Boolean CloseHandle(IntPtr handle);
+    [DllImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    static extern bool CloseHandle(IntPtr handle);
 
     ~TemplateClass()
     {

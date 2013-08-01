@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace UnmanagedBefore
 {
@@ -13,16 +14,6 @@ namespace UnmanagedBefore
             handle = new IntPtr();
         }
 
-        public void Method()
-        {
-            //Some code
-        }
-
-        public void Dispose()
-        {
-            //must be empty
-        }
-
         void DisposeUnmanaged()
         {
             CloseHandle(handle);
@@ -32,6 +23,15 @@ namespace UnmanagedBefore
         [DllImport("kernel32.dll", SetLastError=true)]
         static extern bool CloseHandle(IntPtr hObject);
 
+        public void Method()
+        {
+            //Some code
+        }
+
+        public void Dispose()
+        {
+            //must be empty
+        }
     }
 
 }
@@ -41,32 +41,12 @@ namespace UnmanagedAfter
  
     public class Sample : IDisposable
     {
-        bool isDisposed;
         IntPtr handle;
+        volatile int disposeSignaled;
 
         public Sample()
         {
             handle = new IntPtr();
-        }
-
-        public void Method()
-        {
-            if (isDisposed)
-            {
-                throw new ObjectDisposedException("Sample");
-            }
-            //Some code
-        }
-
-        public void Dispose()
-        {
-            if (isDisposed)
-            {
-                return;
-            }
-            isDisposed = true;
-            DisposeUnmanaged();
-            GC.SuppressFinalize(this);
         }
 
         void DisposeUnmanaged()
@@ -77,6 +57,35 @@ namespace UnmanagedAfter
 
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern Boolean CloseHandle(IntPtr handle);
+
+        public void Method()
+        {
+            ThrowIfDisposed();
+            //Some code
+        }
+
+        void ThrowIfDisposed()
+        {
+            if (IsDisposed())
+            {
+                throw new ObjectDisposedException("Sample");
+            }
+        }
+
+        public void Dispose()
+        {
+            if (IsDisposed())
+            {
+                return;
+            }
+            DisposeUnmanaged();
+            GC.SuppressFinalize(this);
+        }
+
+        bool IsDisposed()
+        {
+            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
+        }
 
         ~Sample()
         {

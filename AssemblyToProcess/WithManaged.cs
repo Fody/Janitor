@@ -12,4 +12,7 @@ public class WithManaged:IDisposable
 
     public bool DisposeManagedCalled;
 
+    public void Method()
+    {
+    }
 }

@@ -19,17 +19,17 @@ public class ModuleWeaverTests
         beforeAssemblyPath = beforeAssemblyPath.Replace("Debug", "Release");
 #endif
         afterAssemblyPath = beforeAssemblyPath.Replace(".dll", "2.dll");
-        var oldpdb = beforeAssemblyPath.Replace(".dll", ".pdb");
-        var newpdb = beforeAssemblyPath.Replace(".dll", "2.pdb");
+        var oldPdb = beforeAssemblyPath.Replace(".dll", ".pdb");
+        var newPdb = beforeAssemblyPath.Replace(".dll", "2.pdb");
         File.Copy(beforeAssemblyPath, afterAssemblyPath, true);
-        File.Copy(oldpdb, newpdb, true);
+        File.Copy(oldPdb, newPdb, true);
 
         var assemblyResolver = new MockAssemblyResolver
             {
                 Directory = Path.GetDirectoryName(beforeAssemblyPath)
             };
 
-        using (var symbolStream = File.OpenRead(newpdb))
+        using (var symbolStream = File.OpenRead(newPdb))
         {
             var readerParameters = new ReaderParameters
                 {
@@ -60,6 +60,7 @@ public class ModuleWeaverTests
         instance.Dispose();
         isDisposed = GetIsDisposed(instance);
         Assert.IsTrue(isDisposed);
+        Assert.Throws<ObjectDisposedException>(() => instance.Method());
     }
     [Test]
     public void WithManagedAndUnmanaged()
@@ -73,6 +74,7 @@ public class ModuleWeaverTests
         Assert.IsTrue(isDisposed);
         Assert.IsTrue(instance.DisposeManagedCalled);
         Assert.IsTrue(instance.DisposeUnmanagedCalled);
+        Assert.Throws<ObjectDisposedException>(() => instance.Method());
     }
     [Test]
     public void WithManaged()
@@ -85,6 +87,7 @@ public class ModuleWeaverTests
 
         Assert.IsTrue(isDisposed);
         Assert.IsTrue(instance.DisposeManagedCalled);
+        Assert.Throws<ObjectDisposedException>(() => instance.Method());
     }
     [Test]
     public void WithUnmanaged()
@@ -97,6 +100,7 @@ public class ModuleWeaverTests
 
         Assert.IsTrue(isDisposed);
         Assert.IsTrue(instance.DisposeUnmanagedCalled);
+        Assert.Throws<ObjectDisposedException>(() => instance.Method());
     }
     [Test]
     public void WithUnmanagedAndDisposableField()
@@ -110,6 +114,7 @@ public class ModuleWeaverTests
         Assert.IsTrue(isDisposed);
         Assert.IsTrue(instance.DisposeUnmanagedCalled);
         Assert.IsNull(instance.DisposableField);
+        Assert.Throws<ObjectDisposedException>(() => instance.Method());
     }
     [Test]
     public void WhereFieldIsDisposableByBase()
@@ -121,18 +126,20 @@ public class ModuleWeaverTests
         instance.Dispose();
         isChildDisposed = GetIsDisposed(child);
         Assert.IsTrue(isChildDisposed);
+        Assert.Throws<ObjectDisposedException>(() => instance.Method());
     }
 
-    static dynamic GetIsDisposed(dynamic instance)
+    bool GetIsDisposed(dynamic instance)
     {
         Type type = instance.GetType();
         FieldInfo fieldInfo = null;
         while (fieldInfo == null && type != null)
         {
-            fieldInfo = type.GetField("isDisposed", BindingFlags.NonPublic | BindingFlags.Instance);
+            fieldInfo = type.GetField("disposeSignaled", BindingFlags.NonPublic | BindingFlags.Instance);
             type = type.BaseType;
         }
-        return fieldInfo.GetValue(instance);
+        var disposeCount = (int)fieldInfo.GetValue(instance);
+        return disposeCount > 0;
     }
 
     public dynamic GetInstance(string className)

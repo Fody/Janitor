@@ -12,5 +12,8 @@ public class WhereFieldIsDisposableByBase:IDisposable
     {
         Child = new Child();
     }
-    
+
+    public void Method()
+    {
+    }
 }

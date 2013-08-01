@@ -11,8 +11,10 @@ public class TypeProcessor
     public Action<string> LogInfo;
     public ModuleWeaver ModuleWeaver;
     public TypeDefinition TargetType;
-    FieldDefinition isDisposedField;
     TypeSystem typeSystem;
+    FieldDefinition signaledField;
+    MethodDefinition throwIfDisposed;
+    MethodDefinition isDisposedMethod;
 
     public void Process()
     {
@@ -27,7 +29,9 @@ public class TypeProcessor
             disposeManagedMethod = CreateDisposeManagedIfNecessary();
         }
 
-        CreateIsDisposedField();
+        CreateSignaledField();
+        CreateIsDisposedMethod();
+        CreateThrowIfDisposed();
 
         if (disposeUnmanagedMethod == null && disposeManagedMethod == null)
         {
@@ -125,14 +129,12 @@ public class TypeProcessor
 
   public  IEnumerable<Instruction> GetDisposeEscapeInstructions()
     {
-        var skipReturnInstruction = Instruction.Create(OpCodes.Ldarg_0);
+        var skipReturnInstruction = Instruction.Create(OpCodes.Nop);
         yield return Instruction.Create(OpCodes.Ldarg_0);
-        yield return Instruction.Create(OpCodes.Ldfld, isDisposedField);
-        yield return Instruction.Create(OpCodes.Brfalse, skipReturnInstruction);
+        yield return Instruction.Create(OpCodes.Call, isDisposedMethod);
+        yield return Instruction.Create(OpCodes.Brfalse_S, skipReturnInstruction);
         yield return Instruction.Create(OpCodes.Ret);
         yield return skipReturnInstruction;
-        yield return Instruction.Create(OpCodes.Ldc_I4_1);
-        yield return Instruction.Create(OpCodes.Stfld, isDisposedField);
     }
 
 
@@ -187,6 +189,14 @@ public class TypeProcessor
             {
                 continue;
             }
+            if (method.Name == "ThrowIfDisposed")
+            {
+                continue;
+            }
+            if (method.Name == "IsDisposed")
+            {
+                continue;
+            }
             if (!method.HasBody)
             {
                 continue;
@@ -194,29 +204,57 @@ public class TypeProcessor
 
             method.Body.SimplifyMacros();
             var instructions = method.Body.Instructions;
-            var first = instructions.First();
             instructions.InsertAtStart(new []
                                        {
                                            Instruction.Create(OpCodes.Ldarg_0), 
-                                           Instruction.Create(OpCodes.Ldfld, isDisposedField), 
-                                           Instruction.Create(OpCodes.Brfalse, first), 
-                                           Instruction.Create(OpCodes.Ldstr, TargetType.FullName), 
-                                           Instruction.Create(OpCodes.Newobj, ModuleWeaver.ExceptionConstructorReference), 
-                                           Instruction.Create(OpCodes.Throw), 
+                                           Instruction.Create(OpCodes.Call, throwIfDisposed), 
                                        });
             method.Body.OptimizeMacros();
         }
     }
 
-    void CreateIsDisposedField()
+
+    void CreateSignaledField()
     {
-        if (TargetType.Fields.FirstOrDefault(x => x.Name == "isDisposed") != null)
-        {
-            var message = string.Format("Type `{0}` contains a `isDisposed` field. Either remove this field or add a `[Janitor.SkipWeaving]` attribute to the type.", TargetType.FullName);
-            throw new WeavingException(message);
-        }
-        isDisposedField = new FieldDefinition("isDisposed", FieldAttributes.Private, typeSystem.Boolean);
-        TargetType.Fields.Add(isDisposedField);
+        TargetType.ThrowIfMethodExists("disposeSignaled");
+        var volatileInt = new RequiredModifierType(ModuleWeaver.IsVolatileReference, typeSystem.Int32);
+        signaledField = new FieldDefinition("disposeSignaled", FieldAttributes.Private, volatileInt);
+        TargetType.Fields.Add(signaledField);
     }
 
+
+    public void CreateThrowIfDisposed()
+    {
+        TargetType.ThrowIfMethodExists("ThrowIfDisposed");
+        throwIfDisposed = new MethodDefinition("ThrowIfDisposed", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.Void);
+        TargetType.Methods.Add(throwIfDisposed);
+        var collection = throwIfDisposed.Body.Instructions;
+        var returnInstruction = Instruction.Create(OpCodes.Ret);
+        collection.Add(Instruction.Create(OpCodes.Ldarg_0));
+        collection.Add(Instruction.Create(OpCodes.Call,isDisposedMethod));
+        collection.Add(Instruction.Create(OpCodes.Brfalse_S, returnInstruction));
+        collection.Add(Instruction.Create(OpCodes.Ldstr, TargetType.Name));
+        collection.Add(Instruction.Create(OpCodes.Newobj, ModuleWeaver.ExceptionConstructorReference));
+        collection.Add(Instruction.Create(OpCodes.Throw));
+        collection.Add(returnInstruction);
+
+    }
+    public void CreateIsDisposedMethod()
+    {
+        TargetType.ThrowIfMethodExists("IsDisposed");
+        isDisposedMethod = new MethodDefinition("IsDisposed", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.Boolean);
+        TargetType.Methods.Add(isDisposedMethod);
+        var collection = isDisposedMethod.Body.Instructions;
+        var returnInstruction = Instruction.Create(OpCodes.Ret);
+        collection.Add(Instruction.Create(OpCodes.Ldarg_0));
+        collection.Add(Instruction.Create(OpCodes.Ldflda, signaledField));
+        collection.Add(Instruction.Create(OpCodes.Ldc_I4_1));
+        collection.Add(Instruction.Create(OpCodes.Call, ModuleWeaver.ExchangeMethodReference));
+        collection.Add(Instruction.Create(OpCodes.Ldc_I4_0));
+        collection.Add(Instruction.Create(OpCodes.Ceq));
+        collection.Add(Instruction.Create(OpCodes.Ldc_I4_0));
+        collection.Add(Instruction.Create(OpCodes.Ceq));
+        collection.Add(returnInstruction);
+
+    }
 }

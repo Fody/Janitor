@@ -13,9 +13,9 @@ Simplifies the implementation of [IDisposable](http://msdn.microsoft.com/en-us/l
 
  * Looks for all classes with a `Dispose` method.
  * Finds all instance fields that are `IDisposable` and cleans them up.
- * Adds a `isDisposed` field that is set inside `Dispose`.
- * Uses `isDisposed` to add an exit clause to `Dispose`.
- * Uses `isDisposed` to add to all instance methods a guard clause. This will cause an `ObjectDisposedException` to be thrown if the class has been disposed.
+ * Adds a `volatile int disposeSignaled` field that is `Interlocked.Exchange`ed inside `Dispose`.
+ * Uses `disposeSignaled` to add an exit clause to `Dispose`.
+ * Uses `disposeSignaled` to add to all instance methods a guard clause. This will cause an `ObjectDisposedException` to be thrown if the class has been disposed.
  * Supports convention based overrides for custom disposing of managed and unmanaged resources.
  * Adds a finalizer when cleanup of unmanaged resources is required
  * Uses the `Dispose(isDisposing)` convention when cleanup of unmanaged resources is required
@@ -51,7 +51,7 @@ All instance fields will be cleaned up in the `Dispose` method.
     public class Sample : IDisposable
     {
         MemoryStream stream;
-        bool isDisposed;
+        volatile int disposeSignaled;
 
         public Sample()
         {
@@ -60,25 +60,34 @@ All instance fields will be cleaned up in the `Dispose` method.
 
         public void Method()
         {
-            if (isDisposed)
+            ThrowIfDisposed();
+            //Some code
+        }
+
+        void ThrowIfDisposed()
+        {
+            if (IsDisposed())
             {
                 throw new ObjectDisposedException("Sample");
             }
-            //Some code
         }
 
         public void Dispose()
         {
-            if (isDisposed)
+            if (IsDisposed())
             {
                 return;
             }
-            isDisposed = true;
             if (stream != null)
             {
                 stream.Dispose();
                 stream = null;
             }
+        }
+
+        bool IsDisposed()
+        {
+            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
         }
     }
     
@@ -122,30 +131,11 @@ In some cases you may want to have custom code that cleans up your managed resou
     public class Sample : IDisposable
     {
         MemoryStream stream;
-        bool isDisposed;
+        volatile int disposeSignaled;
 
         public Sample()
         {
             stream = new MemoryStream();
-        }
-
-        public void Method()
-        {
-            if (isDisposed)
-            {
-                throw new ObjectDisposedException("Sample");
-            }
-            //Some code
-        }
-
-        public void Dispose()
-        {
-            if (isDisposed)
-            {
-                return;
-            }
-            isDisposed = true;
-            DisposeManaged();
         }
 
         void DisposeManaged()
@@ -155,6 +145,34 @@ In some cases you may want to have custom code that cleans up your managed resou
                 stream.Dispose();
                 stream = null;
             }
+        }
+
+        public void Method()
+        {
+            ThrowIfDisposed();
+            //Some code
+        }
+
+        void ThrowIfDisposed()
+        {
+            if (IsDisposed())
+            {
+                throw new ObjectDisposedException("Sample");
+            }
+        }
+
+        public void Dispose()
+        {
+            if (IsDisposed())
+            {
+                return;
+            }
+            DisposeManaged();
+        }
+
+        bool IsDisposed()
+        {
+            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
         }
     }
 
@@ -191,39 +209,18 @@ In some cases you may want to have custom code that cleans up your unmanaged res
 
         [DllImport("kernel32.dll", SetLastError=true)]
         static extern bool CloseHandle(IntPtr hObject);
-
     }
 
 #### What gets compiled
 
     public class Sample : IDisposable
     {
-        bool isDisposed;
         IntPtr handle;
+        volatile int disposeSignaled;
 
         public Sample()
         {
             handle = new IntPtr();
-        }
-
-        public void Method()
-        {
-            if (isDisposed)
-            {
-                throw new ObjectDisposedException("Sample");
-            }
-            //Some code
-        }
-
-        public void Dispose()
-        {
-            if (isDisposed)
-            {
-                return;
-            }
-            isDisposed = true;
-            DisposeUnmanaged();
-            GC.SuppressFinalize(this);
         }
 
         void DisposeUnmanaged()
@@ -232,8 +229,37 @@ In some cases you may want to have custom code that cleans up your unmanaged res
             handle = IntPtr.Zero;
         }
 
-        [DllImport("kernel32.dll", SetLastError=true)]
+        [DllImport("kernel32.dll", SetLastError = true)]
         static extern Boolean CloseHandle(IntPtr handle);
+
+        public void Method()
+        {
+            ThrowIfDisposed();
+            //Some code
+        }
+
+        void ThrowIfDisposed()
+        {
+            if (IsDisposed())
+            {
+                throw new ObjectDisposedException("Sample");
+            }
+        }
+
+        public void Dispose()
+        {
+            if (IsDisposed())
+            {
+                return;
+            }
+            DisposeUnmanaged();
+            GC.SuppressFinalize(this);
+        }
+
+        bool IsDisposed()
+        {
+            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
+        }
 
         ~Sample()
         {
@@ -285,7 +311,6 @@ Combining the above two scenarios will give you the following
 
         [DllImport("kernel32.dll", SetLastError=true)]
         static extern bool CloseHandle(IntPtr hObject);
-
     }
 
 #### What gets compiled
@@ -293,8 +318,8 @@ Combining the above two scenarios will give you the following
     public class Sample : IDisposable
     {
         MemoryStream stream;
-        bool isDisposed;
         IntPtr handle;
+        volatile int disposeSignaled;
 
         public Sample()
         {
@@ -304,31 +329,8 @@ Combining the above two scenarios will give you the following
 
         public void Method()
         {
-            if (isDisposed)
-            {
-                throw new ObjectDisposedException("Sample");
-            }
+            ThrowIfDisposed();
             //Some code
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        public void Dispose(bool disposing)
-        {
-            if (isDisposed)
-            {
-                return;
-            }
-            isDisposed = true;
-            if (disposing)
-            {
-                DisposeManaged();
-            }
-            DisposeUnmanaged();
         }
 
         void DisposeUnmanaged()
@@ -346,8 +348,40 @@ Combining the above two scenarios will give you the following
             }
         }
 
-        [DllImport("kernel32.dll", SetLastError=true)]
+        [DllImport("kernel32.dll", SetLastError = true)]
         static extern Boolean CloseHandle(IntPtr handle);
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        void ThrowIfDisposed()
+        {
+            if (IsDisposed())
+            {
+                throw new ObjectDisposedException("Sample");
+            }
+        }
+
+        public void Dispose(bool disposing)
+        {
+            if (IsDisposed())
+            {
+                return;
+            }
+            if (disposing)
+            {
+                DisposeManaged();
+            }
+            DisposeUnmanaged();
+        }
+
+        bool IsDisposed()
+        {
+            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
+        }
 
         ~Sample()
         {

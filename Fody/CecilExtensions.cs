@@ -19,6 +19,22 @@ public static class CecilExtensions
         }
     }
 
+    public static void ThrowIfMethodExists(this TypeDefinition typeDefinition, string method)
+    {
+        if (typeDefinition.Methods.Any(x => x.Name == method))
+        {
+            var message = string.Format("Type `{0}` contains a `{1}` method. Either remove this method or add a `[Janitor.SkipWeaving]` attribute to the type.", typeDefinition.FullName, method);
+            throw new WeavingException(message);
+        }
+    }
+    public static void ThrowIfFieldExists(this TypeDefinition typeDefinition, string field)
+    {
+        if (typeDefinition.Fields.Any(x => x.Name == field))
+        {
+            var message = string.Format("Type `{0}` contains a `{1}` field. Either remove this field or add a `[Janitor.SkipWeaving]` attribute to the type.", typeDefinition.FullName, field);
+            throw new WeavingException(message);
+        }
+    }
     public static bool IsClass(this TypeDefinition x)
     {
         return (x.BaseType != null) && !x.IsEnum && !x.IsInterface;

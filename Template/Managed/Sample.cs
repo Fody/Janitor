@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 
 namespace ManagedBefore
 {
@@ -13,6 +14,15 @@ namespace ManagedBefore
             stream = new MemoryStream();
         }
 
+        void DisposeManaged()
+        {
+            if (stream != null)
+            {
+                stream.Dispose();
+                stream = null;
+            }
+        }
+
         public void Method()
         {
             //Some code
@@ -21,15 +31,6 @@ namespace ManagedBefore
         public void Dispose()
         {
             //must be empty
-        }
-
-        void DisposeManaged()
-        {
-            if (stream != null)
-            {
-                stream.Dispose();
-                stream = null;
-            }
         }
     }
 
@@ -41,30 +42,11 @@ namespace ManagedAfter
     public class Sample : IDisposable
     {
         MemoryStream stream;
-        bool isDisposed;
+        volatile int disposeSignaled;
 
         public Sample()
         {
             stream = new MemoryStream();
-        }
-
-        public void Method()
-        {
-            if (isDisposed)
-            {
-                throw new ObjectDisposedException("Sample");
-            }
-            //Some code
-        }
-
-        public void Dispose()
-        {
-            if (isDisposed)
-            {
-                return;
-            }
-            isDisposed = true;
-            DisposeManaged();
         }
 
         void DisposeManaged()
@@ -74,6 +56,34 @@ namespace ManagedAfter
                 stream.Dispose();
                 stream = null;
             }
+        }
+
+        public void Method()
+        {
+            ThrowIfDisposed();
+            //Some code
+        }
+
+        void ThrowIfDisposed()
+        {
+            if (IsDisposed())
+            {
+                throw new ObjectDisposedException("Sample");
+            }
+        }
+
+        public void Dispose()
+        {
+            if (IsDisposed())
+            {
+                return;
+            }
+            DisposeManaged();
+        }
+
+        bool IsDisposed()
+        {
+            return Interlocked.Exchange(ref disposeSignaled, 1) != 0;
         }
     }
 }

@@ -16,4 +16,7 @@ public class WithUnmanagedAndDisposableField : IDisposable
     }
 
     public bool DisposeUnmanagedCalled;
+    public void Method()
+    {
+    }
 }

@@ -18,4 +18,7 @@ public class WithManagedAndUnmanaged:IDisposable
     }
 
     public bool DisposeUnmanagedCalled;
+    public void Method()
+    {
+    }
 }
