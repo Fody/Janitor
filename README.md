@@ -15,10 +15,10 @@ Simplifies the implementation of [IDisposable](http://msdn.microsoft.com/en-us/l
  * Finds all instance fields that are `IDisposable` and cleans them up.
  * Adds a `volatile int disposeSignaled` field that is `Interlocked.Exchange`ed inside `Dispose`.
  * Uses `disposeSignaled` to add an exit clause to `Dispose`.
- * Uses `disposeSignaled` to add to all instance methods a guard clause. This will cause an `ObjectDisposedException` to be thrown if the class has been disposed.
+ * Uses `disposeSignaled` to add a guard clause to all non-private instance methods. This will cause an `ObjectDisposedException` to be thrown if the class has been disposed.
  * Supports convention based overrides for custom disposing of managed and unmanaged resources.
- * Adds a finalizer when cleanup of unmanaged resources is required
- * Uses the `Dispose(isDisposing)` convention when cleanup of unmanaged resources is required
+ * Adds a finalizer when clean-up of unmanaged resources is required
+ * Uses the `Dispose(isDisposing)` convention when clean-up of unmanaged resources is required
 
 ### Simple Case
 
@@ -68,7 +68,7 @@ All instance fields will be cleaned up in the `Dispose` method.
         {
             if (disposeSignaled !=0)
             {
-                throw new ObjectDisposedException("TemplateClass");
+                throw new ObjectDisposedException("Sample");
             }
         }
 
@@ -152,7 +152,7 @@ In some cases you may want to have custom code that cleans up your managed resou
         {
             if (disposeSignaled !=0)
             {
-                throw new ObjectDisposedException("TemplateClass");
+                throw new ObjectDisposedException("Sample");
             }
         }
 
@@ -232,7 +232,7 @@ In some cases you may want to have custom code that cleans up your unmanaged res
         {
             if (disposeSignaled !=0)
             {
-                throw new ObjectDisposedException("TemplateClass");
+                throw new ObjectDisposedException("Sample");
             }
         }
 
@@ -346,7 +346,7 @@ Combining the above two scenarios will give you the following
         {
             if (disposeSignaled !=0)
             {
-                throw new ObjectDisposedException("TemplateClass");
+                throw new ObjectDisposedException("Sample");
             }
         }
 
