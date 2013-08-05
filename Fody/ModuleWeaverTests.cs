@@ -60,8 +60,119 @@ public class ModuleWeaverTests
         instance.Dispose();
         isDisposed = GetIsDisposed(instance);
         Assert.IsTrue(isDisposed);
-        Assert.Throws<ObjectDisposedException>(() => instance.Method());
     }
+
+    [Test]
+    public void EnsurePublicPropertyThrows()
+    {
+        var instance = GetInstance("Simple");
+        instance.Dispose();
+        Assert.Throws<ObjectDisposedException>(() => instance.PublicProperty = "aString");
+        Assert.Throws<ObjectDisposedException>(() => { var x = instance.PublicProperty; });
+    }
+
+    [Test]
+    public void EnsureInternalPropertyThrows()
+    {
+        var instance = GetInstance("Simple");
+        instance.Dispose();
+        var type = (Type)instance.GetType();
+        var setMethodInfo = type.GetMethod("set_InternalProperty", BindingFlags.Instance | BindingFlags.NonPublic);
+        var getMethodInfo = type.GetMethod("get_InternalProperty", BindingFlags.Instance | BindingFlags.NonPublic);
+        var setTargetInvocationException = Assert.Throws<TargetInvocationException>(() => setMethodInfo.Invoke(instance, new object[] { "aString" }));
+        Assert.IsAssignableFrom<ObjectDisposedException>(setTargetInvocationException.InnerException);
+        var getTargetInvocationException = Assert.Throws<TargetInvocationException>(() => getMethodInfo.Invoke(instance, null));
+        Assert.IsAssignableFrom<ObjectDisposedException>(getTargetInvocationException.InnerException);
+    }
+
+    [Test]
+    public void EnsureProtectedPropertyThrows()
+    {
+        var instance = GetInstance("Simple");
+        instance.Dispose();
+        var type = (Type)instance.GetType();
+        var setMethodInfo = type.GetMethod("set_ProtectedProperty", BindingFlags.Instance | BindingFlags.NonPublic);
+        var getMethodInfo = type.GetMethod("get_ProtectedProperty", BindingFlags.Instance | BindingFlags.NonPublic);
+        var setTargetInvocationException = Assert.Throws<TargetInvocationException>(() => setMethodInfo.Invoke(instance, new object[] { "aString" }));
+        Assert.IsAssignableFrom<ObjectDisposedException>(setTargetInvocationException.InnerException);
+        var getTargetInvocationException = Assert.Throws<TargetInvocationException>(() => getMethodInfo.Invoke(instance, null));
+        Assert.IsAssignableFrom<ObjectDisposedException>(getTargetInvocationException.InnerException);
+    }
+
+    [Test]
+    public void EnsurePrivatePropertyDoesNotThrow()
+    {
+        var instance = GetInstance("Simple");
+        instance.Dispose();
+        var type = (Type)instance.GetType();
+        var setMethodInfo = type.GetMethod("set_PrivateProperty", BindingFlags.Instance | BindingFlags.NonPublic);
+        var getMethodInfo = type.GetMethod("get_PrivateProperty", BindingFlags.Instance | BindingFlags.NonPublic);
+        setMethodInfo.Invoke(instance, new object[] {"aString"});
+        getMethodInfo.Invoke(instance, null);
+    }
+
+    [Test]
+    public void EnsureStaticPropertyDoesNotThrow()
+    {
+        var instance = GetInstance("Simple");
+        instance.Dispose();
+        var type = (Type)instance.GetType();
+        var setMethodInfo = type.GetMethod("set_StaticProperty", BindingFlags.Static | BindingFlags.Public);
+        var getMethodInfo = type.GetMethod("get_StaticProperty", BindingFlags.Static | BindingFlags.Public);
+        setMethodInfo.Invoke(null, new object[] { "aString" });
+        getMethodInfo.Invoke(null, null);
+    }
+
+    [Test]
+    public void EnsurePublicMethodThrows()
+    {
+        var instance = GetInstance("Simple");
+        instance.Dispose();
+        Assert.Throws<ObjectDisposedException>(() => instance.PublicMethod());
+    }
+
+    [Test]
+    public void EnsureInternalMethodThrows()
+    {
+        var instance = GetInstance("Simple");
+        instance.Dispose();
+        var type = (Type)instance.GetType();
+        var methodInfo = type.GetMethod("InternalMethod", BindingFlags.Instance | BindingFlags.NonPublic);
+        var targetInvocationException = Assert.Throws<TargetInvocationException>(() => methodInfo.Invoke(instance, null));
+        Assert.IsAssignableFrom<ObjectDisposedException>(targetInvocationException.InnerException);
+    }
+
+    [Test]
+    public void EnsureProtectedMethodThrows()
+    {
+        var instance = GetInstance("Simple");
+        instance.Dispose();
+        var type = (Type)instance.GetType();
+        var methodInfo = type.GetMethod("ProtectedMethod", BindingFlags.Instance | BindingFlags.NonPublic);
+        var targetInvocationException = Assert.Throws<TargetInvocationException>(() => methodInfo.Invoke(instance, null));
+        Assert.IsAssignableFrom<ObjectDisposedException>(targetInvocationException.InnerException);
+    }
+
+    [Test]
+    public void EnsurePrivateMethodDoesNotThrow()
+    {
+        var instance = GetInstance("Simple");
+        instance.Dispose();
+        var type = (Type)instance.GetType();
+        var methodInfo = type.GetMethod("PrivateMethod",BindingFlags.Instance|BindingFlags.NonPublic);
+        methodInfo.Invoke(instance,null);
+    }
+
+    [Test]
+    public void EnsureStaticMethodDoesNotThrow()
+    {
+        var instance = GetInstance("Simple");
+        instance.Dispose();
+        var type = (Type)instance.GetType();
+        var methodInfo = type.GetMethod("StaticMethod",BindingFlags.Static|BindingFlags.Public);
+        methodInfo.Invoke(null,null);
+    }
+
     [Test]
     public void WithManagedAndUnmanaged()
     {
@@ -76,6 +187,7 @@ public class ModuleWeaverTests
         Assert.IsTrue(instance.DisposeUnmanagedCalled);
         Assert.Throws<ObjectDisposedException>(() => instance.Method());
     }
+
     [Test]
     public void WithManaged()
     {
@@ -89,6 +201,7 @@ public class ModuleWeaverTests
         Assert.IsTrue(instance.DisposeManagedCalled);
         Assert.Throws<ObjectDisposedException>(() => instance.Method());
     }
+
     [Test]
     public void WithUnmanaged()
     {
@@ -102,6 +215,7 @@ public class ModuleWeaverTests
         Assert.IsTrue(instance.DisposeUnmanagedCalled);
         Assert.Throws<ObjectDisposedException>(() => instance.Method());
     }
+
     [Test]
     public void WithUnmanagedAndDisposableField()
     {
@@ -116,6 +230,7 @@ public class ModuleWeaverTests
         Assert.IsNull(instance.DisposableField);
         Assert.Throws<ObjectDisposedException>(() => instance.Method());
     }
+
     [Test]
     public void WhereFieldIsDisposableByBase()
     {

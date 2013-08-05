@@ -173,7 +173,7 @@ public class TypeProcessor
     {
         foreach (var method in TargetType.Methods)
         {
-            if (method.Name ==".ctor")
+            if (method.Name == ".ctor")
             {
                 continue;
             }
@@ -201,13 +201,16 @@ public class TypeProcessor
             {
                 continue;
             }
-
+            if (method.IsPrivate)
+            {
+                continue;
+            }
             method.Body.SimplifyMacros();
             var instructions = method.Body.Instructions;
-            instructions.InsertAtStart(new []
+            instructions.InsertAtStart(new[]
                                        {
-                                           Instruction.Create(OpCodes.Ldarg_0), 
-                                           Instruction.Create(OpCodes.Call, throwIfDisposed), 
+                                           Instruction.Create(OpCodes.Ldarg_0),
+                                           Instruction.Create(OpCodes.Call, throwIfDisposed),
                                        });
             method.Body.OptimizeMacros();
         }

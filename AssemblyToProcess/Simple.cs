@@ -12,9 +12,26 @@ public class Simple:IDisposable
     {
         stream = new MemoryStream();
     }
-    public void Method()
+    public string PublicProperty { get; set; }
+    internal string InternalProperty { get; set; }
+    string PrivateProperty { get; set; }
+    public static string StaticProperty { get; set; }
+    protected string ProtectedProperty { get; set; }
+
+    public void PublicMethod()
     {
-        stream.ReadByte();
+    }
+    internal void InternalMethod()
+    {
+    }
+    void PrivateMethod()
+    {
+    }
+    public static void StaticMethod()
+    {
+    }
+    protected void ProtectedMethod()
+    {
     }
     
 }

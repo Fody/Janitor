@@ -17,25 +17,21 @@ public partial class ModuleWeaver
 
         var gcTypeDefinition = msCoreTypes.First(x => x.Name == "GC");
         SuppressFinalizeMethodReference = ModuleDefinition.Import(gcTypeDefinition.Find("SuppressFinalize", "Object"));
+        
         var interlockedTypeDefinition = msCoreTypes.First(x => x.Name == "Interlocked");
         ExchangeMethodReference = ModuleDefinition.Import(interlockedTypeDefinition.Find("Exchange", "Int32&", "Int32"));
 
-        
         var exceptionTypeDefinition = msCoreTypes.First(x => x.Name == "ObjectDisposedException");
 		ExceptionConstructorReference = ModuleDefinition.Import(exceptionTypeDefinition.Find(".ctor", "String"));
+
         var iDisposableTypeDefinition = msCoreTypes.First(x => x.Name == "IDisposable");
         DisposeMethodReference = ModuleDefinition.Import(iDisposableTypeDefinition.Find("Dispose"));
     }
 
     public MethodReference ExchangeMethodReference;
-
     public TypeReference IsVolatileReference;
-
     public MethodReference SuppressFinalizeMethodReference;
-
     public MethodReference ObjectFinalizeReference;
-
     public MethodReference DisposeMethodReference;
     public MethodReference ExceptionConstructorReference;
-
 }
