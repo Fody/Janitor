@@ -43,6 +43,7 @@ namespace UnmanagedAfter
     {
         IntPtr handle;
         volatile int disposeSignaled;
+        bool disposed;
 
         public Sample()
         {
@@ -66,7 +67,7 @@ namespace UnmanagedAfter
 
         void ThrowIfDisposed()
         {
-            if (disposeSignaled != 0)
+            if (disposed)
             {
                 throw new ObjectDisposedException("TemplateClass");
             }
@@ -80,6 +81,7 @@ namespace UnmanagedAfter
             }
             DisposeUnmanaged();
             GC.SuppressFinalize(this);
+            disposed = true;
         }
 
 

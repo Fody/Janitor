@@ -8,6 +8,7 @@ public class TemplateClass : IDisposable
     MemoryStream stream;
     IntPtr handle;
     volatile int disposeSignaled;
+    bool disposed;
 
     public TemplateClass()
     {
@@ -23,7 +24,7 @@ public class TemplateClass : IDisposable
 
     void ThrowIfDisposed()
     {
-        if (disposeSignaled !=0)
+        if (disposed)
         {
             throw new ObjectDisposedException("TemplateClass");
         }
@@ -46,6 +47,7 @@ public class TemplateClass : IDisposable
             DisposeManaged();
         }
         DisposeUnmanaged();
+        disposed = true;
     }
 
     void DisposeUnmanaged()
@@ -62,6 +64,7 @@ public class TemplateClass : IDisposable
             stream = null;
         }
     }
+
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     static extern bool CloseHandle(IntPtr handle);

@@ -11,6 +11,7 @@ public class SimpleDisposeProcessor
         instructions.Clear();
         instructions.Add(TypeProcessor.GetDisposeEscapeInstructions());
         instructions.Add(TypeProcessor.GetDisposeOfFieldInstructions());
+        instructions.Add(TypeProcessor.GetDisposedInstructions());
         instructions.Add(Instruction.Create(OpCodes.Ret));
     }
 }

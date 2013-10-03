@@ -13,6 +13,7 @@ public class TypeProcessor
     public TypeDefinition TargetType;
     TypeSystem typeSystem;
     FieldDefinition signaledField;
+    FieldDefinition disposedField;
     MethodDefinition throwIfDisposed;
 
     public void Process()
@@ -29,6 +30,7 @@ public class TypeProcessor
         }
 
         CreateSignaledField();
+        CreateDisposedField();
         CreateThrowIfDisposed();
 
         if (disposeUnmanagedMethod == null && disposeManagedMethod == null)
@@ -137,6 +139,13 @@ public class TypeProcessor
         yield return skipReturnInstruction;
     }
 
+    public IEnumerable<Instruction> GetDisposedInstructions()
+    {
+        yield return Instruction.Create(OpCodes.Ldarg_0);
+        yield return Instruction.Create(OpCodes.Ldc_I4_1);
+        yield return Instruction.Create(OpCodes.Stfld, disposedField);
+    }
+
 
    public IEnumerable<Instruction> GetDisposeOfFieldInstructions()
     {
@@ -219,10 +228,16 @@ public class TypeProcessor
 
     void CreateSignaledField()
     {
-        TargetType.ThrowIfMethodExists("disposeSignaled");
+        TargetType.ThrowIfFieldExists("disposeSignaled");
         var volatileInt = new RequiredModifierType(ModuleWeaver.IsVolatileReference, typeSystem.Int32);
         signaledField = new FieldDefinition("disposeSignaled", FieldAttributes.Private, volatileInt);
         TargetType.Fields.Add(signaledField);
+    }
+    void CreateDisposedField()
+    {
+        TargetType.ThrowIfFieldExists("disposed");
+        disposedField = new FieldDefinition("disposed",FieldAttributes.Private,typeSystem.Boolean);
+        TargetType.Fields.Add(disposedField);
     }
 
 
@@ -234,8 +249,7 @@ public class TypeProcessor
         var collection = throwIfDisposed.Body.Instructions;
         var returnInstruction = Instruction.Create(OpCodes.Ret);
         collection.Add(Instruction.Create(OpCodes.Ldarg_0));
-        collection.Add(Instruction.Create(OpCodes.Volatile));
-        collection.Add(Instruction.Create(OpCodes.Ldfld,signaledField));
+        collection.Add(Instruction.Create(OpCodes.Ldfld,disposedField));
         collection.Add(Instruction.Create(OpCodes.Brfalse_S, returnInstruction));
         collection.Add(Instruction.Create(OpCodes.Ldstr, TargetType.Name));
         collection.Add(Instruction.Create(OpCodes.Newobj, ModuleWeaver.ExceptionConstructorReference));

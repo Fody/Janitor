@@ -52,6 +52,7 @@ All instance fields will be cleaned up in the `Dispose` method.
     {
         MemoryStream stream;
         volatile int disposeSignaled;
+        bool disposed;
 
         public Sample()
         {
@@ -66,9 +67,9 @@ All instance fields will be cleaned up in the `Dispose` method.
 
         void ThrowIfDisposed()
         {
-            if (disposeSignaled !=0)
+            if (disposed)
             {
-                throw new ObjectDisposedException("Sample");
+                throw new ObjectDisposedException("TemplateClass");
             }
         }
 
@@ -83,7 +84,9 @@ All instance fields will be cleaned up in the `Dispose` method.
                 stream.Dispose();
                 stream = null;
             }
+            disposed = true;
         }
+
     }
     
 ### Custom managed handling 
@@ -127,6 +130,7 @@ In some cases you may want to have custom code that cleans up your managed resou
     {
         MemoryStream stream;
         volatile int disposeSignaled;
+        bool disposed;
 
         public Sample()
         {
@@ -150,9 +154,9 @@ In some cases you may want to have custom code that cleans up your managed resou
 
         void ThrowIfDisposed()
         {
-            if (disposeSignaled !=0)
+            if (disposed)
             {
-                throw new ObjectDisposedException("Sample");
+                throw new ObjectDisposedException("TemplateClass");
             }
         }
 
@@ -163,7 +167,9 @@ In some cases you may want to have custom code that cleans up your managed resou
                 return;
             }
             DisposeManaged();
+            disposed = true;
         }
+
     }
 
 ### Custom unmanaged handling 
@@ -207,6 +213,7 @@ In some cases you may want to have custom code that cleans up your unmanaged res
     {
         IntPtr handle;
         volatile int disposeSignaled;
+        bool disposed;
 
         public Sample()
         {
@@ -230,9 +237,9 @@ In some cases you may want to have custom code that cleans up your unmanaged res
 
         void ThrowIfDisposed()
         {
-            if (disposeSignaled !=0)
+            if (disposed)
             {
-                throw new ObjectDisposedException("Sample");
+                throw new ObjectDisposedException("TemplateClass");
             }
         }
 
@@ -244,7 +251,9 @@ In some cases you may want to have custom code that cleans up your unmanaged res
             }
             DisposeUnmanaged();
             GC.SuppressFinalize(this);
+            disposed = true;
         }
+
 
         ~Sample()
         {
@@ -262,6 +271,8 @@ Combining the above two scenarios will give you the following
     {
         MemoryStream stream;
         IntPtr handle;
+        volatile int disposeSignaled;
+        bool disposed;
 
         public Sample()
         {
@@ -271,12 +282,8 @@ Combining the above two scenarios will give you the following
 
         public void Method()
         {
+            ThrowIfDisposed();
             //Some code
-        }
-
-        public void Dispose()
-        {
-            //must be empty
         }
 
         void DisposeUnmanaged()
@@ -294,8 +301,41 @@ Combining the above two scenarios will give you the following
             }
         }
 
-        [DllImport("kernel32.dll", SetLastError=true)]
-        static extern bool CloseHandle(IntPtr hObject);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern Boolean CloseHandle(IntPtr handle);
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        void ThrowIfDisposed()
+        {
+            if (disposed)
+            {
+                throw new ObjectDisposedException("TemplateClass");
+            }
+        }
+
+        public void Dispose(bool disposing)
+        {
+            if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
+            {
+                return;
+            }
+            if (disposing)
+            {
+                DisposeManaged();
+            }
+            DisposeUnmanaged();
+            disposed = true;
+        }
+
+        ~Sample()
+        {
+            Dispose(false);
+        }
     }
 
 #### What gets compiled

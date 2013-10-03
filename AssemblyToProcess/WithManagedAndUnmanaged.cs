@@ -8,6 +8,8 @@ public class WithManagedAndUnmanaged:IDisposable
     public void DisposeManaged()
     {
         DisposeManagedCalled = true;
+        Property = "a";
+        Method();
     }
 
     public bool DisposeManagedCalled;
@@ -15,8 +17,11 @@ public class WithManagedAndUnmanaged:IDisposable
     public void DisposeUnmanaged()
     {
         DisposeUnmanagedCalled = true;
+        Property = "a";
+        Method();
     }
 
+    public string Property { get; set; }
     public bool DisposeUnmanagedCalled;
     public void Method()
     {

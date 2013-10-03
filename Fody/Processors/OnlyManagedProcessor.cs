@@ -15,7 +15,8 @@ public class OnlyManagedProcessor
         instructions.Add(TypeProcessor.GetDisposeEscapeInstructions());
         instructions.Add(
             Instruction.Create(OpCodes.Ldarg_0),
-            Instruction.Create(OpCodes.Call, DisposeManagedMethod),
-            Instruction.Create(OpCodes.Ret));
+            Instruction.Create(OpCodes.Call, DisposeManagedMethod));
+        instructions.Add(TypeProcessor.GetDisposedInstructions());
+        instructions.Add(Instruction.Create(OpCodes.Ret));
     }
 }

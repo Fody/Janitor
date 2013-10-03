@@ -49,8 +49,11 @@ public class ManagedAndUnmanagedProcessor
             Instruction.Create(OpCodes.Call, DisposeManagedMethod),
             skipDisposeManaged,
             Instruction.Create(OpCodes.Ldarg_0),
-            Instruction.Create(OpCodes.Call, DisposeUnmanagedMethod),
-            Instruction.Create(OpCodes.Ret));
+            Instruction.Create(OpCodes.Call, DisposeUnmanagedMethod)
+            );
+
+        instructions.Add(TypeProcessor.GetDisposedInstructions());
+        instructions.Add(Instruction.Create(OpCodes.Ret));
 
         TypeProcessor.TargetType.Methods.Add(DisposeBoolMethod);
     }

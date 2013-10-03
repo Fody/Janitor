@@ -35,6 +35,7 @@ namespace SimpleAfter
     {
         MemoryStream stream;
         volatile int disposeSignaled;
+        bool disposed;
 
         public Sample()
         {
@@ -49,7 +50,7 @@ namespace SimpleAfter
 
         void ThrowIfDisposed()
         {
-            if (disposeSignaled != 0)
+            if (disposed)
             {
                 throw new ObjectDisposedException("TemplateClass");
             }
@@ -66,6 +67,7 @@ namespace SimpleAfter
                 stream.Dispose();
                 stream = null;
             }
+            disposed = true;
         }
 
     }

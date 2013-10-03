@@ -43,6 +43,7 @@ namespace ManagedAfter
     {
         MemoryStream stream;
         volatile int disposeSignaled;
+        bool disposed;
 
         public Sample()
         {
@@ -66,7 +67,7 @@ namespace ManagedAfter
 
         void ThrowIfDisposed()
         {
-            if (disposeSignaled != 0)
+            if (disposed)
             {
                 throw new ObjectDisposedException("TemplateClass");
             }
@@ -79,6 +80,7 @@ namespace ManagedAfter
                 return;
             }
             DisposeManaged();
+            disposed = true;
         }
 
     }

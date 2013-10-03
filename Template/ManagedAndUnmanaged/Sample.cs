@@ -56,6 +56,7 @@ namespace ManagedAndUnmanagedAfter
         MemoryStream stream;
         IntPtr handle;
         volatile int disposeSignaled;
+        bool disposed;
 
         public Sample()
         {
@@ -95,7 +96,7 @@ namespace ManagedAndUnmanagedAfter
 
         void ThrowIfDisposed()
         {
-            if (disposeSignaled != 0)
+            if (disposed)
             {
                 throw new ObjectDisposedException("TemplateClass");
             }
@@ -112,6 +113,7 @@ namespace ManagedAndUnmanagedAfter
                 DisposeManaged();
             }
             DisposeUnmanaged();
+            disposed = true;
         }
 
         ~Sample()
