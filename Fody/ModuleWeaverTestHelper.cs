@@ -15,7 +15,7 @@ public class ModuleWeaverTestHelper
     {
         BeforeAssemblyPath = Path.GetFullPath(inputAssembly);
 #if (!DEBUG)
-        beforeAssemblyPath = beforeAssemblyPath.Replace("Debug", "Release");
+        BeforeAssemblyPath = BeforeAssemblyPath.Replace("Debug", "Release");
 #endif
         AfterAssemblyPath = BeforeAssemblyPath.Replace(".dll", "2.dll");
         var oldPdb = BeforeAssemblyPath.Replace(".dll", ".pdb");
