@@ -163,6 +163,10 @@ public class TypeProcessor
             {
                 continue;
             }
+            if (field.IsInitOnly)
+            {
+                throw new WeavingException(string.Format("Could not add dispose for field '{0}' since it is marked as readonly. Please change this field to not be readonly.", field.GetName()));
+            }
 
             var skip = Instruction.Create(OpCodes.Nop);
             yield return Instruction.Create(OpCodes.Ldarg_0);

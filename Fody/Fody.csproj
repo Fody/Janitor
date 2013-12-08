@@ -74,6 +74,8 @@
     <Reference Include="System.Xml.Linq" />
     <None Include="FodyWeavers.xml" />
     <Compile Include="CecilExtensions.cs" />
+    <Compile Include="ReadonlyFieldTests.cs" />
+    <Compile Include="ModuleWeaverTestHelper.cs" />
     <Compile Include="Processors\SimpleDisposeProcessor.cs" />
     <Compile Include="Processors\ManagedAndUnmanagedProcessor.cs" />
     <Compile Include="MockAssemblyResolver.cs" />
@@ -92,6 +94,10 @@
     <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj">
       <Project>{7dec4e2d-f872-434e-a267-0bad65299950}</Project>
       <Name>AssemblyToProcess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AssemblyWithReadOnly\AssemblyWithReadOnly.csproj">
+      <Project>{d7d3fa0e-325e-4ad3-b1ed-002b224fc714}</Project>
+      <Name>AssemblyWithReadOnly</Name>
     </ProjectReference>
     <ProjectReference Include="..\ReferenceAssembly\ReferenceAssembly.csproj">
       <Project>{6f416a34-2476-4a6b-b613-f9b46781c00d}</Project>

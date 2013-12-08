@@ -1,54 +1,15 @@
 ﻿using System;
-using System.IO;
 using System.Reflection;
-using Mono.Cecil;
-using Mono.Cecil.Pdb;
 using NUnit.Framework;
 
 [TestFixture]
 public class ModuleWeaverTests
 {
-    string beforeAssemblyPath;
-    string afterAssemblyPath;
-    Assembly assembly;
+    ModuleWeaverTestHelper moduleWeaverTestHelper;
 
     public ModuleWeaverTests()
     {
-        beforeAssemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
-#if (!DEBUG)
-        beforeAssemblyPath = beforeAssemblyPath.Replace("Debug", "Release");
-#endif
-        afterAssemblyPath = beforeAssemblyPath.Replace(".dll", "2.dll");
-        var oldPdb = beforeAssemblyPath.Replace(".dll", ".pdb");
-        var newPdb = beforeAssemblyPath.Replace(".dll", "2.pdb");
-        File.Copy(beforeAssemblyPath, afterAssemblyPath, true);
-        File.Copy(oldPdb, newPdb, true);
-
-        var assemblyResolver = new MockAssemblyResolver
-            {
-                Directory = Path.GetDirectoryName(beforeAssemblyPath)
-            };
-
-        using (var symbolStream = File.OpenRead(newPdb))
-        {
-            var readerParameters = new ReaderParameters
-                {
-                    ReadSymbols = true,
-                    SymbolStream = symbolStream,
-                    SymbolReaderProvider = new PdbReaderProvider()
-                };
-            var moduleDefinition = ModuleDefinition.ReadModule(afterAssemblyPath, readerParameters);
-
-            var weavingTask = new ModuleWeaver
-                {
-                    ModuleDefinition = moduleDefinition,
-                    AssemblyResolver = assemblyResolver,
-                };
-
-            weavingTask.Execute();
-            moduleDefinition.Write(afterAssemblyPath);
-        }
-        assembly = Assembly.LoadFile(afterAssemblyPath);
+        moduleWeaverTestHelper = new ModuleWeaverTestHelper(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
     }
 
     [Test]
@@ -259,13 +220,13 @@ public class ModuleWeaverTests
 
     public dynamic GetInstance(string className)
     {
-        var type = assembly.GetType(className, true);
+        var type = moduleWeaverTestHelper.Assembly.GetType(className, true);
         return Activator.CreateInstance(type);
     }
 
     [Test]
     public void PeVerify()
     {
-        Verifier.Verify(beforeAssemblyPath, afterAssemblyPath);
+        Verifier.Verify(moduleWeaverTestHelper.BeforeAssemblyPath, moduleWeaverTestHelper.AfterAssemblyPath);
     }
 }

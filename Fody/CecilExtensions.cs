@@ -83,6 +83,11 @@ public static class CecilExtensions
         throw new WeavingException(string.Format("Could not find '{0}' on '{1}'", name, typeReference.Name) );
     }
 
+    public static string GetName(this FieldDefinition field)
+    {
+        return string.Format("{0}.{1}", field.DeclaringType.FullName, field.Name);
+    }
+
     public static bool IsMatch(this MethodReference methodReference,string name, params string[] paramTypes)
     {
         if (methodReference.Parameters.Count != paramTypes.Length)

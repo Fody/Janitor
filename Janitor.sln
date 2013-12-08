@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReferenceAssembly", "Refere
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template", "Template\Template.csproj", "{A9C5C7AF-09D1-44E0-BBF2-EBE325B93D50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithReadOnly", "AssemblyWithReadOnly\AssemblyWithReadOnly.csproj", "{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,15 @@ Global
 		{A9C5C7AF-09D1-44E0-BBF2-EBE325B93D50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9C5C7AF-09D1-44E0-BBF2-EBE325B93D50}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A9C5C7AF-09D1-44E0-BBF2-EBE325B93D50}.Release|x86.ActiveCfg = Release|Any CPU
+		{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}.Deployable|Any CPU.ActiveCfg = Deployable|Any CPU
+		{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}.Deployable|Any CPU.Build.0 = Deployable|Any CPU
+		{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}.Deployable|x86.ActiveCfg = Deployable|Any CPU
+		{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
