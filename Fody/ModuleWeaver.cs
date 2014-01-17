@@ -26,7 +26,7 @@ public partial class ModuleWeaver
                 !x.CustomAttributes.ContainsSkipWeaving()))
         {
             var disposeMethods = type.Methods
-                                     .Where(x => !x.IsStatic && x.Name == "Dispose")
+                                     .Where(x => !x.IsStatic && (x.Name == "Dispose" || x.Name == "System.IDisposable.Dispose"))
                                      .ToList();
             if (disposeMethods.Count == 0)
             {

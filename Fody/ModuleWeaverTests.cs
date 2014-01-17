@@ -24,6 +24,17 @@ public class ModuleWeaverTests
     }
 
     [Test]
+    public void EnsureExplicitDisposeMethodIsWeaved()
+    {
+        var instance = GetInstance("WithExplicitDisposeMethod");
+        var isDisposed = GetIsDisposed(instance);
+        Assert.IsFalse(isDisposed);
+        ((IDisposable)instance).Dispose();
+        isDisposed = GetIsDisposed(instance);
+        Assert.IsTrue(isDisposed);
+    }
+
+    [Test]
     public void EnsurePublicPropertyThrows()
     {
         var instance = GetInstance("Simple");
