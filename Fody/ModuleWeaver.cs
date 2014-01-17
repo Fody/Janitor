@@ -40,7 +40,7 @@ public partial class ModuleWeaver
             }
             var disposeMethod = disposeMethods.First();
 
-            if (disposeMethod.Body.Instructions.Count(x=>x.OpCode !=  OpCodes.Nop) > 1)
+            if (!disposeMethod.IsEmptyOrNotImplemented())
             {
                 var message = string.Format("Type `{0}` contains a `Dispose` method with code. Either remove the code or add a `[Janitor.SkipWeaving]` attribute to the type.", type.FullName);
                 throw new WeavingException(message);
