@@ -109,4 +109,9 @@ public static class CecilExtensions
         }
         return true;
     }
+
+    public static bool IsGeneratedCode(this ICustomAttributeProvider value)
+    {
+        return value.CustomAttributes.Any(a => a.AttributeType.Name == "CompilerGeneratedAttribute" || a.AttributeType.Name == "GeneratedCodeAttribute");
+    }
 }

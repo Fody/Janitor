@@ -23,6 +23,7 @@ public partial class ModuleWeaver
             .Where(x => 
                 x.IsClass() && 
                 !x.IsAbstract &&
+                !x.IsGeneratedCode() &&
                 !x.CustomAttributes.ContainsSkipWeaving()))
         {
             var disposeMethods = type.Methods
