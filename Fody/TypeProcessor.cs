@@ -218,6 +218,9 @@ public class TypeProcessor
             {
                 continue;
             }
+
+            var validSequencePoint = method.Body.Instructions.Select(i => i.SequencePoint).FirstOrDefault(sp => sp != null);
+
             method.Body.SimplifyMacros();
             var instructions = method.Body.Instructions;
             instructions.InsertAtStart(new[]
@@ -225,6 +228,8 @@ public class TypeProcessor
                                            Instruction.Create(OpCodes.Ldarg_0),
                                            Instruction.Create(OpCodes.Call, throwIfDisposed),
                                        });
+            if (validSequencePoint != null)
+                instructions[0].HideLineFromDebugger(validSequencePoint);
             method.Body.OptimizeMacros();
         }
     }
