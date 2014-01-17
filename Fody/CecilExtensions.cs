@@ -114,4 +114,21 @@ public static class CecilExtensions
     {
         return value.CustomAttributes.Any(a => a.AttributeType.Name == "CompilerGeneratedAttribute" || a.AttributeType.Name == "GeneratedCodeAttribute");
     }
+
+    public static bool IsEmptyOrNotImplemented(this MethodDefinition method)
+    {
+        var instructions = method.Body.Instructions.Where(i => i.OpCode != OpCodes.Nop && i.OpCode != OpCodes.Ret).ToList();
+
+        if (instructions.Count == 0)
+            return true;
+
+        if (instructions.Count != 2 || instructions[0].OpCode != OpCodes.Newobj || instructions[1].OpCode != OpCodes.Throw)
+            return false;
+
+        var ctor = (MethodReference)instructions[0].Operand;
+        if (ctor.DeclaringType.FullName == "System.NotImplementedException")
+            return true;
+
+        return false;
+    }
 }

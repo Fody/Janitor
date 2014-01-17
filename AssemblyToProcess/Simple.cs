@@ -7,6 +7,7 @@ public class Simple:IDisposable
 
     public void Dispose()
     {
+        throw new System.NotImplementedException();
     }
     public Simple()
     {
