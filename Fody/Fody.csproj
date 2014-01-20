@@ -48,6 +48,10 @@
     <None Include="NugetAssets\Janitor.nuspec" />
     <None Include="NugetAssets\uninstall.ps1" />
     <None Include="packages.config" />
+    <Reference Include="Anotar.Custom">
+      <HintPath>..\packages\Anotar.Custom.Fody.2.7.4.0\Lib\portable-net4+sl4+wp7+windows8\Anotar.Custom.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\Mono.Cecil.0.9.5.4\lib\net40\Mono.Cecil.dll</HintPath>
@@ -75,6 +79,7 @@
     <Reference Include="System.Xml.Linq" />
     <None Include="FodyWeavers.xml" />
     <Compile Include="CecilExtensions.cs" />
+    <Compile Include="Logging.cs" />
     <Compile Include="ReadonlyFieldTests.cs" />
     <Compile Include="ModuleWeaverTestHelper.cs" />
     <Compile Include="Processors\SimpleDisposeProcessor.cs" />

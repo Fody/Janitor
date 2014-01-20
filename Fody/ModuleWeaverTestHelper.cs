@@ -3,6 +3,7 @@ using System.Reflection;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
 using Scalpel;
+using System.Collections.Generic;
 
 [Remove]
 public class ModuleWeaverTestHelper
@@ -10,6 +11,7 @@ public class ModuleWeaverTestHelper
     public string BeforeAssemblyPath;
     public string AfterAssemblyPath;
     public Assembly Assembly;
+    public List<string> Errors;
 
     public ModuleWeaverTestHelper(string inputAssembly)
     {
@@ -22,6 +24,8 @@ public class ModuleWeaverTestHelper
         var newPdb = BeforeAssemblyPath.Replace(".dll", "2.pdb");
         File.Copy(BeforeAssemblyPath, AfterAssemblyPath, true);
         File.Copy(oldPdb, newPdb, true);
+
+        Errors = new List<string>();
 
         var assemblyResolver = new MockAssemblyResolver
             {
@@ -42,6 +46,7 @@ public class ModuleWeaverTestHelper
                 {
                     ModuleDefinition = moduleDefinition,
                     AssemblyResolver = assemblyResolver,
+                    LogError = s => Errors.Add(s),
                 };
 
             weavingTask.Execute();

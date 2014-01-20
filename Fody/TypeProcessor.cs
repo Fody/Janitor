@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Anotar.Custom;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
@@ -27,6 +28,14 @@ public class TypeProcessor
         if (disposeUnmanagedMethod != null && disposeManagedMethod == null)
         {
             disposeManagedMethod = CreateDisposeManagedIfNecessary();
+        }
+
+        bool error = TargetType.FieldExists("disposeSignaled") | 
+                     TargetType.FieldExists("disposed") | 
+                     TargetType.MethodExists("ThrowIfDisposed");
+        if (error)
+        {
+            return;
         }
 
         CreateSignaledField();
@@ -165,7 +174,8 @@ public class TypeProcessor
             }
             if (field.IsInitOnly)
             {
-                throw new WeavingException(string.Format("Could not add dispose for field '{0}' since it is marked as readonly. Please change this field to not be readonly.", field.GetName()));
+                LogTo.Error("Could not add dispose for field '{0}' since it is marked as readonly. Please change this field to not be readonly.", field.GetName());
+                continue;
             }
 
             var skip = Instruction.Create(OpCodes.Nop);
@@ -237,14 +247,12 @@ public class TypeProcessor
 
     void CreateSignaledField()
     {
-        TargetType.ThrowIfFieldExists("disposeSignaled");
         var volatileInt = new RequiredModifierType(ModuleWeaver.IsVolatileReference, typeSystem.Int32);
         signaledField = new FieldDefinition("disposeSignaled", FieldAttributes.Private, volatileInt);
         TargetType.Fields.Add(signaledField);
     }
     void CreateDisposedField()
     {
-        TargetType.ThrowIfFieldExists("disposed");
         disposedField = new FieldDefinition("disposed",FieldAttributes.Private,typeSystem.Boolean);
         TargetType.Fields.Add(disposedField);
     }
@@ -252,7 +260,6 @@ public class TypeProcessor
 
     public void CreateThrowIfDisposed()
     {
-        TargetType.ThrowIfMethodExists("ThrowIfDisposed");
         throwIfDisposed = new MethodDefinition("ThrowIfDisposed", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.Void);
         TargetType.Methods.Add(throwIfDisposed);
         var collection = throwIfDisposed.Body.Instructions;

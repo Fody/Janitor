@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Anotar.Custom;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
@@ -19,21 +20,23 @@ public static class CecilExtensions
         }
     }
 
-    public static void ThrowIfMethodExists(this TypeDefinition typeDefinition, string method)
+    public static bool MethodExists(this TypeDefinition typeDefinition, string method)
     {
         if (typeDefinition.Methods.Any(x => x.Name == method))
         {
-            var message = string.Format("Type `{0}` contains a `{1}` method. Either remove this method or add a `[Janitor.SkipWeaving]` attribute to the type.", typeDefinition.FullName, method);
-            throw new WeavingException(message);
+            LogTo.Error("Type `{0}` contains a `{1}` method. Either remove this method or add a `[Janitor.SkipWeaving]` attribute to the type.", typeDefinition.FullName, method);
+            return true;
         }
+        return false;
     }
-    public static void ThrowIfFieldExists(this TypeDefinition typeDefinition, string field)
+    public static bool FieldExists(this TypeDefinition typeDefinition, string field)
     {
         if (typeDefinition.Fields.Any(x => x.Name == field))
         {
-            var message = string.Format("Type `{0}` contains a `{1}` field. Either remove this field or add a `[Janitor.SkipWeaving]` attribute to the type.", typeDefinition.FullName, field);
-            throw new WeavingException(message);
+            LogTo.Error("Type `{0}` contains a `{1}` field. Either remove this field or add a `[Janitor.SkipWeaving]` attribute to the type.", typeDefinition.FullName, field);
+            return true;
         }
+        return false;
     }
     public static bool IsClass(this TypeDefinition x)
     {
@@ -88,7 +91,7 @@ public static class CecilExtensions
         return string.Format("{0}.{1}", field.DeclaringType.FullName, field.Name);
     }
 
-    public static bool IsMatch(this MethodReference methodReference,string name, params string[] paramTypes)
+    public static bool IsMatch(this MethodReference methodReference, string name, params string[] paramTypes)
     {
         if (methodReference.Parameters.Count != paramTypes.Length)
         {
