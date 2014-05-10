@@ -1,7 +1,7 @@
 ﻿using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-public class OnlyUnmangedProcessor
+public class OnlyUnmanagedProcessor
 {
     public TypeProcessor TypeProcessor;
     public MethodDefinition DisposeUnmanagedMethod;

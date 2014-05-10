@@ -30,7 +30,7 @@ public class TypeProcessor
             disposeManagedMethod = CreateDisposeManagedIfNecessary();
         }
 
-        bool error = TargetType.FieldExists("disposeSignaled") | 
+        var error = TargetType.FieldExists("disposeSignaled") | 
                      TargetType.FieldExists("disposed") | 
                      TargetType.MethodExists("ThrowIfDisposed");
         if (error)
@@ -62,7 +62,7 @@ public class TypeProcessor
         }
         else if (disposeManagedMethod == null)
         {
-            var methodProcessor = new OnlyUnmangedProcessor
+            var methodProcessor = new OnlyUnmanagedProcessor
                                   {
                                       TypeProcessor = this,
                                       DisposeUnmanagedMethod = disposeUnmanagedMethod

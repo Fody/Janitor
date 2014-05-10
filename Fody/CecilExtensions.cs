@@ -153,8 +153,10 @@ public static class CecilExtensions
         // with a valid SequencePoint. That way IL can be hidden from
         // the Debugger. See
         // http://blogs.msdn.com/b/abhinaba/archive/2005/10/10/479016.aspx
-        i.SequencePoint = new SequencePoint(doc);
-        i.SequencePoint.StartLine = 0xfeefee;
-        i.SequencePoint.EndLine = 0xfeefee;
+        i.SequencePoint = new SequencePoint(doc)
+            {
+                StartLine = 0xfeefee, 
+                EndLine = 0xfeefee
+            };
     }
 }
