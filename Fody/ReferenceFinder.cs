@@ -12,9 +12,6 @@ public partial class ModuleWeaver
 
         ObjectFinalizeReference = ModuleDefinition.Import(ModuleDefinition.TypeSystem.Object.Resolve().Find("Finalize"));
 
-        var isVolatileTypeDefinition = msCoreTypes.First(x => x.Name == "IsVolatile");
-        IsVolatileReference = ModuleDefinition.Import(isVolatileTypeDefinition);
-
         var gcTypeDefinition = msCoreTypes.First(x => x.Name == "GC");
         SuppressFinalizeMethodReference = ModuleDefinition.Import(gcTypeDefinition.Find("SuppressFinalize", "Object"));
         
@@ -29,7 +26,6 @@ public partial class ModuleWeaver
     }
 
     public MethodReference ExchangeMethodReference;
-    public TypeReference IsVolatileReference;
     public MethodReference SuppressFinalizeMethodReference;
     public MethodReference ObjectFinalizeReference;
     public MethodReference DisposeMethodReference;

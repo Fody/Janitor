@@ -247,8 +247,7 @@ public class TypeProcessor
 
     void CreateSignaledField()
     {
-        var volatileInt = new RequiredModifierType(ModuleWeaver.IsVolatileReference, typeSystem.Int32);
-        signaledField = new FieldDefinition("disposeSignaled", FieldAttributes.Private, volatileInt);
+        signaledField = new FieldDefinition("disposeSignaled", FieldAttributes.Private, typeSystem.Int32);
         TargetType.Fields.Add(signaledField);
     }
     void CreateDisposedField()
