@@ -7,9 +7,12 @@ Simplifies the implementation of [IDisposable](http://msdn.microsoft.com/en-us/l
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
-## Nuget package 
 
-http://nuget.org/packages/Janitor.Fody 
+## The nuget package  [![NuGet Status](http://img.shields.io/nuget/v/Janitor.Fody.svg?style=flat)](https://www.nuget.org/packages/Janitor.Fody/)
+
+https://nuget.org/packages/Janitor.Fody/
+
+    PM> Install-Package Janitor.Fody
 
 ## What it does 
 
