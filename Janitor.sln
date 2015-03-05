@@ -20,8 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A98F4D
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fody.Resharper.Tests", "Fody.Resharper.Tests\Fody.Resharper.Tests.csproj", "{C10D2935-F0F9-4D80-A259-F8C563BDCABD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,15 +82,6 @@ Global
 		{C658F4A0-4D78-4906-BD9B-376BB56FB135}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C658F4A0-4D78-4906-BD9B-376BB56FB135}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C658F4A0-4D78-4906-BD9B-376BB56FB135}.Release|x86.ActiveCfg = Release|Any CPU
-		{C10D2935-F0F9-4D80-A259-F8C563BDCABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C10D2935-F0F9-4D80-A259-F8C563BDCABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C10D2935-F0F9-4D80-A259-F8C563BDCABD}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{C10D2935-F0F9-4D80-A259-F8C563BDCABD}.Deployable|Any CPU.ActiveCfg = Debug|Any CPU
-		{C10D2935-F0F9-4D80-A259-F8C563BDCABD}.Deployable|Any CPU.Build.0 = Debug|Any CPU
-		{C10D2935-F0F9-4D80-A259-F8C563BDCABD}.Deployable|x86.ActiveCfg = Debug|Any CPU
-		{C10D2935-F0F9-4D80-A259-F8C563BDCABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C10D2935-F0F9-4D80-A259-F8C563BDCABD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C10D2935-F0F9-4D80-A259-F8C563BDCABD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

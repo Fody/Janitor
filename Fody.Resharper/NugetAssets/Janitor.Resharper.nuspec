@@ -13,7 +13,6 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://raw.github.com/Fody/Janitor/master/Icons/package_icon.png</iconUrl>
     <copyright>Copyright 2015 Daniel Marbach, Simon Cropp</copyright>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
       <dependency id="Wave" version="[1.0]" />
     </dependencies>
@@ -21,7 +20,7 @@
   </metadata>
   <files>
     <!-- Plugin -->
-    <file src="\bin\Release\Janitor.Fody.Resharper.9.0.dll"
+    <file src="..\bin\Release\Janitor.Fody.Resharper.9.0.dll"
           target="DotFiles" />
   </files>
 </package>
