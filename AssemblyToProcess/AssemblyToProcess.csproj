@@ -43,6 +43,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="WithTypeConstraint.cs" />
     <Compile Include="WithYield.cs" />
     <Compile Include="WithAttributeToBeRemoved.cs" />
     <Compile Include="WithExplicitDisposeMethod.cs" />

@@ -4,7 +4,7 @@ using Mono.Cecil.Cil;
 public class OnlyUnmanagedProcessor
 {
     public TypeProcessor TypeProcessor;
-    public MethodDefinition DisposeUnmanagedMethod;
+    public MethodReference DisposeUnmanagedMethod;
     MethodDefinition disposeBoolMethod;
 
     public void Process()

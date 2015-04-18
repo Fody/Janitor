@@ -72,6 +72,15 @@ public class ModuleWeaverTests
     }
 
     [Test]
+    public void WithTypeConstraint()
+    {
+        var type = moduleWeaverTestHelper.Assembly.GetType("WithTypeConstraint`1", true);
+        var genericType = type.MakeGenericType(typeof(int));
+        var instance = (dynamic)Activator.CreateInstance(genericType);
+        instance.Dispose();
+    }
+
+    [Test]
     public void EnsurePrivatePropertyDoesNotThrow()
     {
         var instance = GetInstance("Simple");
@@ -79,7 +88,7 @@ public class ModuleWeaverTests
         var type = (Type)instance.GetType();
         var setMethodInfo = type.GetMethod("set_PrivateProperty", BindingFlags.Instance | BindingFlags.NonPublic);
         var getMethodInfo = type.GetMethod("get_PrivateProperty", BindingFlags.Instance | BindingFlags.NonPublic);
-        setMethodInfo.Invoke(instance, new object[] {"aString"});
+        setMethodInfo.Invoke(instance, new object[] { "aString" });
         getMethodInfo.Invoke(instance, null);
     }
 

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+// ReSharper disable UnusedMember.Local
 
 namespace ManagedAndUnmanagedBefore
 {

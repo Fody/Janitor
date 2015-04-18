@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+// ReSharper disable UnusedMember.Local
 
 public class Simple:IDisposable
 {

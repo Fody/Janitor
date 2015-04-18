@@ -6,8 +6,8 @@ public class ManagedAndUnmanagedProcessor
     MethodDefinition DisposeBoolMethod;
     TypeSystem typeSystem;
     public TypeProcessor TypeProcessor;
-    public MethodDefinition DisposeManagedMethod;
-    public MethodDefinition DisposeUnmanagedMethod;
+    public MethodReference DisposeManagedMethod;
+    public MethodReference DisposeUnmanagedMethod;
 
     public void Process()
     {

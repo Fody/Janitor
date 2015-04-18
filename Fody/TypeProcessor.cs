@@ -9,30 +9,29 @@ using Mono.Cecil.Rocks;
 public class TypeProcessor
 {
     public MethodDefinition DisposeMethod;
-    public Action<string> LogInfo;
     public ModuleWeaver ModuleWeaver;
     public TypeDefinition TargetType;
     TypeSystem typeSystem;
-    FieldDefinition signaledField;
-    FieldDefinition disposedField;
-    MethodDefinition throwIfDisposed;
+    FieldReference signaledField;
+    FieldReference disposedField;
+    MethodReference throwIfDisposed;
 
     public void Process()
     {
         typeSystem = ModuleWeaver.ModuleDefinition.TypeSystem;
         var disposeManagedMethod = TargetType.Methods
-                                             .FirstOrDefault(x => !x.IsStatic && x.IsMatch("DisposeManaged"));
+            .FirstOrDefault(x => !x.IsStatic && x.IsMatch("DisposeManaged"));
         var disposeUnmanagedMethod = TargetType.Methods
-                                               .FirstOrDefault(x => !x.IsStatic && x.IsMatch("DisposeUnmanaged"));
+            .FirstOrDefault(x => !x.IsStatic && x.IsMatch("DisposeUnmanaged"));
 
         if (disposeUnmanagedMethod != null && disposeManagedMethod == null)
         {
             disposeManagedMethod = CreateDisposeManagedIfNecessary();
         }
 
-        var error = TargetType.FieldExists("disposeSignaled") | 
-                     TargetType.FieldExists("disposed") | 
-                     TargetType.MethodExists("ThrowIfDisposed");
+        var error = TargetType.FieldExists("disposeSignaled") |
+                    TargetType.FieldExists("disposed") |
+                    TargetType.MethodExists("ThrowIfDisposed");
         if (error)
         {
             return;
@@ -55,7 +54,7 @@ public class TypeProcessor
             var methodProcessor = new OnlyManagedProcessor
                                   {
                                       TypeProcessor = this,
-                                      DisposeManagedMethod = disposeManagedMethod
+                                      DisposeManagedMethod = disposeManagedMethod.GetGeneric()
                                   };
             methodProcessor.Process();
 
@@ -65,7 +64,7 @@ public class TypeProcessor
             var methodProcessor = new OnlyUnmanagedProcessor
                                   {
                                       TypeProcessor = this,
-                                      DisposeUnmanagedMethod = disposeUnmanagedMethod
+                                      DisposeUnmanagedMethod = disposeUnmanagedMethod.GetGeneric()
                                   };
             methodProcessor.Process();
         }
@@ -74,8 +73,8 @@ public class TypeProcessor
             var methodProcessor = new ManagedAndUnmanagedProcessor
                                   {
                                       TypeProcessor = this,
-                                      DisposeUnmanagedMethod = disposeUnmanagedMethod,
-                                      DisposeManagedMethod = disposeManagedMethod
+                                      DisposeUnmanagedMethod = disposeUnmanagedMethod.GetGeneric(),
+                                      DisposeManagedMethod = disposeManagedMethod.GetGeneric()
                                   };
             methodProcessor.Process();
         }
@@ -112,7 +111,7 @@ public class TypeProcessor
                              {
                                  TryStart = tryStart,
                                  TryEnd = tryEnd,
-                                 HandlerStart = tryEnd, 
+                                 HandlerStart = tryEnd,
                                  HandlerEnd = ret
                              };
 
@@ -136,7 +135,7 @@ public class TypeProcessor
     }
 
 
-  public  IEnumerable<Instruction> GetDisposeEscapeInstructions()
+    public IEnumerable<Instruction> GetDisposeEscapeInstructions()
     {
         var skipReturnInstruction = Instruction.Create(OpCodes.Nop);
         yield return Instruction.Create(OpCodes.Ldarg_0);
@@ -156,7 +155,7 @@ public class TypeProcessor
     }
 
 
-   public IEnumerable<Instruction> GetDisposeOfFieldInstructions()
+    public IEnumerable<Instruction> GetDisposeOfFieldInstructions()
     {
         foreach (var field in TargetType.Fields.Reverse())
         {
@@ -247,29 +246,32 @@ public class TypeProcessor
 
     void CreateSignaledField()
     {
-        signaledField = new FieldDefinition("disposeSignaled", FieldAttributes.Private, typeSystem.Int32);
-        TargetType.Fields.Add(signaledField);
-    }
-    void CreateDisposedField()
-    {
-        disposedField = new FieldDefinition("disposed",FieldAttributes.Private,typeSystem.Boolean);
-        TargetType.Fields.Add(disposedField);
+        var field = new FieldDefinition("disposeSignaled", FieldAttributes.Private, typeSystem.Int32);
+        TargetType.Fields.Add(field);
+        signaledField = field.GetGeneric();
     }
 
+    void CreateDisposedField()
+    {
+        var field = new FieldDefinition("disposed", FieldAttributes.Private, typeSystem.Boolean);
+        TargetType.Fields.Add(field);
+        disposedField = field.GetGeneric();
+    }
 
     public void CreateThrowIfDisposed()
     {
-        throwIfDisposed = new MethodDefinition("ThrowIfDisposed", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.Void);
-        TargetType.Methods.Add(throwIfDisposed);
-        var collection = throwIfDisposed.Body.Instructions;
+        var method = new MethodDefinition("ThrowIfDisposed", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.Void);
+        TargetType.Methods.Add(method);
+        var collection = method.Body.Instructions;
         var returnInstruction = Instruction.Create(OpCodes.Ret);
         collection.Add(Instruction.Create(OpCodes.Ldarg_0));
-        collection.Add(Instruction.Create(OpCodes.Ldfld,disposedField));
+        collection.Add(Instruction.Create(OpCodes.Ldfld, disposedField));
         collection.Add(Instruction.Create(OpCodes.Brfalse_S, returnInstruction));
         collection.Add(Instruction.Create(OpCodes.Ldstr, TargetType.Name));
         collection.Add(Instruction.Create(OpCodes.Newobj, ModuleWeaver.ExceptionConstructorReference));
         collection.Add(Instruction.Create(OpCodes.Throw));
         collection.Add(returnInstruction);
 
+        throwIfDisposed = method.GetGeneric();
     }
 }

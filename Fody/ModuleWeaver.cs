@@ -63,7 +63,6 @@ public partial class ModuleWeaver
                                       DisposeMethod = disposeMethod,
                                       ModuleWeaver = this,
                                       TargetType = type,
-                                      LogInfo = LogInfo
                                   };
             methodProcessor.Process();
         }

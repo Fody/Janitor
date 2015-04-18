@@ -6,7 +6,7 @@ public class OnlyManagedProcessor
 {
     public Action<string> LogInfo;
     public TypeProcessor TypeProcessor;
-    public MethodDefinition DisposeManagedMethod;
+    public MethodReference DisposeManagedMethod;
 
     public void Process()
     {

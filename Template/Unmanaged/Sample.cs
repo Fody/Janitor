@@ -14,6 +14,7 @@ namespace UnmanagedBefore
             handle = new IntPtr();
         }
 
+        // ReSharper disable once UnusedMember.Local
         void DisposeUnmanaged()
         {
             CloseHandle(handle);

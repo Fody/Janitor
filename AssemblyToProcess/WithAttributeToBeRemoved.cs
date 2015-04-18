@@ -5,5 +5,4 @@ public class WithAttributeToBeRemoved
 {
     [SkipWeaving]
     bool DisposeManagedCalled;
-
 }

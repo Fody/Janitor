@@ -14,6 +14,7 @@ namespace ManagedBefore
             stream = new MemoryStream();
         }
 
+        // ReSharper disable once UnusedMember.Local
         void DisposeManaged()
         {
             if (stream != null)
