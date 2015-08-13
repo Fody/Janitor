@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fody", "Fody\Fody.csproj", "{C3578A7B-09A6-4444-9383-0DEAFA4958BD}"
 EndProject
@@ -12,6 +12,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template", "Template\Template.csproj", "{A9C5C7AF-09D1-44E0-BBF2-EBE325B93D50}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithReadOnly", "AssemblyWithReadOnly\AssemblyWithReadOnly.csproj", "{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fody.Resharper.9.0", "Fody.Resharper\Fody.Resharper.9.0.csproj", "{C658F4A0-4D78-4906-BD9B-376BB56FB135}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A98F4DEF-47AF-47AC-9771-E0BC96201E9F}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +73,15 @@ Global
 		{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}.Release|x86.ActiveCfg = Release|Any CPU
+		{C658F4A0-4D78-4906-BD9B-376BB56FB135}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C658F4A0-4D78-4906-BD9B-376BB56FB135}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C658F4A0-4D78-4906-BD9B-376BB56FB135}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C658F4A0-4D78-4906-BD9B-376BB56FB135}.Deployable|Any CPU.ActiveCfg = Debug|Any CPU
+		{C658F4A0-4D78-4906-BD9B-376BB56FB135}.Deployable|Any CPU.Build.0 = Debug|Any CPU
+		{C658F4A0-4D78-4906-BD9B-376BB56FB135}.Deployable|x86.ActiveCfg = Debug|Any CPU
+		{C658F4A0-4D78-4906-BD9B-376BB56FB135}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C658F4A0-4D78-4906-BD9B-376BB56FB135}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C658F4A0-4D78-4906-BD9B-376BB56FB135}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

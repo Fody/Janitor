@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Janitor.Fody</id>
+    <title>Resharper support for Janitor.Fody</title>
+    <version>$version$</version>
+    <authors>Daniel Marbach, Simon Cropp</authors>
+    <owners>Daniel Marbach, Simon Cropp</owners>
+    <description>Resharper support for Janitor.Fody</description>
+    <summary>A unit test provider for xUnit.net</summary>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>http://github.com/Fody/Janitor</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://raw.github.com/Fody/Janitor/master/Icons/package_icon.png</iconUrl>
+    <copyright>Copyright 2015 Daniel Marbach, Simon Cropp</copyright>
+    <dependencies>
+      <dependency id="Wave" version="[1.0]" />
+    </dependencies>
+    <tags>resharper fody janitor</tags>
+  </metadata>
+  <files>
+    <!-- Plugin -->
+    <file src="..\bin\Release\Janitor.Fody.Resharper.9.0.dll"
+          target="DotFiles" />
+  </files>
+</package>
