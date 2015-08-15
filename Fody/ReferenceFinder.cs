@@ -10,19 +10,19 @@ public partial class ModuleWeaver
         var msCoreLibDefinition = assemblyResolver.Resolve("mscorlib");
         var msCoreTypes = msCoreLibDefinition.MainModule.Types;
 
-        ObjectFinalizeReference = ModuleDefinition.Import(ModuleDefinition.TypeSystem.Object.Resolve().Find("Finalize"));
+        ObjectFinalizeReference = ModuleDefinition.ImportReference(ModuleDefinition.TypeSystem.Object.Resolve().Find("Finalize"));
 
         var gcTypeDefinition = msCoreTypes.First(x => x.Name == "GC");
-        SuppressFinalizeMethodReference = ModuleDefinition.Import(gcTypeDefinition.Find("SuppressFinalize", "Object"));
+        SuppressFinalizeMethodReference = ModuleDefinition.ImportReference(gcTypeDefinition.Find("SuppressFinalize", "Object"));
         
         var interlockedTypeDefinition = msCoreTypes.First(x => x.Name == "Interlocked");
-        ExchangeMethodReference = ModuleDefinition.Import(interlockedTypeDefinition.Find("Exchange", "Int32&", "Int32"));
+        ExchangeMethodReference = ModuleDefinition.ImportReference(interlockedTypeDefinition.Find("Exchange", "Int32&", "Int32"));
 
         var exceptionTypeDefinition = msCoreTypes.First(x => x.Name == "ObjectDisposedException");
-		ExceptionConstructorReference = ModuleDefinition.Import(exceptionTypeDefinition.Find(".ctor", "String"));
+        ExceptionConstructorReference = ModuleDefinition.ImportReference(exceptionTypeDefinition.Find(".ctor", "String"));
 
         var iDisposableTypeDefinition = msCoreTypes.First(x => x.Name == "IDisposable");
-        DisposeMethodReference = ModuleDefinition.Import(iDisposableTypeDefinition.Find("Dispose"));
+        DisposeMethodReference = ModuleDefinition.ImportReference(iDisposableTypeDefinition.Find("Dispose"));
     }
 
     public MethodReference ExchangeMethodReference;
