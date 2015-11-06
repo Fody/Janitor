@@ -46,10 +46,10 @@ public class ManagedAndUnmanagedProcessor
             Instruction.Create(OpCodes.Ldarg, disposingParameter),
             Instruction.Create(OpCodes.Brfalse, skipDisposeManaged),
             Instruction.Create(OpCodes.Ldarg_0),
-            Instruction.Create(OpCodes.Call, DisposeManagedMethod),
+            Instruction.Create(DisposeManagedMethod.GetCallingConvention(), DisposeManagedMethod),
             skipDisposeManaged,
             Instruction.Create(OpCodes.Ldarg_0),
-            Instruction.Create(OpCodes.Call, DisposeUnmanagedMethod)
+            Instruction.Create(DisposeUnmanagedMethod.GetCallingConvention(), DisposeUnmanagedMethod)
             );
 
         instructions.Add(TypeProcessor.GetDisposedInstructions());
