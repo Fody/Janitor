@@ -32,3 +32,20 @@ public class WithOverriddenDisposeManagedAndDisposeUnmanaged : WithProtectedDisp
         base.DisposeUnmanaged();
     }
 }
+
+public class WithAbstractBaseClass : AbstractWithProtectedDisposeManaged
+{
+    protected override void DisposeManaged()
+    {
+        Console.WriteLine($"In {nameof(WithAbstractBaseClass)}.{nameof(DisposeManaged)}");
+        base.DisposeManaged();
+    }
+}
+
+public class WithAbstractDisposeManaged : AbstractWithAbstractDisposeManaged
+{
+    protected override void DisposeManaged()
+    {
+        Console.WriteLine($"In {nameof(WithAbstractDisposeManaged)}.{nameof(DisposeManaged)}");
+    }
+}

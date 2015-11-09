@@ -40,3 +40,24 @@ public class WithProtectedDisposeManagedAndDisposeUnmanaged : IDisposable
         Console.WriteLine($"In {nameof(WithProtectedDisposeManagedAndDisposeUnmanaged)}.{nameof(DisposeUnmanaged)}");
     }
 }
+
+public abstract class AbstractWithProtectedDisposeManaged : IDisposable
+{
+    public void Dispose()
+    {
+    }
+
+    protected virtual void DisposeManaged()
+    {
+        Console.WriteLine($"In {nameof(AbstractWithProtectedDisposeManaged)}.{nameof(DisposeManaged)}");
+    }
+}
+
+public abstract class AbstractWithAbstractDisposeManaged : IDisposable
+{
+    public void Dispose()
+    {
+    }
+
+    protected abstract void DisposeManaged();
+}

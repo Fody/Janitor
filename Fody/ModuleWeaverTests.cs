@@ -244,6 +244,11 @@ public class ModuleWeaverTests
         "In WithProtectedDisposeManagedAndDisposeUnmanaged.DisposeManaged\r\n" +
         "In WithOverriddenDisposeManagedAndDisposeUnmanaged.DisposeUnmanaged\r\n" +
         "In WithProtectedDisposeManagedAndDisposeUnmanaged.DisposeUnmanaged\r\n")]
+    [TestCase("WithAbstractBaseClass",
+        "In WithAbstractBaseClass.DisposeManaged\r\n" +
+        "In AbstractWithProtectedDisposeManaged.DisposeManaged\r\n")]
+    [TestCase("WithAbstractDisposeManaged",
+        "In WithAbstractDisposeManaged.DisposeManaged\r\n")]
     public void ProtectedDisposableTest(string className, string expectedValue)
     {
         var writer = new StringWriter();
