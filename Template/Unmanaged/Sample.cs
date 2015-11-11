@@ -58,7 +58,7 @@ namespace UnmanagedAfter
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        static extern Boolean CloseHandle(IntPtr handle);
+        static extern bool CloseHandle(IntPtr handle);
 
         public void Method()
         {

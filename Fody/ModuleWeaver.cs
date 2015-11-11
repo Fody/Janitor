@@ -41,19 +41,19 @@ public partial class ModuleWeaver
             }
             if (disposeMethods.Count > 1)
             {
-                var message = string.Format("Type `{0}` contains more than one `Dispose` method. Either remove one or add a `[Janitor.SkipWeaving]` attribute to the type.", type.FullName);
+                var message = $"Type `{type.FullName}` contains more than one `Dispose` method. Either remove one or add a `[Janitor.SkipWeaving]` attribute to the type.";
                 LogError(message);
             }
             var disposeMethod = disposeMethods.First();
 
             if (!disposeMethod.IsEmptyOrNotImplemented())
             {
-                var message = string.Format("Type `{0}` contains a `Dispose` method with code. Either remove the code or add a `[Janitor.SkipWeaving]` attribute to the type.", type.FullName);
+                var message = $"Type `{type.FullName}` contains a `Dispose` method with code. Either remove the code or add a `[Janitor.SkipWeaving]` attribute to the type.";
                 LogError(message);
             }
             if (type.BaseType.Name != "Object")
             {
-                var message = string.Format("Type `{0}` has a base class which is not currently supported. Either remove the base class or add a `[Janitor.SkipWeaving]` attribute to the type.", type.FullName);
+                var message = $"Type `{type.FullName}` has a base class which is not currently supported. Either remove the base class or add a `[Janitor.SkipWeaving]` attribute to the type.";
                 LogError(message);
             }
 

@@ -46,8 +46,8 @@ public static class CecilExtensions
     public static bool IsIDisposable(this TypeReference typeRef)
     {
         var type = typeRef.Resolve();
-        return (type.Interfaces.Any(i => i.FullName.Equals("System.IDisposable"))
-                || (type.BaseType != null && type.BaseType.IsIDisposable()));
+        return type.Interfaces.Any(i => i.FullName.Equals("System.IDisposable"))
+               || (type.BaseType != null && type.BaseType.IsIDisposable());
     }
 
 
@@ -83,12 +83,12 @@ public static class CecilExtensions
                 return method;
             }
         }
-        throw new WeavingException(string.Format("Could not find '{0}' on '{1}'", name, typeReference.Name) );
+        throw new WeavingException($"Could not find '{name}' on '{typeReference.Name}'");
     }
 
     public static string GetName(this FieldDefinition field)
     {
-        return string.Format("{0}.{1}", field.DeclaringType.FullName, field.Name);
+        return $"{field.DeclaringType.FullName}.{field.Name}";
     }
 
     public static bool IsMatch(this MethodReference methodReference, string name, params string[] paramTypes)
