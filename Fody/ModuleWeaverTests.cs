@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using NUnit.Framework;
 
@@ -223,6 +224,41 @@ public class ModuleWeaverTests
         isChildDisposed = GetIsDisposed(child);
         Assert.IsTrue(isChildDisposed);
         Assert.Throws<ObjectDisposedException>(() => instance.Method());
+    }
+
+    [TestCase("WithProtectedDisposeManaged",
+        "In WithProtectedDisposeManaged.DisposeManaged\r\n")]
+    [TestCase("WithOverriddenDisposeManaged",
+        "In WithOverriddenDisposeManaged.DisposeManaged\r\n" +
+        "In WithProtectedDisposeManaged.DisposeManaged\r\n")]
+    [TestCase("WithProtectedDisposeUnmanaged",
+        "In WithProtectedDisposeUnmanaged.DisposeUnmanaged\r\n")]
+    [TestCase("WithOverriddenDisposeUnmanaged",
+        "In WithOverriddenDisposeUnmanaged.DisposeUnmanaged\r\n" +
+        "In WithProtectedDisposeUnmanaged.DisposeUnmanaged\r\n")]
+    [TestCase("WithProtectedDisposeManagedAndDisposeUnmanaged",
+        "In WithProtectedDisposeManagedAndDisposeUnmanaged.DisposeManaged\r\n" +
+        "In WithProtectedDisposeManagedAndDisposeUnmanaged.DisposeUnmanaged\r\n")]
+    [TestCase("WithOverriddenDisposeManagedAndDisposeUnmanaged",
+        "In WithOverriddenDisposeManagedAndDisposeUnmanaged.DisposeManaged\r\n" +
+        "In WithProtectedDisposeManagedAndDisposeUnmanaged.DisposeManaged\r\n" +
+        "In WithOverriddenDisposeManagedAndDisposeUnmanaged.DisposeUnmanaged\r\n" +
+        "In WithProtectedDisposeManagedAndDisposeUnmanaged.DisposeUnmanaged\r\n")]
+    [TestCase("WithAbstractBaseClass",
+        "In WithAbstractBaseClass.DisposeManaged\r\n" +
+        "In AbstractWithProtectedDisposeManaged.DisposeManaged\r\n")]
+    [TestCase("WithAbstractDisposeManaged",
+        "In WithAbstractDisposeManaged.DisposeManaged\r\n")]
+    public void ProtectedDisposableTest(string className, string expectedValue)
+    {
+        var writer = new StringWriter();
+        Console.SetOut(writer);
+
+        var instance = GetInstance(className);
+        Assert.That(GetIsDisposed(instance), Is.False);
+        instance.Dispose();
+        Assert.That(GetIsDisposed(instance), Is.True);
+        Assert.That(writer.ToString(), Is.EqualTo(expectedValue));
     }
 
     bool GetIsDisposed(dynamic instance)

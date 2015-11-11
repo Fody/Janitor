@@ -29,7 +29,6 @@ public partial class ModuleWeaver
             .GetTypes()
             .Where(x =>
                 x.IsClass() &&
-                !x.IsAbstract &&
                 !x.IsGeneratedCode() &&
                 !x.CustomAttributes.ContainsSkipWeaving()))
         {

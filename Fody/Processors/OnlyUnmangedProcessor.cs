@@ -38,7 +38,7 @@ public class OnlyUnmanagedProcessor
 
         instructions.Add(
             Instruction.Create(OpCodes.Ldarg_0),
-            Instruction.Create(OpCodes.Call, DisposeUnmanagedMethod));
+            Instruction.Create(DisposeUnmanagedMethod.GetCallingConvention(), DisposeUnmanagedMethod));
         instructions.Add(TypeProcessor.GetDisposedInstructions());
         instructions.Add(Instruction.Create(OpCodes.Ret));
 

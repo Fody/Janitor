@@ -196,4 +196,9 @@ public static class CecilExtensions
                 EndLine = 0xfeefee
             };
     }
+
+    public static OpCode GetCallingConvention(this MethodReference method)
+    {
+        return method.Resolve().IsVirtual ? OpCodes.Callvirt : OpCodes.Call;
+    }
 }
