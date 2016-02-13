@@ -26,7 +26,7 @@ public class Logger
         LoggerFactory.LogInfo(string.Format(format, args) + Environment.NewLine + exception);
     }
 
-    public bool IsInformationEnabled { get { return LoggerFactory.LogInfo != null; } }
+    public bool IsInformationEnabled => LoggerFactory.LogInfo != null;
 
     public void Warning(string format, params object[] args)
     {
@@ -38,7 +38,7 @@ public class Logger
         LoggerFactory.LogWarn(string.Format(format, args) + Environment.NewLine + exception);
     }
 
-    public bool IsWarningEnabled { get { return LoggerFactory.LogWarn != null; } }
+    public bool IsWarningEnabled => LoggerFactory.LogWarn != null;
 
     public void Error(string format, params object[] args)
     {
@@ -50,5 +50,5 @@ public class Logger
         LoggerFactory.LogError(string.Format(format, args) + Environment.NewLine + exception);
     }
 
-    public bool IsErrorEnabled { get { return LoggerFactory.LogError != null; } }
+    public bool IsErrorEnabled => LoggerFactory.LogError != null;
 }

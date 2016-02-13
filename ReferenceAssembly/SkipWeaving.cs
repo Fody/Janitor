@@ -6,8 +6,7 @@ namespace Janitor
     /// Used to skip weaving.
     /// </summary>
     [AttributeUsage(
-        AttributeTargets.Class| AttributeTargets.Field, 
-        AllowMultiple = false,
+        AttributeTargets.Class| AttributeTargets.Field,
         Inherited = false)]
     public sealed class SkipWeaving:Attribute
     {
