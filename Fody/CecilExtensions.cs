@@ -11,6 +11,7 @@ public static class CecilExtensions
     {
         return attributes.Any(x => x.AttributeType.FullName == "Janitor.SkipWeaving");
     }
+
     public static void RemoveSkipWeaving(this Collection<CustomAttribute> attributes)
     {
         var attribute = attributes.FirstOrDefault(x => x.AttributeType.FullName == "Janitor.SkipWeaving");
@@ -29,6 +30,7 @@ public static class CecilExtensions
         }
         return false;
     }
+
     public static bool FieldExists(this TypeDefinition typeDefinition, string field)
     {
         if (typeDefinition.Fields.Any(x => x.Name == field))
@@ -38,6 +40,7 @@ public static class CecilExtensions
         }
         return false;
     }
+
     public static bool IsClass(this TypeDefinition x)
     {
         return (x.BaseType != null) && !x.IsEnum && !x.IsInterface;
@@ -47,9 +50,9 @@ public static class CecilExtensions
     {
         var type = typeRef.Resolve();
         return type.Interfaces.Any(i => i.FullName.Equals("System.IDisposable"))
+               || type.FullName.Equals("System.IDisposable")
                || (type.BaseType != null && type.BaseType.IsIDisposable());
     }
-
 
     public static void InsertAtStart(this Collection<Instruction> collection, params Instruction[] instructions)
     {
@@ -60,6 +63,7 @@ public static class CecilExtensions
             indexOf++;
         }
     }
+
     public static void Add(this Collection<Instruction> collection, params Instruction[] instructions)
     {
         foreach (var instruction in instructions)
@@ -67,6 +71,7 @@ public static class CecilExtensions
             collection.Add(instruction);
         }
     }
+
     public static void Add(this Collection<Instruction> collection, IEnumerable<Instruction> instructions)
     {
         foreach (var instruction in instructions)
@@ -74,6 +79,7 @@ public static class CecilExtensions
             collection.Add(instruction);
         }
     }
+
     public static MethodDefinition Find(this TypeDefinition typeReference, string name, params string[] paramTypes)
     {
         foreach (var method in typeReference.Methods)
@@ -171,7 +177,6 @@ public static class CecilExtensions
         return reference;
     }
 
-
     public static void HideLineFromDebugger(this Instruction i, SequencePoint seqPoint)
     {
         if (seqPoint == null)
@@ -191,10 +196,10 @@ public static class CecilExtensions
         // the Debugger. See
         // http://blogs.msdn.com/b/abhinaba/archive/2005/10/10/479016.aspx
         i.SequencePoint = new SequencePoint(doc)
-            {
-                StartLine = 0xfeefee, 
-                EndLine = 0xfeefee
-            };
+        {
+            StartLine = 0xfeefee,
+            EndLine = 0xfeefee
+        };
     }
 
     public static OpCode GetCallingConvention(this MethodReference method)
