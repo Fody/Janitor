@@ -141,8 +141,8 @@ public class ModuleWeaverTests
         var instance = GetInstance("Simple");
         instance.Dispose();
         var type = (Type)instance.GetType();
-        var methodInfo = type.GetMethod("PrivateMethod",BindingFlags.Instance|BindingFlags.NonPublic);
-        methodInfo.Invoke(instance,null);
+        var methodInfo = type.GetMethod("PrivateMethod", BindingFlags.Instance | BindingFlags.NonPublic);
+        methodInfo.Invoke(instance, null);
     }
 
     [Test]
@@ -151,8 +151,8 @@ public class ModuleWeaverTests
         var instance = GetInstance("Simple");
         instance.Dispose();
         var type = (Type)instance.GetType();
-        var methodInfo = type.GetMethod("StaticMethod",BindingFlags.Static|BindingFlags.Public);
-        methodInfo.Invoke(null,null);
+        var methodInfo = type.GetMethod("StaticMethod", BindingFlags.Static | BindingFlags.Public);
+        methodInfo.Invoke(null, null);
     }
 
     [Test]
@@ -224,6 +224,18 @@ public class ModuleWeaverTests
         isChildDisposed = GetIsDisposed(child);
         Assert.IsTrue(isChildDisposed);
         Assert.Throws<ObjectDisposedException>(() => instance.Method());
+    }
+
+    [Test]
+    public void WhereFieldIsIDisposable()
+    {
+        var instance = GetInstance("WhereFieldIsIDisposable");
+        var field = instance.Field;
+        var isFieldDisposed = GetIsDisposed(field);
+        Assert.IsFalse(isFieldDisposed);
+        instance.Dispose();
+        isFieldDisposed = GetIsDisposed(field);
+        Assert.IsTrue(isFieldDisposed);
     }
 
     [TestCase("WithProtectedDisposeManaged",

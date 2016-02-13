@@ -43,6 +43,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="WhereFieldIsIDisposable.cs" />
     <Compile Include="WithOverriddenDispose.cs" />
     <Compile Include="WithProtectedDispose.cs" />
     <Compile Include="WithTypeConstraint.cs" />
