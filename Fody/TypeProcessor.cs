@@ -43,38 +43,37 @@ public class TypeProcessor
         if (disposeUnmanagedMethod == null && disposeManagedMethod == null)
         {
             var methodProcessor = new SimpleDisposeProcessor
-                                  {
-                                      TypeProcessor = this
-                                  };
+            {
+                TypeProcessor = this
+            };
             methodProcessor.Process();
         }
         else if (disposeUnmanagedMethod == null)
         {
             var methodProcessor = new OnlyManagedProcessor
-                                  {
-                                      TypeProcessor = this,
-                                      DisposeManagedMethod = disposeManagedMethod.GetGeneric()
-                                  };
+            {
+                TypeProcessor = this,
+                DisposeManagedMethod = disposeManagedMethod.GetGeneric()
+            };
             methodProcessor.Process();
-
         }
         else if (disposeManagedMethod == null)
         {
             var methodProcessor = new OnlyUnmanagedProcessor
-                                  {
-                                      TypeProcessor = this,
-                                      DisposeUnmanagedMethod = disposeUnmanagedMethod.GetGeneric()
-                                  };
+            {
+                TypeProcessor = this,
+                DisposeUnmanagedMethod = disposeUnmanagedMethod.GetGeneric()
+            };
             methodProcessor.Process();
         }
         else
         {
             var methodProcessor = new ManagedAndUnmanagedProcessor
-                                  {
-                                      TypeProcessor = this,
-                                      DisposeUnmanagedMethod = disposeUnmanagedMethod.GetGeneric(),
-                                      DisposeManagedMethod = disposeManagedMethod.GetGeneric()
-                                  };
+            {
+                TypeProcessor = this,
+                DisposeUnmanagedMethod = disposeUnmanagedMethod.GetGeneric(),
+                DisposeManagedMethod = disposeManagedMethod.GetGeneric()
+            };
             methodProcessor.Process();
         }
         AddGuards();
@@ -107,12 +106,12 @@ public class TypeProcessor
         instructions.Add(ret);
 
         var finallyHandler = new ExceptionHandler(ExceptionHandlerType.Finally)
-                             {
-                                 TryStart = tryStart,
-                                 TryEnd = tryEnd,
-                                 HandlerStart = tryEnd,
-                                 HandlerEnd = ret
-                             };
+        {
+            TryStart = tryStart,
+            TryEnd = tryEnd,
+            HandlerStart = tryEnd,
+            HandlerEnd = ret
+        };
 
         finalizeMethod.Body.ExceptionHandlers.Add(finallyHandler);
         TargetType.Methods.Add(finalizeMethod);
@@ -133,14 +132,13 @@ public class TypeProcessor
         return null;
     }
 
-
     public IEnumerable<Instruction> GetDisposeEscapeInstructions()
     {
         var skipReturnInstruction = Instruction.Create(OpCodes.Nop);
         yield return Instruction.Create(OpCodes.Ldarg_0);
         yield return Instruction.Create(OpCodes.Ldflda, signaledField);
         yield return Instruction.Create(OpCodes.Ldc_I4_1);
-        yield return Instruction.Create(OpCodes.Call, ModuleWeaver.ExchangeMethodReference);
+        yield return Instruction.Create(OpCodes.Call, ModuleWeaver.ExchangeIntMethodReference);
         yield return Instruction.Create(OpCodes.Brfalse_S, skipReturnInstruction);
         yield return Instruction.Create(OpCodes.Ret);
         yield return skipReturnInstruction;
@@ -152,7 +150,6 @@ public class TypeProcessor
         yield return Instruction.Create(OpCodes.Ldc_I4_1);
         yield return Instruction.Create(OpCodes.Stfld, disposedField);
     }
-
 
     public IEnumerable<Instruction> GetDisposeOfFieldInstructions()
     {
@@ -176,17 +173,18 @@ public class TypeProcessor
                 continue;
             }
 
-            var skip = Instruction.Create(OpCodes.Nop);
+            var br1 = Instruction.Create(OpCodes.Callvirt, ModuleWeaver.DisposeMethodReference);
+            var br2 = Instruction.Create(OpCodes.Nop);
             yield return Instruction.Create(OpCodes.Ldarg_0);
-            yield return Instruction.Create(OpCodes.Ldfld, field);
-            yield return Instruction.Create(OpCodes.Brfalse, skip);
-            yield return Instruction.Create(OpCodes.Ldarg_0);
-            yield return Instruction.Create(OpCodes.Ldfld, field);
-            yield return Instruction.Create(OpCodes.Callvirt, ModuleWeaver.DisposeMethodReference);
-            yield return Instruction.Create(OpCodes.Ldarg_0);
+            yield return Instruction.Create(OpCodes.Ldflda, field);
             yield return Instruction.Create(OpCodes.Ldnull);
-            yield return Instruction.Create(OpCodes.Stfld, field);
-            yield return skip;
+            yield return Instruction.Create(OpCodes.Call, ModuleWeaver.ExchangeTMethodReference);
+            yield return Instruction.Create(OpCodes.Dup);
+            yield return Instruction.Create(OpCodes.Brtrue, br1);
+            yield return Instruction.Create(OpCodes.Pop);
+            yield return Instruction.Create(OpCodes.Br, br2);
+            yield return br1;
+            yield return br2;
         }
     }
 
@@ -241,7 +239,6 @@ public class TypeProcessor
             method.Body.OptimizeMacros();
         }
     }
-
 
     void CreateSignaledField()
     {
