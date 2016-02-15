@@ -19,8 +19,7 @@ public partial class ModuleWeaver
 
         var interlockedTypeDefinition = msCoreTypes.First(x => x.Name == "Interlocked");
         ExchangeIntMethodReference = ModuleDefinition.ImportReference(interlockedTypeDefinition.Find("Exchange", "Int32&", "Int32"));
-        ExchangeTMethodReference = ModuleDefinition.ImportReference(interlockedTypeDefinition.Find("Exchange", "T&", "T"))
-            .MakeGeneric(ModuleDefinition.ImportReference(iDisposableTypeDefinition));
+        ExchangeTMethodReference = ModuleDefinition.ImportReference(interlockedTypeDefinition.Find("Exchange", "T&", "T"));
 
         var exceptionTypeDefinition = msCoreTypes.First(x => x.Name == "ObjectDisposedException");
         ExceptionConstructorReference = ModuleDefinition.ImportReference(exceptionTypeDefinition.Find(".ctor", "String"));
