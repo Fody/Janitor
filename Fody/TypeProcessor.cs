@@ -121,16 +121,16 @@ public class TypeProcessor
     public MethodDefinition CreateDisposeManagedIfNecessary()
     {
         var instructions = GetDisposeOfFieldInstructions().ToList();
-        if (instructions.Count > 0)
+        if (instructions.Count == 0)
         {
-            var disposeManagedMethod = new MethodDefinition("DisposeManaged", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.Void);
-            TargetType.Methods.Add(disposeManagedMethod);
-            var collection = disposeManagedMethod.Body.Instructions;
-            collection.Add(instructions);
-            collection.Add(Instruction.Create(OpCodes.Ret));
-            return disposeManagedMethod;
+            return null;
         }
-        return null;
+        var disposeManagedMethod = new MethodDefinition("DisposeManaged", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.Void);
+        TargetType.Methods.Add(disposeManagedMethod);
+        var collection = disposeManagedMethod.Body.Instructions;
+        collection.Add(instructions);
+        collection.Add(Instruction.Create(OpCodes.Ret));
+        return disposeManagedMethod;
     }
 
 
@@ -158,6 +158,14 @@ public class TypeProcessor
     {
         foreach (var field in TargetType.Fields.Reverse())
         {
+            if (field == disposedField)
+            {
+                continue;
+            }
+            if (field == signaledField)
+            {
+                continue;
+            }
             if (field.CustomAttributes.ContainsSkipWeaving())
             {
                 continue;
@@ -172,7 +180,7 @@ public class TypeProcessor
             }
             if (field.IsInitOnly)
             {
-                LogTo.Error("Could not add dispose for field '{0}' since it is marked as readonly. Please change this field to not be readonly.", field.GetName());
+                LogTo.Error("Could not add dispose for field '{0}' since it is marked as readonly. Change this field to not be readonly.", field.GetName());
                 continue;
             }
 

@@ -238,6 +238,23 @@ public class ModuleWeaverTests
         Assert.IsTrue(isFieldDisposed);
     }
 
+    [Test]
+    public void WhereFieldIsIDisposableArray()
+    {
+        var instance = GetInstance("WhereFieldIsIDisposableArray");
+        instance.Dispose();
+        Assert.IsNotNull(instance.Field);
+    }
+
+    [Test]
+    public void WhereFieldIsDisposableClassArray()
+    {
+        var instance = GetInstance("WhereFieldIsDisposableClassArray");
+        instance.Dispose();
+        Assert.IsNotNull(instance.Field);
+    }
+
+
     [TestCase("WithProtectedDisposeManaged",
         "In WithProtectedDisposeManaged.DisposeManaged\r\n")]
     [TestCase("WithOverriddenDisposeManaged",
@@ -276,14 +293,20 @@ public class ModuleWeaverTests
     bool GetIsDisposed(dynamic instance)
     {
         Type type = instance.GetType();
+        var fieldInfo = GetSignaledField(type);
+        var disposeCount = (int)fieldInfo.GetValue(instance);
+        return disposeCount > 0;
+    }
+
+    static FieldInfo GetSignaledField(Type type)
+    {
         FieldInfo fieldInfo = null;
         while (fieldInfo == null && type != null)
         {
             fieldInfo = type.GetField("disposeSignaled", BindingFlags.NonPublic | BindingFlags.Instance);
             type = type.BaseType;
         }
-        var disposeCount = (int)fieldInfo.GetValue(instance);
-        return disposeCount > 0;
+        return fieldInfo;
     }
 
     public dynamic GetInstance(string className)

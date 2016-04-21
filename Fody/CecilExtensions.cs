@@ -48,10 +48,20 @@ public static class CecilExtensions
 
     public static bool IsIDisposable(this TypeReference typeRef)
     {
+        if (typeRef.IsArray)
+        {
+            return false;
+        }
         var type = typeRef.Resolve();
-        return type.Interfaces.Any(i => i.FullName.Equals("System.IDisposable"))
-               || type.FullName.Equals("System.IDisposable")
-               || (type.BaseType != null && type.BaseType.IsIDisposable());
+        if (type.Interfaces.Any(i => i.FullName.Equals("System.IDisposable")))
+        {
+            return true;
+        }
+        if (type.FullName.Equals("System.IDisposable"))
+        {
+            return true;
+        }
+        return type.BaseType != null && type.BaseType.IsIDisposable();
     }
 
     public static void InsertAtStart(this Collection<Instruction> collection, params Instruction[] instructions)

@@ -1,8 +1,8 @@
 ﻿using System;
 
-public class WhereFieldIsIDisposable : IDisposable
+public class WhereFieldIsDisposableClassArray : IDisposable
 {
-    public IDisposable Field = new Disposable();
+    public Disposable[] Field = new Disposable[0];
 
     public void Dispose()
     {
