@@ -28,11 +28,16 @@ public class ModuleWeaverTests
     public void EnsureExplicitDisposeMethodIsWeaved()
     {
         var instance = GetInstance("WithExplicitDisposeMethod");
+        var child = instance.Child;
         var isDisposed = GetIsDisposed(instance);
+        var isChildDisposed = GetIsDisposed(child);
         Assert.IsFalse(isDisposed);
+        Assert.IsFalse(isChildDisposed);
         ((IDisposable)instance).Dispose();
         isDisposed = GetIsDisposed(instance);
+        isChildDisposed = GetIsDisposed(child);
         Assert.IsTrue(isDisposed);
+        Assert.IsTrue(isChildDisposed);
     }
 
     [Test]
