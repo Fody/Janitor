@@ -14,7 +14,8 @@ https://nuget.org/packages/Janitor.Fody/
 
     PM> Install-Package Janitor.Fody
 
-## What it does 
+
+## What it does
 
  * Looks for all classes with a `Dispose` method.
  * Finds all instance fields that are `IDisposable` and cleans them up.
@@ -25,9 +26,11 @@ https://nuget.org/packages/Janitor.Fody/
  * Adds a finalizer when clean-up of unmanaged resources is required
  * Uses the `Dispose(isDisposing)` convention when clean-up of unmanaged resources is required
 
+
 ### Simple Case
 
 All instance fields will be cleaned up in the `Dispose` method.
+
 
 #### Your Code
 
@@ -50,7 +53,8 @@ All instance fields will be cleaned up in the `Dispose` method.
             //must be empty
         }
     }
-    
+
+
 #### What gets compiled
 
     public class Sample : IDisposable
@@ -84,19 +88,21 @@ All instance fields will be cleaned up in the `Dispose` method.
             {
                 return;
             }
-            if (stream != null)
+            var temp = Interlocked.Exchange<IDisposable>(ref stream, null);
+            if (temp != null)
             {
-                stream.Dispose();
-                stream = null;
+                temp.Dispose();
             }
             disposed = true;
         }
 
     }
-    
-### Custom managed handling 
+
+
+### Custom managed handling
 
 In some cases you may want to have custom code that cleans up your managed resources. If this is the case add a method `void DisposeManaged()`
+
 
 #### Your Code
 
@@ -128,6 +134,7 @@ In some cases you may want to have custom code that cleans up your managed resou
             }
         }
     }
+
 
 #### What gets compiled
 
@@ -177,6 +184,7 @@ In some cases you may want to have custom code that cleans up your managed resou
 
     }
 
+
 ### Custom unmanaged handling 
 
 In some cases you may want to have custom code that cleans up your unmanaged resources. If this is the case add a method `void DisposeUnmanaged()`
@@ -211,6 +219,7 @@ In some cases you may want to have custom code that cleans up your unmanaged res
         [DllImport("kernel32.dll", SetLastError=true)]
         static extern bool CloseHandle(IntPtr hObject);
     }
+
 
 #### What gets compiled
 
@@ -265,10 +274,12 @@ In some cases you may want to have custom code that cleans up your unmanaged res
             Dispose();
         }
     }
-    
+
+
 ### Custom managed and unmanaged handling 
 
 Combining the above two scenarios will give you the following
+
 
 #### Your code
 
@@ -384,17 +395,21 @@ Combining the above two scenarios will give you the following
         }
     }
 
+
 ## What's with the empty `Dispose()`
 
 You will notice that the `Dispose()` is empty in all of the above cases. This is because Janitor controls what goes in there. In fact if you put any code in there Janitor will throw an exception. If you want to control `IDisposable` for specific types you can use `[Janitor.SkipWeaving]` attribute applied to the type. Then Janitor wont touch it.
+
 
 ## Why not weave in `IDisposable`
 
 So it is technically possible to flag a type, with an attribute or a custom interface, and inject the full implementation of `IDisposable`. This would mean the empty `Dispose` method would not be required. However, since Fody operates after a compile, it would mean you would not be able to use the type in question as if it was `IDisposable` when in the same assembly. You would also not be able to use it as `IDisposable` within the same solution since intellisense has no knowledge of the how Fody manipulates an assembly.
 
+
 ## What about base classes
 
 Not currently supported.
+
 
 ## Icon
 
