@@ -2,10 +2,8 @@
 using System.Reflection;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
-using Scalpel;
 using System.Collections.Generic;
 
-[Remove]
 public class ModuleWeaverTestHelper
 {
     public string BeforeAssemblyPath;

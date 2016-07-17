@@ -10,7 +10,7 @@ public class ModuleWeaverTests
 
     public ModuleWeaverTests()
     {
-        moduleWeaverTestHelper = new ModuleWeaverTestHelper(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
+        moduleWeaverTestHelper = new ModuleWeaverTestHelper(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll"));
     }
 
     [Test]

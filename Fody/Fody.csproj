@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,10 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Janitor.Fody</RootNamespace>
     <AssemblyName>Janitor.Fody</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,16 +37,6 @@
     <Prefer32Bit>false</Prefer32Bit>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deployable|AnyCPU'">
-    <OutputPath>bin\Deployable\</OutputPath>
-    <DefineConstants>TRACE;SCALPEL</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
   <ItemGroup>
     <None Include="NugetAssets\install.ps" />
     <None Include="NugetAssets\Janitor.Fody.nuspec" />
@@ -54,7 +45,7 @@
       <SubType>Designer</SubType>
     </None>
     <Reference Include="Anotar.Custom, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Anotar.Custom.Fody.3.0.1\lib\net35\Anotar.Custom.dll</HintPath>
+      <HintPath>..\packages\Anotar.Custom.Fody.3.1.0\lib\net35\Anotar.Custom.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -74,14 +65,6 @@
       <HintPath>..\packages\FodyCecil.1.29.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Scalpel, Version=1.0.4.0, Culture=neutral, PublicKeyToken=1d3f964f81f300dd, processorArchitecture=MSIL">
-      <HintPath>..\packages\Scalpel.Fody.1.0.4.0\lib\portable-net4+sl4+wp7+win8+MonoAndroid16+MonoTouch40\Scalpel.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
@@ -89,18 +72,13 @@
     <None Include="FodyWeavers.xml" />
     <Compile Include="CecilExtensions.cs" />
     <Compile Include="Logging.cs" />
-    <Compile Include="ReadonlyFieldTests.cs" />
-    <Compile Include="ModuleWeaverTestHelper.cs" />
     <Compile Include="Processors\SimpleDisposeProcessor.cs" />
     <Compile Include="Processors\ManagedAndUnmanagedProcessor.cs" />
-    <Compile Include="MockAssemblyResolver.cs" />
     <Compile Include="ModuleWeaver.cs" />
-    <Compile Include="ModuleWeaverTests.cs" />
     <Compile Include="Processors\OnlyManagedProcessor.cs" />
     <Compile Include="Processors\OnlyUnmangedProcessor.cs" />
     <Compile Include="ReferenceFinder.cs" />
     <Compile Include="TypeProcessor.cs" />
-    <Compile Include="Verifier.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
     <Compile Include="ReferenceCleaner.cs" />
     <Compile Include="WeavingException.cs" />
