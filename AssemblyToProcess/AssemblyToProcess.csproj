@@ -60,6 +60,7 @@
     <Compile Include="WithManagedAndUnmanaged.cs" />
     <Compile Include="WithOverriddenDispose.cs" />
     <Compile Include="WithProtectedDispose.cs" />
+    <Compile Include="WithTask.cs" />
     <Compile Include="WithTypeConstraint.cs" />
     <Compile Include="WithUnmanaged.cs" />
     <Compile Include="WithUnmanagedAndDisposableField.cs" />

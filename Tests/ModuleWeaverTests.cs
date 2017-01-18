@@ -295,6 +295,16 @@ public class ModuleWeaverTests
         Assert.That(writer.ToString(), Is.EqualTo(expectedValue));
     }
 
+    [Test]
+    public void EnsureTasksAreNotDisposed()
+    {
+        var instance = GetInstance("WithTask");
+        instance.Dispose();
+        Assert.IsNotNull(instance.taskField);
+        instance.taskCompletionSource.SetResult(42);
+        Assert.That(instance.taskField.Result, Is.EqualTo(42));
+    }
+
     bool GetIsDisposed(dynamic instance)
     {
         Type type = instance.GetType();

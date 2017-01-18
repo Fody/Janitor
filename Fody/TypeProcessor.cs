@@ -180,6 +180,11 @@ public class TypeProcessor
                 LogTo.Error("Could not add dispose for field '{0}' since it is marked as readonly. Change this field to not be readonly.", field.GetName());
                 continue;
             }
+            if (field.FieldType.FullName.StartsWith("System.Threading.Tasks.Task"))
+            {
+                // do not dispose tasks, see https://blogs.msdn.microsoft.com/pfxteam/2012/03/25/do-i-need-to-dispose-of-tasks/
+                continue;
+            }
 
             var exchangedMethodReference = ModuleWeaver.ExchangeTMethodReference
                 .MakeGeneric(field.FieldType);
