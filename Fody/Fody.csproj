@@ -45,7 +45,7 @@
       <SubType>Designer</SubType>
     </None>
     <Reference Include="Anotar.Custom, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Anotar.Custom.Fody.3.1.0\lib\net35\Anotar.Custom.dll</HintPath>
+      <HintPath>..\packages\Anotar.Custom.Fody.3.2.0\lib\net35\Anotar.Custom.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
