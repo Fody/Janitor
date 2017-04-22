@@ -38,17 +38,18 @@ public class ModuleWeaverTestHelper
                     SymbolStream = symbolStream,
                     SymbolReaderProvider = new PdbReaderProvider()
                 };
-            var moduleDefinition = ModuleDefinition.ReadModule(AfterAssemblyPath, readerParameters);
-
-            var weavingTask = new ModuleWeaver
+            using (var moduleDefinition = ModuleDefinition.ReadModule(BeforeAssemblyPath, readerParameters))
+            {
+                var weavingTask = new ModuleWeaver
                 {
                     ModuleDefinition = moduleDefinition,
                     AssemblyResolver = assemblyResolver,
                     LogError = s => Errors.Add(s),
                 };
 
-            weavingTask.Execute();
-            moduleDefinition.Write(AfterAssemblyPath);
+                weavingTask.Execute();
+                moduleDefinition.Write(AfterAssemblyPath);
+            }
         }
         Assembly = Assembly.LoadFile(AfterAssemblyPath);
     }

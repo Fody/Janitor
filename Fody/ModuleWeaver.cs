@@ -19,10 +19,6 @@ public partial class ModuleWeaver
 
     public void Execute()
     {
-        LoggerFactory.LogInfo = LogInfo;
-        LoggerFactory.LogWarn = LogWarning;
-        LoggerFactory.LogError = LogError;
-
         FindCoreReferences();
 
         foreach (var type in ModuleDefinition

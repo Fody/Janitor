@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Anotar.Custom;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
@@ -26,7 +25,6 @@ public static class CecilExtensions
     {
         if (typeDefinition.Methods.Any(x => x.Name == method))
         {
-            LogTo.Error("Type `{0}` contains a `{1}` method. Either remove this method or add a `[Janitor.SkipWeaving]` attribute to the type.", typeDefinition.FullName, method);
             return true;
         }
         return false;
@@ -36,7 +34,6 @@ public static class CecilExtensions
     {
         if (typeDefinition.Fields.Any(x => x.Name == field))
         {
-            LogTo.Error("Type `{0}` contains a `{1}` field. Either remove this field or add a `[Janitor.SkipWeaving]` attribute to the type.", typeDefinition.FullName, field);
             return true;
         }
         return false;
@@ -56,7 +53,7 @@ public static class CecilExtensions
             return false;
         }
         var type = typeRef.Resolve();
-        if (type.Interfaces.Any(i => i.FullName.Equals("System.IDisposable")))
+        if (type.Interfaces.Any(i => i.InterfaceType.FullName.Equals("System.IDisposable")))
         {
             return true;
         }
@@ -142,14 +139,20 @@ public static class CecilExtensions
         var instructions = method.Body.Instructions.Where(i => i.OpCode != OpCodes.Nop && i.OpCode != OpCodes.Ret).ToList();
 
         if (instructions.Count == 0)
+        {
             return true;
+        }
 
         if (instructions.Count != 2 || instructions[0].OpCode != OpCodes.Newobj || instructions[1].OpCode != OpCodes.Throw)
+        {
             return false;
+        }
 
         var ctor = (MethodReference)instructions[0].Operand;
         if (ctor.DeclaringType.FullName == "System.NotImplementedException")
+        {
             return true;
+        }
 
         return false;
     }
@@ -190,29 +193,20 @@ public static class CecilExtensions
         return reference;
     }
 
-    public static void HideLineFromDebugger(this Instruction i, SequencePoint seqPoint)
+    public static void HideLineFromDebugger(SequencePoint seqPoint)
     {
-        if (seqPoint == null)
+        if (seqPoint?.Document == null)
+        {
             return;
-
-        HideLineFromDebugger(i, seqPoint.Document);
-    }
-
-    public static void HideLineFromDebugger(this Instruction i, Document doc)
-    {
-        if (doc == null)
-            return;
+        }
 
         // This tells the debugger to ignore and step through
         // all the following instructions to the next instruction
         // with a valid SequencePoint. That way IL can be hidden from
         // the Debugger. See
         // http://blogs.msdn.com/b/abhinaba/archive/2005/10/10/479016.aspx
-        i.SequencePoint = new SequencePoint(doc)
-        {
-            StartLine = 0xfeefee,
-            EndLine = 0xfeefee
-        };
+        seqPoint.StartLine = 0xfeefee;
+        seqPoint.EndLine = 0xfeefee;
     }
 
     public static OpCode GetCallingConvention(this MethodReference method)

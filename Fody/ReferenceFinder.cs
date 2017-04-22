@@ -6,7 +6,7 @@ public partial class ModuleWeaver
     public void FindCoreReferences()
     {
         var assemblyResolver = ModuleDefinition.AssemblyResolver;
-        var msCoreLibDefinition = assemblyResolver.Resolve("mscorlib");
+        var msCoreLibDefinition = assemblyResolver.Resolve(new AssemblyNameReference("mscorlib", null));
         var msCoreTypes = msCoreLibDefinition.MainModule.Types;
 
         ObjectFinalizeReference = ModuleDefinition.ImportReference(ModuleDefinition.TypeSystem.Object.Resolve().Find("Finalize"));

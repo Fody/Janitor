@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Anotar.Custom;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
@@ -27,12 +26,22 @@ public class TypeProcessor
         {
             disposeManagedMethod = CreateDisposeManagedIfNecessary();
         }
-
-        var error = TargetType.FieldExists("disposeSignaled") |
-                    TargetType.FieldExists("disposed") |
-                    TargetType.MethodExists("ThrowIfDisposed");
-        if (error)
+        
+        if (TargetType.FieldExists("disposeSignaled"))
         {
+            ModuleWeaver.LogError($"Type `{TargetType.FullName}` contains a `disposeSignaled` field. Either remove this field or add a `[Janitor.SkipWeaving]` attribute to the type.");
+            return;
+        }
+
+        if (TargetType.FieldExists("disposed"))
+        {
+            ModuleWeaver.LogError($"Type `{TargetType.FullName}` contains a `disposed` field. Either remove this field or add a `[Janitor.SkipWeaving]` attribute to the type.");
+            return;
+        }
+
+        if (TargetType.MethodExists("ThrowIfDisposed"))
+        {
+            ModuleWeaver.LogError($"Type `{TargetType.FullName}` contains a `ThrowIfDisposed` method. Either remove this method or add a `[Janitor.SkipWeaving]` attribute to the type.");
             return;
         }
 
@@ -177,7 +186,7 @@ public class TypeProcessor
             }
             if (field.IsInitOnly)
             {
-                LogTo.Error("Could not add dispose for field '{0}' since it is marked as readonly. Change this field to not be readonly.", field.GetName());
+                ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it is marked as readonly. Change this field to not be readonly.");
                 continue;
             }
             if (field.FieldType.FullName.StartsWith("System.Threading.Tasks.Task"))
@@ -241,17 +250,16 @@ public class TypeProcessor
                 continue;
             }
 
-            var validSequencePoint = method.Body.Instructions.Select(i => i.SequencePoint).FirstOrDefault(sp => sp != null);
-
+            var validSequencePoint = method.DebugInformation.SequencePoints.FirstOrDefault();
             method.Body.SimplifyMacros();
             var instructions = method.Body.Instructions;
-            instructions.InsertAtStart(new[]
-                                       {
-                                           Instruction.Create(OpCodes.Ldarg_0),
-                                           Instruction.Create(OpCodes.Call, throwIfDisposed),
-                                       });
+            instructions.InsertAtStart(
+                Instruction.Create(OpCodes.Ldarg_0),
+                Instruction.Create(OpCodes.Call, throwIfDisposed));
             if (validSequencePoint != null)
-                instructions[0].HideLineFromDebugger(validSequencePoint);
+            {
+                CecilExtensions.HideLineFromDebugger(validSequencePoint);
+            }
             method.Body.OptimizeMacros();
         }
     }

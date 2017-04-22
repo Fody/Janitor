@@ -29,24 +29,9 @@ public class MockAssemblyResolver : IAssemblyResolver
         throw new NotImplementedException();
     }
 
-    public AssemblyDefinition Resolve(string fullName)
-    {
-        try
-        {
-            var codeBase = Assembly.Load(fullName).CodeBase.Replace("file:///", "");
-
-            return AssemblyDefinition.ReadAssembly(codeBase);
-        }
-        catch (FileNotFoundException)
-        {
-            return null;
-        }
-    }
-
-    public AssemblyDefinition Resolve(string fullName, ReaderParameters parameters)
-    {
-        throw new NotImplementedException();
-    }
-
     public string Directory;
+
+    public void Dispose()
+    {
+    }
 }
