@@ -51,7 +51,6 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MockAssemblyResolver.cs" />
     <Compile Include="ModuleWeaverTestHelper.cs" />
     <Compile Include="ModuleWeaverTests.cs" />
     <Compile Include="ReadonlyFieldTests.cs" />

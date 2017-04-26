@@ -25,30 +25,30 @@ public class ModuleWeaverTestHelper
 
         Errors = new List<string>();
 
-        var assemblyResolver = new MockAssemblyResolver
-            {
-                Directory = Path.GetDirectoryName(BeforeAssemblyPath)
-            };
-
-        using (var symbolStream = File.OpenRead(newPdb))
+        using (var assemblyResolver = new DefaultAssemblyResolver())
         {
-            var readerParameters = new ReaderParameters
+            assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(BeforeAssemblyPath));
+
+            using (var symbolStream = File.OpenRead(newPdb))
+            {
+                var readerParameters = new ReaderParameters
                 {
                     ReadSymbols = true,
                     SymbolStream = symbolStream,
                     SymbolReaderProvider = new PdbReaderProvider()
                 };
-            using (var moduleDefinition = ModuleDefinition.ReadModule(BeforeAssemblyPath, readerParameters))
-            {
-                var weavingTask = new ModuleWeaver
+                using (var moduleDefinition = ModuleDefinition.ReadModule(BeforeAssemblyPath, readerParameters))
                 {
-                    ModuleDefinition = moduleDefinition,
-                    AssemblyResolver = assemblyResolver,
-                    LogError = s => Errors.Add(s),
-                };
+                    var weavingTask = new ModuleWeaver
+                    {
+                        ModuleDefinition = moduleDefinition,
+                        AssemblyResolver = assemblyResolver,
+                        LogError = s => Errors.Add(s),
+                    };
 
-                weavingTask.Execute();
-                moduleDefinition.Write(AfterAssemblyPath);
+                    weavingTask.Execute();
+                    moduleDefinition.Write(AfterAssemblyPath);
+                }
             }
         }
         Assembly = Assembly.LoadFile(AfterAssemblyPath);
