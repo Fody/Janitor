@@ -36,6 +36,9 @@
     <DocumentationFile>bin\Release\Janitor.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="SkipWeaving.cs" />
   </ItemGroup>
   <ItemGroup>
