@@ -67,8 +67,10 @@
     <Compile Include="WithYield.cs" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <ProjectReference Include="..\ReferenceAssembly\ReferenceAssembly.csproj">
-      <Project>{6F416A34-2476-4A6B-B613-F9B46781C00D}</Project>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ReferenceAssemblyPortable\ReferenceAssembly.csproj">
+      <Project>{6f416a34-2476-4a6b-b613-f9b46781c00d}</Project>
       <Name>ReferenceAssembly</Name>
     </ProjectReference>
   </ItemGroup>

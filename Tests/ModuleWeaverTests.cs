@@ -46,6 +46,7 @@ public class ModuleWeaverTests
         var instance = GetInstance("Simple");
         instance.Dispose();
         Assert.Throws<ObjectDisposedException>(() => instance.PublicProperty = "aString");
+        // ReSharper disable once UnusedVariable
         Assert.Throws<ObjectDisposedException>(() => { var x = instance.PublicProperty; });
     }
 

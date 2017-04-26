@@ -77,20 +77,6 @@
     <Compile Include="ReferenceCleaner.cs" />
     <Compile Include="WeavingException.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj">
-      <Project>{7dec4e2d-f872-434e-a267-0bad65299950}</Project>
-      <Name>AssemblyToProcess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AssemblyWithReadOnly\AssemblyWithReadOnly.csproj">
-      <Project>{d7d3fa0e-325e-4ad3-b1ed-002b224fc714}</Project>
-      <Name>AssemblyWithReadOnly</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ReferenceAssembly\ReferenceAssembly.csproj">
-      <Project>{6f416a34-2476-4a6b-b613-f9b46781c00d}</Project>
-      <Name>ReferenceAssembly</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <ItemGroup>
@@ -98,10 +84,10 @@
     </ItemGroup>
     <Delete Files="@(FilesToDelete)" />
     <MakeDir Directories="$(SolutionDir)NuGetBuild" />
-    <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\Janitor.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40" />
-    <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\Janitor.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40" />
-    <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\Janitor.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
-    <Copy SourceFiles="$(SolutionDir)ReferenceAssembly\bin\$(ConfigurationName)\Janitor.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\dotnet" />
+    <Copy SourceFiles="$(SolutionDir)ReferenceAssemblyPortable\bin\$(ConfigurationName)\Janitor.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40" />
+    <Copy SourceFiles="$(SolutionDir)ReferenceAssemblyPortable\bin\$(ConfigurationName)\Janitor.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl5+wp8+win8+wpa81+MonoAndroid16+MonoTouch40" />
+    <Copy SourceFiles="$(SolutionDir)ReferenceAssemblyNetStandard\bin\$(ConfigurationName)\netstandard1.4\Janitor.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\netstandard1.4" />
+    <Copy SourceFiles="$(SolutionDir)ReferenceAssemblyNetStandard\bin\$(ConfigurationName)\netstandard1.4\Janitor.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\netstandard1.4" />
     <Copy SourceFiles="$(ProjectDir)NugetAssets\Janitor.Fody.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(OutputPath)Janitor.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(OutputPath)Janitor.Fody.pdb" DestinationFolder="$(SolutionDir)NuGetBuild" />

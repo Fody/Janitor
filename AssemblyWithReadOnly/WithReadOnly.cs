@@ -12,5 +12,5 @@ public class WithReadOnly:IDisposable
     {
         stream = new MemoryStream();
     }
-    
+
 }

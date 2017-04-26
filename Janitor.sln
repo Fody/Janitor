@@ -1,19 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 14.0.23107.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fody", "Fody\Fody.csproj", "{C3578A7B-09A6-4444-9383-0DEAFA4958BD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BECA8B98-F5A1-419E-8BFE-81A77B3A17A3} = {BECA8B98-F5A1-419E-8BFE-81A77B3A17A3}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcess", "AssemblyToProcess\AssemblyToProcess.csproj", "{7DEC4E2D-F872-434E-A267-0BAD65299950}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReferenceAssembly", "ReferenceAssembly\ReferenceAssembly.csproj", "{6F416A34-2476-4A6B-B613-F9B46781C00D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReferenceAssembly", "ReferenceAssemblyPortable\ReferenceAssembly.csproj", "{6F416A34-2476-4A6B-B613-F9B46781C00D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template", "Template\Template.csproj", "{A9C5C7AF-09D1-44E0-BBF2-EBE325B93D50}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyWithReadOnly", "AssemblyWithReadOnly\AssemblyWithReadOnly.csproj", "{D7D3FA0E-325E-4AD3-B1ED-002B224FC714}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{3AFB7D94-64AE-4E67-BF0B-C27588598395}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReferenceAssemblyNetStandard", "ReferenceAssemblyNetStandard\ReferenceAssemblyNetStandard.csproj", "{BECA8B98-F5A1-419E-8BFE-81A77B3A17A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +66,14 @@ Global
 		{3AFB7D94-64AE-4E67-BF0B-C27588598395}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3AFB7D94-64AE-4E67-BF0B-C27588598395}.Release|x86.ActiveCfg = Release|Any CPU
 		{3AFB7D94-64AE-4E67-BF0B-C27588598395}.Release|x86.Build.0 = Release|Any CPU
+		{BECA8B98-F5A1-419E-8BFE-81A77B3A17A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BECA8B98-F5A1-419E-8BFE-81A77B3A17A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BECA8B98-F5A1-419E-8BFE-81A77B3A17A3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BECA8B98-F5A1-419E-8BFE-81A77B3A17A3}.Debug|x86.Build.0 = Debug|Any CPU
+		{BECA8B98-F5A1-419E-8BFE-81A77B3A17A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BECA8B98-F5A1-419E-8BFE-81A77B3A17A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BECA8B98-F5A1-419E-8BFE-81A77B3A17A3}.Release|x86.ActiveCfg = Release|Any CPU
+		{BECA8B98-F5A1-419E-8BFE-81A77B3A17A3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
