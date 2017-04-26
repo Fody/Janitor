@@ -12,6 +12,10 @@
     <DocumentationFile>bin\Release\netstandard1.4\Janitor.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.4\Janitor.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\ReferenceAssemblyPortable\SkipWeaving.cs" Link="SkipWeaving.cs" />
   </ItemGroup>
