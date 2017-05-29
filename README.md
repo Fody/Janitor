@@ -1,3 +1,7 @@
+[![Chat on Gitter Status](https://img.shields.io/gitter/room/fody/fody.svg?style=flat)](https://gitter.im/Fody)
+[![NuGet Status](http://img.shields.io/nuget/v/Janitor.Fody.svg?style=flat)](https://www.nuget.org/packages/Janitor.Fody/)
+
+
 ## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
 
 ![Icon](https://raw.github.com/Fody/Janitor/master/Icons/package_icon.png)
@@ -8,7 +12,7 @@ Simplifies the implementation of [IDisposable](http://msdn.microsoft.com/en-us/l
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
 
-## The nuget package  [![NuGet Status](http://img.shields.io/nuget/v/Janitor.Fody.svg?style=flat)](https://www.nuget.org/packages/Janitor.Fody/)
+## The nuget package
 
 https://nuget.org/packages/Janitor.Fody/
 
