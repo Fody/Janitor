@@ -418,4 +418,4 @@ Not currently supported.
 
 ## Icon
 
-<a href="http://thenounproject.com/noun/spray-bottle/#icon-No7154" target="_blank">Spray Bottle</a> designed by <a href="http://thenounproject.com/julietafelix" target="_blank">Julieta Felix</a> from The Noun Project
+<a href="http://thenounproject.com/noun/spray-bottle/#icon-No7154" target="_blank">Spray Bottle</a> designed by <a href="http://thenounproject.com/julietafelix" target="_blank">Julieta Felix</a> from The Noun Project.
