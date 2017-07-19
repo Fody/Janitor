@@ -20,6 +20,7 @@
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs" Link="CommonAssemblyInfo.cs" />
     <Compile Include="..\ReferenceAssemblyPortable\SkipWeaving.cs" Link="SkipWeaving.cs" />
+    <Compile Include="..\ReferenceAssemblyPortable\SkipWeavingNamespace.cs" Link="SkipWeavingNamespace.cs" />
   </ItemGroup>
 
 </Project>
