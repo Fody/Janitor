@@ -403,7 +403,7 @@ Combining the above two scenarios will give you the following
 
 ## What's with the empty `Dispose()`
 
-You will notice that the `Dispose()` is empty in all of the above cases. This is because Janitor controls what goes in there. In fact if you put any code in there Janitor will throw an exception. If you want to control `IDisposable` for specific types you can use `[Janitor.SkipWeaving]` attribute applied to the type. Then Janitor wont touch it.
+You will notice that the `Dispose()` is empty in all of the above cases. This is because Janitor controls what goes in there. In fact if you put any code in there Janitor will throw an exception. If you want to control `IDisposable` for specific types use `[Janitor.SkipWeaving]` attribute applied to the type or `[Janitor.SkipWeavingNamespace("namespaceToSkip"]` to the assembly. Then Janitor wont touch it.
 
 
 ## Why not weave in `IDisposable`

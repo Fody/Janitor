@@ -21,6 +21,15 @@ public static class CecilExtensions
         }
     }
 
+    public static void RemoveSkipWeavingNamespace(this Collection<CustomAttribute> attributes)
+    {
+        var attribute = attributes.FirstOrDefault(x => x.AttributeType.FullName == "Janitor.SkipWeavingNamespace");
+        if (attribute != null)
+        {
+            attributes.Remove(attribute);
+        }
+    }
+
     public static bool MethodExists(this TypeDefinition typeDefinition, string method)
     {
         if (typeDefinition.Methods.Any(x => x.Name == method))

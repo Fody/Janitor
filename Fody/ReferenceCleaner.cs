@@ -5,6 +5,7 @@ public partial class ModuleWeaver
 
     public void CleanReferences()
     {
+        ModuleDefinition.Assembly.CustomAttributes.RemoveSkipWeavingNamespace();
         foreach (var typeDefinition in ModuleDefinition.GetTypes())
         {
             typeDefinition.CustomAttributes.RemoveSkipWeaving();

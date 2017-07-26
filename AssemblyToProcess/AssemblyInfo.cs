@@ -1,3 +1,3 @@
-﻿using Janitor.Fody;
+﻿using Janitor;
 
 [assembly: SkipWeavingNamespace("NamespaceToSkip")]

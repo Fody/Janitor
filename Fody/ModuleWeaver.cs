@@ -22,9 +22,7 @@ public partial class ModuleWeaver
     {
         FindCoreReferences();
 
-        var namespacesToSkip = new HashSet<string>(ModuleDefinition.Assembly.CustomAttributes
-            .Where(a => a.AttributeType.FullName == "Janitor.Fody.SkipWeavingNamespace")
-            .Select(a => (string) a.ConstructorArguments[0].Value));
+        var namespacesToSkip = GetNamespacesToSkip();
 
         foreach (var type in ModuleDefinition
             .GetTypes()
@@ -70,5 +68,11 @@ public partial class ModuleWeaver
         CleanReferences();
     }
 
-
+    HashSet<string> GetNamespacesToSkip()
+    {
+        var collection = ModuleDefinition.Assembly.CustomAttributes
+            .Where(a => a.AttributeType.FullName == "Janitor.SkipWeavingNamespace")
+            .Select(a => (string) a.ConstructorArguments[0].Value);
+        return new HashSet<string>(collection);
+    }
 }
