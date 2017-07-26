@@ -47,6 +47,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="DisposeInBase\Child.cs" />
     <Compile Include="DisposeInBase\Parent.cs" />
     <Compile Include="Simple.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="WhereFieldIsDisposableClassArray.cs" />
     <Compile Include="WhereFieldIsIDisposable.cs" />
     <Compile Include="WhereFieldIsIDisposableArray.cs" />
+    <Compile Include="WhereNamespaceShouldBeSkipped.cs" />
     <Compile Include="WithAttributeToBeRemoved.cs" />
     <Compile Include="WithExplicitDisposeMethod.cs" />
     <Compile Include="WithManaged.cs" />

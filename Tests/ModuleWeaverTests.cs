@@ -306,6 +306,14 @@ public class ModuleWeaverTests
         Assert.That(instance.taskField.Result, Is.EqualTo(42));
     }
 
+    [Test]
+    public void EnsureClassesInSkippedNamespacesAreNotDisposed()
+    {
+        var instance = GetInstance("NamespaceToSkip.WhereNamespaceShouldBeSkipped");
+        instance.Dispose();
+        Assert.IsNotNull(instance.disposableField);
+    }
+
     bool GetIsDisposed(dynamic instance)
     {
         Type type = instance.GetType();

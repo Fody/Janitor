@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 
@@ -21,12 +22,17 @@ public partial class ModuleWeaver
     {
         FindCoreReferences();
 
+        var namespacesToSkip = new HashSet<string>(ModuleDefinition.Assembly.CustomAttributes
+            .Where(a => a.AttributeType.FullName == "Janitor.Fody.SkipWeavingNamespace")
+            .Select(a => (string) a.ConstructorArguments[0].Value));
+
         foreach (var type in ModuleDefinition
             .GetTypes()
             .Where(x =>
                 x.IsClass() &&
                 !x.IsGeneratedCode() &&
-                !x.CustomAttributes.ContainsSkipWeaving()))
+                !x.CustomAttributes.ContainsSkipWeaving() &&
+                !namespacesToSkip.Contains(x.Namespace)))
         {
             var disposeMethods = type.Methods
                                      .Where(x => !x.IsStatic && (x.Name == "Dispose" || x.Name == "System.IDisposable.Dispose"))
