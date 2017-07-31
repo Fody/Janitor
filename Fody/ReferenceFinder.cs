@@ -10,6 +10,7 @@ public partial class ModuleWeaver
         AddAssemblyIfExists("mscorlib", types);
         AddAssemblyIfExists("System.Runtime", types);
         AddAssemblyIfExists("System.Threading", types);
+        AddAssemblyIfExists("netstandard", types);
 
         ObjectFinalizeReference = ModuleDefinition.ImportReference(ModuleDefinition.TypeSystem.Object.Resolve().Find("Finalize"));
 
