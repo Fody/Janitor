@@ -81,9 +81,7 @@ public class ModuleWeaverTests
     [Test]
     public void WithTypeConstraint()
     {
-        var type = moduleWeaverTestHelper.Assembly.GetType("WithTypeConstraint`1", true);
-        var genericType = type.MakeGenericType(typeof(int));
-        var instance = (dynamic)Activator.CreateInstance(genericType);
+        var instance = GetGenericInstance("WithTypeConstraint`1", typeof(int));
         instance.Dispose();
     }
 
@@ -314,6 +312,24 @@ public class ModuleWeaverTests
         Assert.IsNotNull(instance.disposableField);
     }
 
+    [Test]
+    public void WithUnmanagedAndGenericField()
+    {
+        var instance = GetGenericInstance("WithUnmanagedAndGenericField`1", typeof(string));
+        Assert.That(GetIsDisposed(instance), Is.False);
+        instance.Dispose();
+        Assert.That(GetIsDisposed(instance), Is.True);
+    }
+
+    [Test]
+    public void WithUnmanagedAndGenericIDisposableField()
+    {
+        var instance = GetGenericInstance("WithUnmanagedAndGenericIDisposableField`1", typeof(Stream));
+        Assert.That(GetIsDisposed(instance), Is.False);
+        instance.Dispose();
+        Assert.That(GetIsDisposed(instance), Is.True);
+    }
+
     bool GetIsDisposed(dynamic instance)
     {
         Type type = instance.GetType();
@@ -337,6 +353,13 @@ public class ModuleWeaverTests
     {
         var type = moduleWeaverTestHelper.Assembly.GetType(className, true);
         return Activator.CreateInstance(type);
+    }
+
+    public dynamic GetGenericInstance(string className, params Type[] types)
+    {
+        var type = moduleWeaverTestHelper.Assembly.GetType(className, true);
+        var genericType = type.MakeGenericType(types);
+        return Activator.CreateInstance(genericType);
     }
 
     [Test]

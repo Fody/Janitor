@@ -66,6 +66,8 @@
     <Compile Include="WithTypeConstraint.cs" />
     <Compile Include="WithUnmanaged.cs" />
     <Compile Include="WithUnmanagedAndDisposableField.cs" />
+    <Compile Include="WithUnmanagedAndGenericField.cs" />
+    <Compile Include="WithUnmanagedAndGenericIDisposableField.cs" />
     <Compile Include="WithYield.cs" />
     <Reference Include="System" />
     <Reference Include="System.Core" />

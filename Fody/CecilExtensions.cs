@@ -61,6 +61,12 @@ public static class CecilExtensions
         {
             return false;
         }
+        if (typeRef.IsGenericParameter)
+        {
+            var genericParameter = (GenericParameter)typeRef;
+            return genericParameter.HasReferenceTypeConstraint &&
+                genericParameter.Constraints.Any(p => p.FullName.Equals("System.IDisposable"));
+        }
         var type = typeRef.Resolve();
         if (type.Interfaces.Any(i => i.InterfaceType.FullName.Equals("System.IDisposable")))
         {

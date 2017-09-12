@@ -20,7 +20,7 @@ public class OnlyUnmanagedProcessor
         instructions.Add(
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Ldc_I4_1),
-            Instruction.Create(OpCodes.Call, disposeBoolMethod),
+            Instruction.Create(OpCodes.Call, disposeBoolMethod.GetGeneric()),
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(OpCodes.Call, TypeProcessor.ModuleWeaver.SuppressFinalizeMethodReference),
             Instruction.Create(OpCodes.Ret));
