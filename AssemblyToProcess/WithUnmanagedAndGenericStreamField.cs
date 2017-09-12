@@ -1,7 +1,8 @@
 ﻿using System;
+using System.IO;
 
-public class WithUnmanagedAndGenericIDisposableField<T> : IDisposable
-    where T : IDisposable
+public class WithUnmanagedAndGenericStreamField<T> : IDisposable
+    where T : Stream
 {
     public void Dispose()
     {

@@ -196,7 +196,7 @@ public class TypeProcessor
             }
 
             var exchangedMethodReference = ModuleWeaver.ExchangeTMethodReference
-                .MakeGeneric(field.FieldType);
+                .MakeGeneric(field.FieldType.GetDisposable());
 
             var br1 = Instruction.Create(OpCodes.Callvirt, ModuleWeaver.DisposeMethodReference);
             var br2 = Instruction.Create(OpCodes.Nop);

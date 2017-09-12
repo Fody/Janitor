@@ -330,6 +330,24 @@ public class ModuleWeaverTests
         Assert.That(GetIsDisposed(instance), Is.True);
     }
 
+    [Test]
+    public void WithUnmanagedAndGenericStreamField()
+    {
+        var instance = GetGenericInstance("WithUnmanagedAndGenericStreamField`1", typeof(MemoryStream));
+        Assert.That(GetIsDisposed(instance), Is.False);
+        instance.Dispose();
+        Assert.That(GetIsDisposed(instance), Is.True);
+    }
+
+    [Test]
+    public void SimpleWithGenericField()
+    {
+        var instance = GetGenericInstance("SimpleWithGenericField`1", typeof(Stream));
+        Assert.That(GetIsDisposed(instance), Is.False);
+        instance.Dispose();
+        Assert.That(GetIsDisposed(instance), Is.True);
+    }
+
     bool GetIsDisposed(dynamic instance)
     {
         Type type = instance.GetType();

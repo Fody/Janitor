@@ -51,6 +51,7 @@
     <Compile Include="DisposeInBase\Child.cs" />
     <Compile Include="DisposeInBase\Parent.cs" />
     <Compile Include="Simple.cs" />
+    <Compile Include="SimpleWithGenericField.cs" />
     <Compile Include="WhereFieldIsDisposableByBase.cs" />
     <Compile Include="WhereFieldIsDisposableClassArray.cs" />
     <Compile Include="WhereFieldIsIDisposable.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="WithUnmanagedAndDisposableField.cs" />
     <Compile Include="WithUnmanagedAndGenericField.cs" />
     <Compile Include="WithUnmanagedAndGenericIDisposableField.cs" />
+    <Compile Include="WithUnmanagedAndGenericStreamField.cs" />
     <Compile Include="WithYield.cs" />
     <Reference Include="System" />
     <Reference Include="System.Core" />

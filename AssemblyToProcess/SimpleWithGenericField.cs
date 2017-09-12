@@ -1,13 +1,9 @@
 ﻿using System;
 
-public class WithUnmanagedAndGenericIDisposableField<T> : IDisposable
+public class SimpleWithGenericField<T> : IDisposable
     where T : IDisposable
 {
     public void Dispose()
-    {
-    }
-
-    void DisposeUnmanaged()
     {
     }
 
