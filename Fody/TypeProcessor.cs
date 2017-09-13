@@ -26,7 +26,7 @@ public class TypeProcessor
         {
             disposeManagedMethod = CreateDisposeManagedIfNecessary();
         }
-        
+
         if (TargetType.FieldExists("disposeSignaled"))
         {
             ModuleWeaver.LogError($"Type `{TargetType.FullName}` contains a `disposeSignaled` field. Either remove this field or add a `[Janitor.SkipWeaving]` attribute to the type.");
@@ -196,12 +196,12 @@ public class TypeProcessor
             }
 
             var exchangedMethodReference = ModuleWeaver.ExchangeTMethodReference
-                .MakeGeneric(field.FieldType);
+                .MakeGeneric(field.FieldType.GetDisposable());
 
             var br1 = Instruction.Create(OpCodes.Callvirt, ModuleWeaver.DisposeMethodReference);
             var br2 = Instruction.Create(OpCodes.Nop);
             yield return Instruction.Create(OpCodes.Ldarg_0);
-            yield return Instruction.Create(OpCodes.Ldflda, field);
+            yield return Instruction.Create(OpCodes.Ldflda, field.GetGeneric());
             yield return Instruction.Create(OpCodes.Ldnull);
             yield return Instruction.Create(OpCodes.Call, exchangedMethodReference);
             yield return Instruction.Create(OpCodes.Dup);

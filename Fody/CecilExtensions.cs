@@ -61,6 +61,10 @@ public static class CecilExtensions
         {
             return false;
         }
+        if (typeRef.IsGenericParameter)
+        {
+            return ((GenericParameter)typeRef).Constraints.Any(c => c.IsIDisposable());
+        }
         var type = typeRef.Resolve();
         if (type.Interfaces.Any(i => i.InterfaceType.FullName.Equals("System.IDisposable")))
         {
@@ -236,5 +240,15 @@ public static class CecilExtensions
             genericTypeRef.GenericArguments.Add(arg);
 
         return genericTypeRef;
+    }
+
+    public static TypeReference GetDisposable(this TypeReference reference)
+    {
+        if (reference.IsGenericParameter)
+        {
+            return ((GenericParameter)reference).Constraints.First(c => c.IsIDisposable());
+        }
+
+        return reference;
     }
 }
