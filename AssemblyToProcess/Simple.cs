@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 // ReSharper disable UnusedMember.Local
+// ReSharper disable NotAccessedField.Local
 
 public class Simple:IDisposable
 {
@@ -35,5 +36,4 @@ public class Simple:IDisposable
     protected void ProtectedMethod()
     {
     }
-    
 }

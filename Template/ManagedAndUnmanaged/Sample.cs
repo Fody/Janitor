@@ -51,7 +51,7 @@ namespace ManagedAndUnmanagedBefore
 
 namespace ManagedAndUnmanagedAfter
 {
- 
+
     public class Sample : IDisposable
     {
         MemoryStream stream;

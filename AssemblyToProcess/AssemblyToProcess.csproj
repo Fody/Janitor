@@ -1,84 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7DEC4E2D-F872-434E-A267-0BAD65299950}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AssemblyToProcess</RootNamespace>
-    <AssemblyName>AssemblyToProcess</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>3</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deployable|AnyCPU'">
-    <OutputPath>bin\Deployable\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
+    <TargetFrameworks>net452;netcoreapp2.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="DisposeInBase\Child.cs" />
-    <Compile Include="DisposeInBase\Parent.cs" />
-    <Compile Include="Simple.cs" />
-    <Compile Include="SimpleWithGenericField.cs" />
-    <Compile Include="WhereFieldIsDisposableByBase.cs" />
-    <Compile Include="WhereFieldIsDisposableClassArray.cs" />
-    <Compile Include="WhereFieldIsIDisposable.cs" />
-    <Compile Include="WhereFieldIsIDisposableArray.cs" />
-    <Compile Include="WhereNamespaceShouldBeSkipped.cs" />
-    <Compile Include="WithAttributeToBeRemoved.cs" />
-    <Compile Include="WithExplicitDisposeMethod.cs" />
-    <Compile Include="WithManaged.cs" />
-    <Compile Include="WithManagedAndUnmanaged.cs" />
-    <Compile Include="WithOverriddenDispose.cs" />
-    <Compile Include="WithProtectedDispose.cs" />
-    <Compile Include="WithTask.cs" />
-    <Compile Include="WithTypeConstraint.cs" />
-    <Compile Include="WithUnmanaged.cs" />
-    <Compile Include="WithUnmanagedAndDisposableField.cs" />
-    <Compile Include="WithUnmanagedAndGenericField.cs" />
-    <Compile Include="WithUnmanagedAndGenericIDisposableField.cs" />
-    <Compile Include="WithUnmanagedAndGenericStreamField.cs" />
-    <Compile Include="WithYield.cs" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <ProjectReference Include="..\Janitor\Janitor.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ReferenceAssemblyPortable\ReferenceAssembly.csproj">
-      <Project>{6f416a34-2476-4a6b-b613-f9b46781c00d}</Project>
-      <Name>ReferenceAssembly</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

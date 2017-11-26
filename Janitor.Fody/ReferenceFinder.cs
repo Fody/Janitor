@@ -6,7 +6,7 @@ public partial class ModuleWeaver
 {
     public void FindCoreReferences()
     {
-        List<TypeDefinition> types = new List<TypeDefinition>();
+        var types = new List<TypeDefinition>();
         AddAssemblyIfExists("mscorlib", types);
         AddAssemblyIfExists("System.Runtime", types);
         AddAssemblyIfExists("System.Threading", types);

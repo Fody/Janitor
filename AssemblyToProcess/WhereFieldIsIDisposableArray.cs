@@ -7,5 +7,4 @@ public class WhereFieldIsIDisposableArray : IDisposable
     public void Dispose()
     {
     }
-
 }

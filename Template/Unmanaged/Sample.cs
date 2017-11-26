@@ -85,7 +85,6 @@ namespace UnmanagedAfter
             disposed = true;
         }
 
-
         ~Sample()
         {
             Dispose();

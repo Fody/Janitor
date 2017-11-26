@@ -25,12 +25,11 @@ namespace SimpleBefore
             //must be empty
         }
     }
-
 }
 
 namespace SimpleAfter
 {
- 
+
     public class Sample : IDisposable
     {
         MemoryStream stream;
@@ -72,6 +71,3 @@ namespace SimpleAfter
 
     }
 }
-
-
-// ReSharper restore NotAccessedField.Local

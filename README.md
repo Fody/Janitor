@@ -2,21 +2,43 @@
 [![NuGet Status](http://img.shields.io/nuget/v/Janitor.Fody.svg?style=flat)](https://www.nuget.org/packages/Janitor.Fody/)
 
 
-## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
+## This is an add-in for [Fody](https://github.com/Fody/Fody/)
 
-![Icon](https://raw.github.com/Fody/Janitor/master/Icons/package_icon.png)
-![Icon](https://raw.github.com/Fody/Janitor/master/Icons/Janitor.jpg)
+![Icon](https://raw.github.com/Fody/Janitor/master/package_icon.png)
+![Icon](https://raw.github.com/Fody/Janitor/master/Janitor.jpg)
 
 Simplifies the implementation of [IDisposable](http://msdn.microsoft.com/en-us/library/system.idisposable.aspx).
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
 
-## The nuget package
+## Usage
 
-https://nuget.org/packages/Janitor.Fody/
+See also [Fody usage](https://github.com/Fody/Fody#usage).
 
-    PM> Install-Package Janitor.Fody
+
+### NuGet installation
+
+Install the [Janitor.Fody NuGet package](https://nuget.org/packages/Janitor.Fody/) and update the [Fody NuGet package](https://nuget.org/packages/Fody/):
+
+```
+PM> Install-Package Janitor.Fody
+PM> Update-Package Fody
+```
+
+The `Update-Package Fody` is required since NuGet always defaults to the oldest, and most buggy, version of any dependency.
+
+
+### Add to FodyWeavers.xml
+
+Add `<Janitor/>` to [FodyWeavers.xml](https://github.com/Fody/Fody#add-fodyweaversxml)
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<Weavers>
+  <Janitor/>
+</Weavers>
+```
 
 
 ## What it does
@@ -38,69 +60,72 @@ All instance fields will be cleaned up in the `Dispose` method.
 
 #### Your Code
 
-    public class Sample : IDisposable
+```
+public class Sample : IDisposable
+{
+    MemoryStream stream;
+
+    public Sample()
     {
-        MemoryStream stream;
-
-        public Sample()
-        {
-            stream = new MemoryStream();
-        }
-
-        public void Method()
-        {
-            //Some code
-        }
-
-        public void Dispose()
-        {
-            //must be empty
-        }
+        stream = new MemoryStream();
     }
+
+    public void Method()
+    {
+        //Some code
+    }
+
+    public void Dispose()
+    {
+        //must be empty
+    }
+}
+```
 
 
 #### What gets compiled
 
-    public class Sample : IDisposable
+```
+public class Sample : IDisposable
+{
+    MemoryStream stream;
+    volatile int disposeSignaled;
+    bool disposed;
+
+    public Sample()
     {
-        MemoryStream stream;
-        volatile int disposeSignaled;
-        bool disposed;
-
-        public Sample()
-        {
-            stream = new MemoryStream();
-        }
-
-        public void Method()
-        {
-            ThrowIfDisposed();
-            //Some code
-        }
-
-        void ThrowIfDisposed()
-        {
-            if (disposed)
-            {
-                throw new ObjectDisposedException("TemplateClass");
-            }
-        }
-
-        public void Dispose()
-        {
-            if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
-            {
-                return;
-            }
-            var temp = Interlocked.Exchange<IDisposable>(ref stream, null);
-            if (temp != null)
-            {
-                temp.Dispose();
-            }
-            disposed = true;
-        }
-
+        stream = new MemoryStream();
     }
+
+    public void Method()
+    {
+        ThrowIfDisposed();
+        //Some code
+    }
+
+    void ThrowIfDisposed()
+    {
+        if (disposed)
+        {
+            throw new ObjectDisposedException("TemplateClass");
+        }
+    }
+
+    public void Dispose()
+    {
+        if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
+        {
+            return;
+        }
+        var temp = Interlocked.Exchange<IDisposable>(ref stream, null);
+        if (temp != null)
+        {
+            temp.Dispose();
+        }
+        disposed = true;
+    }
+}
+```
 
 
 ### Custom managed handling
@@ -110,83 +135,86 @@ In some cases you may want to have custom code that cleans up your managed resou
 
 #### Your Code
 
-    public class Sample : IDisposable
+```
+public class Sample : IDisposable
+{
+    MemoryStream stream;
+
+    public Sample()
     {
-        MemoryStream stream;
+        stream = new MemoryStream();
+    }
 
-        public Sample()
-        {
-            stream = new MemoryStream();
-        }
+    public void Method()
+    {
+        //Some code
+    }
 
-        public void Method()
-        {
-            //Some code
-        }
+    public void Dispose()
+    {
+        //must be empty
+    }
 
-        public void Dispose()
+    void DisposeManaged()
+    {
+        if (stream != null)
         {
-            //must be empty
-        }
-
-        void DisposeManaged()
-        {
-            if (stream != null)
-            {
-                stream.Dispose();
-                stream = null;
-            }
+            stream.Dispose();
+            stream = null;
         }
     }
+}
+```
 
 
 #### What gets compiled
 
-    public class Sample : IDisposable
+```
+public class Sample : IDisposable
+{
+    MemoryStream stream;
+    volatile int disposeSignaled;
+    bool disposed;
+
+    public Sample()
     {
-        MemoryStream stream;
-        volatile int disposeSignaled;
-        bool disposed;
-
-        public Sample()
-        {
-            stream = new MemoryStream();
-        }
-
-        void DisposeManaged()
-        {
-            if (stream != null)
-            {
-                stream.Dispose();
-                stream = null;
-            }
-        }
-
-        public void Method()
-        {
-            ThrowIfDisposed();
-            //Some code
-        }
-
-        void ThrowIfDisposed()
-        {
-            if (disposed)
-            {
-                throw new ObjectDisposedException("TemplateClass");
-            }
-        }
-
-        public void Dispose()
-        {
-            if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
-            {
-                return;
-            }
-            DisposeManaged();
-            disposed = true;
-        }
-
+        stream = new MemoryStream();
     }
+
+    void DisposeManaged()
+    {
+        if (stream != null)
+        {
+            stream.Dispose();
+            stream = null;
+        }
+    }
+
+    public void Method()
+    {
+        ThrowIfDisposed();
+        //Some code
+    }
+
+    void ThrowIfDisposed()
+    {
+        if (disposed)
+        {
+            throw new ObjectDisposedException("TemplateClass");
+        }
+    }
+
+    public void Dispose()
+    {
+        if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
+        {
+            return;
+        }
+        DisposeManaged();
+        disposed = true;
+    }
+}
+```
 
 
 ### Custom unmanaged handling 
@@ -196,89 +224,92 @@ In some cases you may want to have custom code that cleans up your unmanaged res
 
 #### Your Code
 
-    public class Sample : IDisposable
+```
+public class Sample : IDisposable
+{
+    IntPtr handle;
+
+    public Sample()
     {
-        IntPtr handle;
-
-        public Sample()
-        {
-            handle = new IntPtr();
-        }
-
-        public void Method()
-        {
-            //Some code
-        }
-
-        public void Dispose()
-        {
-            //must be empty
-        }
-
-        void DisposeUnmanaged()
-        {
-            CloseHandle(handle);
-            handle = IntPtr.Zero;
-        }
-
-        [DllImport("kernel32.dll", SetLastError=true)]
-        static extern bool CloseHandle(IntPtr hObject);
+        handle = new IntPtr();
     }
+
+    public void Method()
+    {
+        //Some code
+    }
+
+    public void Dispose()
+    {
+        //must be empty
+    }
+
+    void DisposeUnmanaged()
+    {
+        CloseHandle(handle);
+        handle = IntPtr.Zero;
+    }
+
+    [DllImport("kernel32.dll", SetLastError=true)]
+    static extern bool CloseHandle(IntPtr hObject);
+}
+```
 
 
 #### What gets compiled
 
-    public class Sample : IDisposable
+```
+public class Sample : IDisposable
+{
+    IntPtr handle;
+    volatile int disposeSignaled;
+    bool disposed;
+
+    public Sample()
     {
-        IntPtr handle;
-        volatile int disposeSignaled;
-        bool disposed;
+        handle = new IntPtr();
+    }
 
-        public Sample()
+    void DisposeUnmanaged()
+    {
+        CloseHandle(handle);
+        handle = IntPtr.Zero;
+    }
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern Boolean CloseHandle(IntPtr handle);
+
+    public void Method()
+    {
+        ThrowIfDisposed();
+        //Some code
+    }
+
+    void ThrowIfDisposed()
+    {
+        if (disposed)
         {
-            handle = new IntPtr();
-        }
-
-        void DisposeUnmanaged()
-        {
-            CloseHandle(handle);
-            handle = IntPtr.Zero;
-        }
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern Boolean CloseHandle(IntPtr handle);
-
-        public void Method()
-        {
-            ThrowIfDisposed();
-            //Some code
-        }
-
-        void ThrowIfDisposed()
-        {
-            if (disposed)
-            {
-                throw new ObjectDisposedException("TemplateClass");
-            }
-        }
-
-        public void Dispose()
-        {
-            if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
-            {
-                return;
-            }
-            DisposeUnmanaged();
-            GC.SuppressFinalize(this);
-            disposed = true;
-        }
-
-
-        ~Sample()
-        {
-            Dispose();
+            throw new ObjectDisposedException("TemplateClass");
         }
     }
+
+    public void Dispose()
+    {
+        if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
+        {
+            return;
+        }
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+        disposed = true;
+    }
+
+    ~Sample()
+    {
+        Dispose();
+    }
+}
+```
 
 
 ### Custom managed and unmanaged handling 
@@ -288,117 +319,121 @@ Combining the above two scenarios will give you the following
 
 #### Your code
 
-    public class Sample : IDisposable
+```
+public class Sample : IDisposable
+{
+    MemoryStream stream;
+    IntPtr handle;
+
+    public Sample()
     {
-        MemoryStream stream;
-        IntPtr handle;
+        stream = new MemoryStream();
+        handle = new IntPtr();
+    }
 
-        public Sample()
+    void DisposeUnmanaged()
+    {
+        CloseHandle(handle);
+        handle = IntPtr.Zero;
+    }
+
+    void DisposeManaged()
+    {
+        if (stream != null)
         {
-            stream = new MemoryStream();
-            handle = new IntPtr();
-        }
-
-        void DisposeUnmanaged()
-        {
-            CloseHandle(handle);
-            handle = IntPtr.Zero;
-        }
-
-        void DisposeManaged()
-        {
-            if (stream != null)
-            {
-                stream.Dispose();
-                stream = null;
-            }
-        }
-
-        [DllImport("kernel32.dll", SetLastError=true)]
-        static extern bool CloseHandle(IntPtr hObject);
-
-        public void Method()
-        {
-            //Some code
-        }
-
-        public void Dispose()
-        {
-            //must be empty
+            stream.Dispose();
+            stream = null;
         }
     }
+
+    [DllImport("kernel32.dll", SetLastError=true)]
+    static extern bool CloseHandle(IntPtr hObject);
+
+    public void Method()
+    {
+        //Some code
+    }
+
+    public void Dispose()
+    {
+        //must be empty
+    }
+}
+```
 
 
 #### What gets compiled
 
-    public class Sample : IDisposable
+```
+public class Sample : IDisposable
+{
+    MemoryStream stream;
+    IntPtr handle;
+    volatile int disposeSignaled;
+
+    public Sample()
     {
-        MemoryStream stream;
-        IntPtr handle;
-        volatile int disposeSignaled;
+        stream = new MemoryStream();
+        handle = new IntPtr();
+    }
 
-        public Sample()
+    public void Method()
+    {
+        ThrowIfDisposed();
+        //Some code
+    }
+
+    void DisposeUnmanaged()
+    {
+        CloseHandle(handle);
+        handle = IntPtr.Zero;
+    }
+
+    void DisposeManaged()
+    {
+        if (stream != null)
         {
-            stream = new MemoryStream();
-            handle = new IntPtr();
-        }
-
-        public void Method()
-        {
-            ThrowIfDisposed();
-            //Some code
-        }
-
-        void DisposeUnmanaged()
-        {
-            CloseHandle(handle);
-            handle = IntPtr.Zero;
-        }
-
-        void DisposeManaged()
-        {
-            if (stream != null)
-            {
-                stream.Dispose();
-                stream = null;
-            }
-        }
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern Boolean CloseHandle(IntPtr handle);
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        void ThrowIfDisposed()
-        {
-            if (disposeSignaled !=0)
-            {
-                throw new ObjectDisposedException("Sample");
-            }
-        }
-
-        public void Dispose(bool disposing)
-        {
-            if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
-            {
-                return;
-            }
-            if (disposing)
-            {
-                DisposeManaged();
-            }
-            DisposeUnmanaged();
-        }
-
-        ~Sample()
-        {
-            Dispose(false);
+            stream.Dispose();
+            stream = null;
         }
     }
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern Boolean CloseHandle(IntPtr handle);
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    void ThrowIfDisposed()
+    {
+        if (disposeSignaled !=0)
+        {
+            throw new ObjectDisposedException("Sample");
+        }
+    }
+
+    public void Dispose(bool disposing)
+    {
+        if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
+        {
+            return;
+        }
+        if (disposing)
+        {
+            DisposeManaged();
+        }
+        DisposeUnmanaged();
+    }
+
+    ~Sample()
+    {
+        Dispose(false);
+    }
+}
+```
 
 
 ## What's with the empty `Dispose()`

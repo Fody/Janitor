@@ -14,9 +14,6 @@ public class ModuleWeaverTestHelper
     public ModuleWeaverTestHelper(string inputAssembly)
     {
         BeforeAssemblyPath = Path.GetFullPath(inputAssembly);
-#if (!DEBUG)
-        BeforeAssemblyPath = BeforeAssemblyPath.Replace("Debug", "Release");
-#endif
         AfterAssemblyPath = BeforeAssemblyPath.Replace(".dll", "2.dll");
         var oldPdb = BeforeAssemblyPath.Replace(".dll", ".pdb");
         var newPdb = BeforeAssemblyPath.Replace(".dll", "2.pdb");
@@ -53,5 +50,4 @@ public class ModuleWeaverTestHelper
         }
         Assembly = Assembly.LoadFile(AfterAssemblyPath);
     }
-
 }

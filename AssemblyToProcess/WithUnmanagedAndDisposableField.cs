@@ -9,7 +9,6 @@ public class WithUnmanagedAndDisposableField : IDisposable
     {
     }
 
-
     public void DisposeUnmanaged()
     {
         DisposeUnmanagedCalled = true;
@@ -18,7 +17,9 @@ public class WithUnmanagedAndDisposableField : IDisposable
     }
 
     public string Property { get; set; }
+
     public bool DisposeUnmanagedCalled;
+
     public void Method()
     {
     }

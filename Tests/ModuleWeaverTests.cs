@@ -8,10 +8,7 @@ public class ModuleWeaverTests
 {
     ModuleWeaverTestHelper moduleWeaverTestHelper;
 
-    public ModuleWeaverTests()
-    {
-        moduleWeaverTestHelper = new ModuleWeaverTestHelper(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll"));
-    }
+    public ModuleWeaverTests()    {        var inputAssembly = Path.Combine(TestContext.CurrentContext.TestDirectory, "AssemblyToProcess.dll");        moduleWeaverTestHelper = new ModuleWeaverTestHelper(inputAssembly);    }
 
     [Test]
     public void Simple()

@@ -17,7 +17,6 @@ public class ManagedAndUnmanagedProcessor
         TypeProcessor.AddFinalizer(DisposeBoolMethod);
     }
 
-
     void InjectIntoDispose()
     {
         var instructions = TypeProcessor.DisposeMethod.Body.Instructions;
@@ -57,5 +56,4 @@ public class ManagedAndUnmanagedProcessor
 
         TypeProcessor.TargetType.Methods.Add(DisposeBoolMethod);
     }
-
 }

@@ -45,8 +45,4 @@ public class OnlyUnmanagedProcessor
         TypeProcessor.TargetType.Methods.Add(disposeBoolMethod);
         TypeProcessor.AddFinalizer(disposeBoolMethod);
     }
-
-
-
-
 }

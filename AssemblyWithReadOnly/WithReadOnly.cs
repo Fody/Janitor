@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+// ReSharper disable NotAccessedField.Local
 
 public class WithReadOnly:IDisposable
 {
@@ -8,9 +9,9 @@ public class WithReadOnly:IDisposable
     public void Dispose()
     {
     }
+
     public WithReadOnly()
     {
         stream = new MemoryStream();
     }
-
 }

@@ -4,7 +4,6 @@ using System.Threading;
 
 namespace ManagedBefore
 {
-
     public class Sample : IDisposable
     {
         MemoryStream stream;
@@ -34,12 +33,10 @@ namespace ManagedBefore
             //must be empty
         }
     }
-
 }
 
 namespace ManagedAfter
 {
- 
     public class Sample : IDisposable
     {
         MemoryStream stream;
@@ -83,6 +80,5 @@ namespace ManagedAfter
             DisposeManaged();
             disposed = true;
         }
-
     }
 }

@@ -5,6 +5,7 @@ public class WithManaged:IDisposable
     public void Dispose()
     {
     }
+
     public void DisposeManaged()
     {
         DisposeManagedCalled = true;
@@ -14,8 +15,8 @@ public class WithManaged:IDisposable
 
     public bool DisposeManagedCalled;
 
-
     public string Property { get; set; }
+
     public void Method()
     {
     }

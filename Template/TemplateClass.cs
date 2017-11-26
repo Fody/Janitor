@@ -30,7 +30,7 @@ public class TemplateClass : IDisposable
         }
     }
 
-    public void Dispose() 
+    public void Dispose()
     {
         Dispose(true);
         GC.SuppressFinalize(this);

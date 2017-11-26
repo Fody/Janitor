@@ -6,7 +6,6 @@ public class WithUnmanaged:IDisposable
     {
     }
 
-
     public void DisposeUnmanaged()
     {
         DisposeUnmanagedCalled = true;
@@ -15,7 +14,9 @@ public class WithUnmanaged:IDisposable
     }
 
     public string Property { get; set; }
+
     public bool DisposeUnmanagedCalled;
+
     public void Method()
     {
     }

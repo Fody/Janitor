@@ -8,6 +8,7 @@ public class WhereFieldIsDisposableByBase:IDisposable
     public void Dispose()
     {
     }
+
     public WhereFieldIsDisposableByBase()
     {
         Child = new Child();
