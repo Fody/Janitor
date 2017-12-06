@@ -35,7 +35,9 @@ public partial class ModuleWeaver
             var assembly = AssemblyResolver.Resolve(new AssemblyNameReference(name, null));
             if (assembly != null)
             {
-                types.AddRange(assembly.MainModule.Types);
+                var module = assembly.MainModule;
+                types.AddRange(module.Types.Where(x => x.IsPublic));
+                types.AddRange(module.ExportedTypes.Select(x => x.Resolve()).Where(x => x.IsPublic));
             }
         }
         catch (AssemblyResolutionException)
