@@ -13,7 +13,11 @@ public class ModuleWeaverTests
     static ModuleWeaverTests()
     {
         var weavingTask = new ModuleWeaver();
+#if(NET46)
         testResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll");
+#else
+        testResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll",false);
+#endif
         assembly = testResult.Assembly;
     }
 
@@ -121,7 +125,10 @@ public class ModuleWeaverTests
     {
         var instance = GetInstance("Simple");
         instance.Dispose();
-        Assert.Throws<ObjectDisposedException>(() => instance.PublicMethod());
+        Assert.Throws<ObjectDisposedException>(() =>
+        {
+            instance.PublicMethod();
+        });
     }
 
     [Fact]
@@ -178,7 +185,10 @@ public class ModuleWeaverTests
         Assert.True(isDisposed);
         Assert.True(instance.DisposeManagedCalled);
         Assert.True(instance.DisposeUnmanagedCalled);
-        Assert.Throws<ObjectDisposedException>(() => instance.Method());
+        Assert.Throws<ObjectDisposedException>(() =>
+        {
+            instance.Method();
+        });
     }
 
     [Fact]
@@ -192,7 +202,10 @@ public class ModuleWeaverTests
 
         Assert.True(isDisposed);
         Assert.True(instance.DisposeManagedCalled);
-        Assert.Throws<ObjectDisposedException>(() => instance.Method());
+        Assert.Throws<ObjectDisposedException>(() =>
+        {
+            instance.Method();
+        });
     }
 
     [Fact]
@@ -206,7 +219,10 @@ public class ModuleWeaverTests
 
         Assert.True(isDisposed);
         Assert.True(instance.DisposeUnmanagedCalled);
-        Assert.Throws<ObjectDisposedException>(() => instance.Method());
+        Assert.Throws<ObjectDisposedException>(() =>
+        {
+           instance.Method();
+        });
     }
 
     [Fact]
@@ -221,7 +237,10 @@ public class ModuleWeaverTests
         Assert.True(isDisposed);
         Assert.True(instance.DisposeUnmanagedCalled);
         Assert.Null(instance.DisposableField);
-        Assert.Throws<ObjectDisposedException>(() => instance.Method());
+        Assert.Throws<ObjectDisposedException>(() =>
+        {
+            instance.Method();
+        });
     }
 
     [Fact]
@@ -234,7 +253,10 @@ public class ModuleWeaverTests
         instance.Dispose();
         isChildDisposed = GetIsDisposed(child);
         Assert.True(isChildDisposed);
-        Assert.Throws<ObjectDisposedException>(() => instance.Method());
+        Assert.Throws<ObjectDisposedException>(() =>
+        {
+            instance.Method();
+        });
     }
 
     [Fact]

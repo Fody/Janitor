@@ -12,7 +12,7 @@ public class OnlyManagedProcessor
     {
         var instructions =TypeProcessor.DisposeMethod.Body.Instructions;
         instructions.Clear();
-      //  instructions.Add(TypeProcessor.GetDisposeEscapeInstructions());
+        instructions.Add(TypeProcessor.GetDisposeEscapeInstructions());
         instructions.Add(
             Instruction.Create(OpCodes.Ldarg_0),
             Instruction.Create(DisposeManagedMethod.GetCallingConvention(), DisposeManagedMethod));

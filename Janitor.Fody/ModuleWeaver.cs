@@ -54,6 +54,16 @@ public partial class ModuleWeaver : BaseModuleWeaver
             };
             methodProcessor.Process();
         }
+
+        ModuleDefinition.Assembly.CustomAttributes.RemoveSkipWeavingNamespace();
+        foreach (var typeDefinition in ModuleDefinition.GetTypes())
+        {
+            typeDefinition.CustomAttributes.RemoveSkipWeaving();
+            foreach (var field in typeDefinition.Fields)
+            {
+                field.CustomAttributes.RemoveSkipWeaving();
+            }
+        }
     }
 
     public override IEnumerable<string> GetAssembliesForScanning()
