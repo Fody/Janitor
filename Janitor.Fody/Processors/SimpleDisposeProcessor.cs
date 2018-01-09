@@ -9,7 +9,7 @@ public class SimpleDisposeProcessor
         var disposeMethod = TypeProcessor.DisposeMethod;
         var instructions = disposeMethod.Body.Instructions;
         instructions.Clear();
-        instructions.Add(TypeProcessor.GetDisposeEscapeInstructions());
+     //   instructions.Add(TypeProcessor.GetDisposeEscapeInstructions());
         instructions.Add(TypeProcessor.GetDisposeOfFieldInstructions());
         instructions.Add(TypeProcessor.GetDisposedInstructions());
         instructions.Add(Instruction.Create(OpCodes.Ret));

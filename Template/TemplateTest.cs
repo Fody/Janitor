@@ -1,9 +1,8 @@
-﻿using NUnit.Framework;
+﻿using Xunit;
 
-[TestFixture]
 public class TemplateTest
 {
-    [Test]
+    [Fact]
     public void Run()
     {
         var templateClass = new TemplateClass();

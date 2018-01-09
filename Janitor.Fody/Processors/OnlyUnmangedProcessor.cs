@@ -34,7 +34,7 @@ public class OnlyUnmanagedProcessor
         disposeBoolMethod.Parameters.Add(disposingParameter);
 
         var instructions = disposeBoolMethod.Body.Instructions;
-        instructions.Add(TypeProcessor.GetDisposeEscapeInstructions());
+       // instructions.Add(TypeProcessor.GetDisposeEscapeInstructions());
 
         instructions.Add(
             Instruction.Create(OpCodes.Ldarg_0),

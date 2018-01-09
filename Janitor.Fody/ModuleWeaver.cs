@@ -1,24 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Mono.Cecil;
+using Fody;
 
-public partial class ModuleWeaver
+public partial class ModuleWeaver : BaseModuleWeaver
 {
-    public Action<string> LogInfo { get; set; }
-    public Action<string> LogWarning { get; set; }
-    public Action<string> LogError { get; set; }
-    public ModuleDefinition ModuleDefinition { get; set; }
-    public IAssemblyResolver AssemblyResolver { get; set; }
-
-    public ModuleWeaver()
-    {
-        LogInfo = s => { };
-        LogWarning = s => { };
-        LogError = s => { };
-    }
-
-    public void Execute()
+    public override void Execute()
     {
         FindCoreReferences();
 
@@ -33,17 +19,19 @@ public partial class ModuleWeaver
                 !namespacesToSkip.Contains(x.Namespace)))
         {
             var disposeMethods = type.Methods
-                                     .Where(x => !x.IsStatic && (x.Name == "Dispose" || x.Name == "System.IDisposable.Dispose"))
-                                     .ToList();
+                .Where(x => !x.IsStatic && (x.Name == "Dispose" || x.Name == "System.IDisposable.Dispose"))
+                .ToList();
             if (disposeMethods.Count == 0)
             {
                 continue;
             }
+
             if (disposeMethods.Count > 1)
             {
                 var message = $"Type `{type.FullName}` contains more than one `Dispose` method. Either remove one or add a `[Janitor.SkipWeaving]` attribute to the type.";
                 LogError(message);
             }
+
             var disposeMethod = disposeMethods.First();
 
             if (!disposeMethod.IsEmptyOrNotImplemented())
@@ -51,6 +39,7 @@ public partial class ModuleWeaver
                 var message = $"Type `{type.FullName}` contains a `Dispose` method with code. Either remove the code or add a `[Janitor.SkipWeaving]` attribute to the type.";
                 LogError(message);
             }
+
             if (type.BaseType.Name != "Object")
             {
                 var message = $"Type `{type.FullName}` has a base class which is not currently supported. Either remove the base class or add a `[Janitor.SkipWeaving]` attribute to the type.";
@@ -58,21 +47,30 @@ public partial class ModuleWeaver
             }
 
             var methodProcessor = new TypeProcessor
-                                  {
-                                      DisposeMethod = disposeMethod,
-                                      ModuleWeaver = this,
-                                      TargetType = type,
-                                  };
+            {
+                DisposeMethod = disposeMethod,
+                ModuleWeaver = this,
+                TargetType = type,
+            };
             methodProcessor.Process();
         }
-        CleanReferences();
     }
+
+    public override IEnumerable<string> GetAssembliesForScanning()
+    {
+        yield return "mscorlib";
+        yield return "System.Runtime";
+        yield return "System.Threading";
+        yield return "netstandard";
+    }
+
+    public override bool ShouldCleanReference => true;
 
     HashSet<string> GetNamespacesToSkip()
     {
         var collection = ModuleDefinition.Assembly.CustomAttributes
             .Where(a => a.AttributeType.FullName == "Janitor.SkipWeavingNamespace")
-            .Select(a => (string) a.ConstructorArguments[0].Value);
+            .Select(a => (string)a.ConstructorArguments[0].Value);
         return new HashSet<string>(collection);
     }
 }

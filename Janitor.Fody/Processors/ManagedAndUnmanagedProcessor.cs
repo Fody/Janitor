@@ -38,7 +38,7 @@ public class ManagedAndUnmanagedProcessor
         DisposeBoolMethod.Parameters.Add(disposingParameter);
 
         var instructions = DisposeBoolMethod.Body.Instructions;
-        instructions.Add(TypeProcessor.GetDisposeEscapeInstructions());
+     //   instructions.Add(TypeProcessor.GetDisposeEscapeInstructions());
 
         var skipDisposeManaged = Instruction.Create(OpCodes.Nop);
         instructions.Add(

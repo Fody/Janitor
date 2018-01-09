@@ -6,7 +6,6 @@ using System.Threading;
 
 namespace ManagedAndUnmanagedBefore
 {
-
     public class Sample : IDisposable
     {
         MemoryStream stream;

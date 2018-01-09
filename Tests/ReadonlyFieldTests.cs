@@ -1,14 +1,13 @@
-﻿using System.IO;
-using NUnit.Framework;
+﻿using Fody;
+using Xunit;
 
-[TestFixture]
 public class ReadonlyFieldTests
 {
-    [Test]
+    [Fact]
     public void Verity_throws_an_exception()
     {
-        var inputAssembly = Path.Combine(TestContext.CurrentContext.TestDirectory, "AssemblyWithReadOnly.dll");
-        var testHelper = new ModuleWeaverTestHelper(inputAssembly);
-        Assert.AreEqual("Could not add dispose for field 'WithReadOnly.stream' since it is marked as readonly. Change this field to not be readonly.", testHelper.Errors[0]);
+        var weavingTask = new ModuleWeaver();
+        var testResult = weavingTask.ExecuteTestRun("AssemblyWithReadOnly.dll");
+        Assert.Equal("Could not add dispose for field 'WithReadOnly.stream' since it is marked as readonly. Change this field to not be readonly.", testResult.Errors[0].Text);
     }
 }

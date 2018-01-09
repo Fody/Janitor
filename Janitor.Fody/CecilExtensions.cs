@@ -63,7 +63,8 @@ public static class CecilExtensions
         }
         if (typeRef.IsGenericParameter)
         {
-            return ((GenericParameter)typeRef).Constraints.Any(c => c.IsIDisposable());
+            var genericParameter = ((GenericParameter)typeRef);
+            return genericParameter.Constraints.Any(c => c.IsIDisposable());
         }
         var type = typeRef.Resolve();
         if (type.Interfaces.Any(i => i.InterfaceType.FullName.Equals("System.IDisposable")))
@@ -230,10 +231,14 @@ public static class CecilExtensions
     public static MethodReference MakeGeneric(this MethodReference method, params TypeReference[] args)
     {
         if (args.Length == 0)
+        {
             return method;
+        }
 
         if (method.GenericParameters.Count != args.Length)
+        {
             throw new ArgumentException("Invalid number of generic type arguments supplied");
+        }
 
         var genericTypeRef = new GenericInstanceMethod(method);
         foreach (var arg in args)
