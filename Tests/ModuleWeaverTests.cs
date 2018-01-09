@@ -7,7 +7,6 @@ using Xunit;
 
 public class ModuleWeaverTests
 {
-    static Assembly assembly;
     static TestResult testResult;
 
     static ModuleWeaverTests()
@@ -18,13 +17,12 @@ public class ModuleWeaverTests
 #else
         testResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll",false);
 #endif
-        assembly = testResult.Assembly;
     }
 
     [Fact]
     public void Simple()
     {
-        var instance = GetInstance("Simple");
+        var instance = testResult.GetInstance("Simple");
         var isDisposed = GetIsDisposed(instance);
         Assert.False(isDisposed);
         instance.Dispose();
@@ -35,7 +33,7 @@ public class ModuleWeaverTests
     [Fact]
     public void EnsureExplicitDisposeMethodIsWeaved()
     {
-        var instance = GetInstance("WithExplicitDisposeMethod");
+        var instance = testResult.GetInstance("WithExplicitDisposeMethod");
         var child = instance.Child;
         var isDisposed = GetIsDisposed(instance);
         var isChildDisposed = GetIsDisposed(child);
@@ -51,7 +49,7 @@ public class ModuleWeaverTests
     [Fact]
     public void EnsurePublicPropertyThrows()
     {
-        var instance = GetInstance("Simple");
+        var instance = testResult.GetInstance("Simple");
         instance.Dispose();
         Assert.Throws<ObjectDisposedException>(() => instance.PublicProperty = "aString");
         // ReSharper disable once UnusedVariable
@@ -64,7 +62,7 @@ public class ModuleWeaverTests
     [Fact]
     public void EnsureInternalPropertyThrows()
     {
-        var instance = GetInstance("Simple");
+        var instance = testResult.GetInstance("Simple");
         instance.Dispose();
         var type = (Type)instance.GetType();
         var setMethodInfo = type.GetMethod("set_InternalProperty", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -78,7 +76,7 @@ public class ModuleWeaverTests
     [Fact]
     public void EnsureProtectedPropertyThrows()
     {
-        var instance = GetInstance("Simple");
+        var instance = testResult.GetInstance("Simple");
         instance.Dispose();
         var type = (Type)instance.GetType();
         var setMethodInfo = type.GetMethod("set_ProtectedProperty", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -92,14 +90,14 @@ public class ModuleWeaverTests
     [Fact]
     public void WithTypeConstraint()
     {
-        var instance = GetGenericInstance("WithTypeConstraint`1", typeof(int));
+        var instance = testResult.GetGenericInstance("WithTypeConstraint`1", typeof(int));
         instance.Dispose();
     }
 
     [Fact]
     public void EnsurePrivatePropertyDoesNotThrow()
     {
-        var instance = GetInstance("Simple");
+        var instance = testResult.GetInstance("Simple");
         instance.Dispose();
         var type = (Type)instance.GetType();
         var setMethodInfo = type.GetMethod("set_PrivateProperty", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -111,7 +109,7 @@ public class ModuleWeaverTests
     [Fact]
     public void EnsureStaticPropertyDoesNotThrow()
     {
-        var instance = GetInstance("Simple");
+        var instance = testResult.GetInstance("Simple");
         instance.Dispose();
         var type = (Type)instance.GetType();
         var setMethodInfo = type.GetMethod("set_StaticProperty", BindingFlags.Static | BindingFlags.Public);
@@ -123,7 +121,7 @@ public class ModuleWeaverTests
     [Fact]
     public void EnsurePublicMethodThrows()
     {
-        var instance = GetInstance("Simple");
+        var instance = testResult.GetInstance("Simple");
         instance.Dispose();
         Assert.Throws<ObjectDisposedException>(() =>
         {
@@ -134,7 +132,7 @@ public class ModuleWeaverTests
     [Fact]
     public void EnsureInternalMethodThrows()
     {
-        var instance = GetInstance("Simple");
+        var instance = testResult.GetInstance("Simple");
         instance.Dispose();
         var type = (Type)instance.GetType();
         var methodInfo = type.GetMethod("InternalMethod", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -145,7 +143,7 @@ public class ModuleWeaverTests
     [Fact]
     public void EnsureProtectedMethodThrows()
     {
-        var instance = GetInstance("Simple");
+        var instance = testResult.GetInstance("Simple");
         instance.Dispose();
         var type = (Type)instance.GetType();
         var methodInfo = type.GetMethod("ProtectedMethod", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -156,7 +154,7 @@ public class ModuleWeaverTests
     [Fact]
     public void EnsurePrivateMethodDoesNotThrow()
     {
-        var instance = GetInstance("Simple");
+        var instance = testResult.GetInstance("Simple");
         instance.Dispose();
         var type = (Type)instance.GetType();
         var methodInfo = type.GetMethod("PrivateMethod", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -166,7 +164,7 @@ public class ModuleWeaverTests
     [Fact]
     public void EnsureStaticMethodDoesNotThrow()
     {
-        var instance = GetInstance("Simple");
+        var instance = testResult.GetInstance("Simple");
         instance.Dispose();
         var type = (Type)instance.GetType();
         var methodInfo = type.GetMethod("StaticMethod", BindingFlags.Static | BindingFlags.Public);
@@ -176,7 +174,7 @@ public class ModuleWeaverTests
     [Fact]
     public void WithManagedAndUnmanaged()
     {
-        var instance = GetInstance("WithManagedAndUnmanaged");
+        var instance = testResult.GetInstance("WithManagedAndUnmanaged");
         var isDisposed = GetIsDisposed(instance);
         Assert.False(isDisposed);
         instance.Dispose();
@@ -194,7 +192,7 @@ public class ModuleWeaverTests
     [Fact]
     public void WithManaged()
     {
-        var instance = GetInstance("WithManaged");
+        var instance = testResult.GetInstance("WithManaged");
         var isDisposed = GetIsDisposed(instance);
         Assert.False(isDisposed);
         instance.Dispose();
@@ -211,7 +209,7 @@ public class ModuleWeaverTests
     [Fact]
     public void WithUnmanaged()
     {
-        var instance = GetInstance("WithUnmanaged");
+        var instance = testResult.GetInstance("WithUnmanaged");
         var isDisposed = GetIsDisposed(instance);
         Assert.False(isDisposed);
         instance.Dispose();
@@ -228,7 +226,7 @@ public class ModuleWeaverTests
     [Fact]
     public void WithUnmanagedAndDisposableField()
     {
-        var instance = GetInstance("WithUnmanagedAndDisposableField");
+        var instance = testResult.GetInstance("WithUnmanagedAndDisposableField");
         var isDisposed = GetIsDisposed(instance);
         Assert.False(isDisposed);
         instance.Dispose();
@@ -246,7 +244,7 @@ public class ModuleWeaverTests
     [Fact]
     public void WhereFieldIsDisposableByBase()
     {
-        var instance = GetInstance("WhereFieldIsDisposableByBase");
+        var instance = testResult.GetInstance("WhereFieldIsDisposableByBase");
         var child = instance.Child;
         var isChildDisposed = GetIsDisposed(child);
         Assert.False(isChildDisposed);
@@ -262,7 +260,7 @@ public class ModuleWeaverTests
     [Fact]
     public void WhereFieldIsIDisposable()
     {
-        var instance = GetInstance("WhereFieldIsIDisposable");
+        var instance = testResult.GetInstance("WhereFieldIsIDisposable");
         var field = instance.Field;
         var isFieldDisposed = GetIsDisposed(field);
         Assert.False(isFieldDisposed);
@@ -280,7 +278,7 @@ public class ModuleWeaverTests
     [Fact]
     public void WhereFieldIsIDisposableArray()
     {
-        var instance = GetInstance("WhereFieldIsIDisposableArray");
+        var instance = testResult.GetInstance("WhereFieldIsIDisposableArray");
         instance.Dispose();
         Assert.NotNull(instance.Field);
     }
@@ -288,7 +286,7 @@ public class ModuleWeaverTests
     [Fact]
     public void WhereFieldIsDisposableClassArray()
     {
-        var instance = GetInstance("WhereFieldIsDisposableClassArray");
+        var instance = testResult.GetInstance("WhereFieldIsDisposableClassArray");
         instance.Dispose();
         Assert.NotNull(instance.Field);
     }
@@ -322,7 +320,7 @@ public class ModuleWeaverTests
         var writer = new StringWriter();
         Console.SetOut(writer);
 
-        var instance = GetInstance(className);
+        var instance = testResult.GetInstance(className);
         Assert.False(GetIsDisposed(instance));
         instance.Dispose();
         Assert.True(GetIsDisposed(instance));
@@ -332,7 +330,7 @@ public class ModuleWeaverTests
     [Fact]
     public void EnsureTasksAreNotDisposed()
     {
-        var instance = GetInstance("WithTask");
+        var instance = testResult.GetInstance("WithTask");
         instance.Dispose();
         Assert.NotNull(instance.taskField);
         instance.taskCompletionSource.SetResult(42);
@@ -342,7 +340,7 @@ public class ModuleWeaverTests
     [Fact]
     public void EnsureClassesInSkippedNamespacesAreNotDisposed()
     {
-        var instance = GetInstance("NamespaceToSkip.WhereNamespaceShouldBeSkipped");
+        var instance = testResult.GetInstance("NamespaceToSkip.WhereNamespaceShouldBeSkipped");
         instance.Dispose();
         Assert.NotNull(instance.disposableField);
     }
@@ -350,7 +348,7 @@ public class ModuleWeaverTests
     [Fact]
     public void WithUnmanagedAndGenericField()
     {
-        var instance = GetGenericInstance("WithUnmanagedAndGenericField`1", typeof(string));
+        var instance = testResult.GetGenericInstance("WithUnmanagedAndGenericField`1", typeof(string));
         Assert.False(GetIsDisposed(instance));
         instance.Dispose();
         Assert.True(GetIsDisposed(instance));
@@ -359,7 +357,7 @@ public class ModuleWeaverTests
     [Fact]
     public void WithUnmanagedAndGenericIDisposableField()
     {
-        var instance = GetGenericInstance("WithUnmanagedAndGenericIDisposableField`1", typeof(Stream));
+        var instance = testResult.GetGenericInstance("WithUnmanagedAndGenericIDisposableField`1", typeof(Stream));
         Assert.False(GetIsDisposed(instance));
         instance.Dispose();
         Assert.True(GetIsDisposed(instance));
@@ -368,7 +366,7 @@ public class ModuleWeaverTests
     [Fact]
     public void WithUnmanagedAndGenericStreamField()
     {
-        var instance = GetGenericInstance("WithUnmanagedAndGenericStreamField`1", typeof(MemoryStream));
+        var instance = testResult.GetGenericInstance("WithUnmanagedAndGenericStreamField`1", typeof(MemoryStream));
         Assert.False(GetIsDisposed(instance));
         instance.Dispose();
         Assert.True(GetIsDisposed(instance));
@@ -377,7 +375,7 @@ public class ModuleWeaverTests
     [Fact]
     public void SimpleWithGenericField()
     {
-        var instance = GetGenericInstance("SimpleWithGenericField`1", typeof(Stream));
+        var instance = testResult.GetGenericInstance("SimpleWithGenericField`1", typeof(Stream));
         Assert.False(GetIsDisposed(instance));
         instance.Dispose();
         Assert.True(GetIsDisposed(instance));
@@ -401,18 +399,5 @@ public class ModuleWeaverTests
         }
 
         return fieldInfo;
-    }
-
-    public dynamic GetInstance(string className)
-    {
-        var type = assembly.GetType(className, true);
-        return Activator.CreateInstance(type);
-    }
-
-    public dynamic GetGenericInstance(string className, params Type[] types)
-    {
-        var type = assembly.GetType(className, true);
-        var genericType = type.MakeGenericType(types);
-        return Activator.CreateInstance(genericType);
     }
 }
