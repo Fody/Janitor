@@ -189,6 +189,17 @@ public class TypeProcessor
                 ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it is marked as readonly. Change this field to not be readonly.");
                 continue;
             }
+            if (field.FieldType.IsValueType)
+            {
+                ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it is a value type.");
+                continue;
+            }
+
+            if (field.FieldType.HasGenericParameters || this.TargetType.HasGenericParameters)
+            {
+                ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it is a value type.");
+                continue;
+            }
             if (field.FieldType.FullName.StartsWith("System.Threading.Tasks.Task"))
             {
                 // do not dispose tasks, see https://blogs.msdn.microsoft.com/pfxteam/2012/03/25/do-i-need-to-dispose-of-tasks/

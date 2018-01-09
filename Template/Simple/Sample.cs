@@ -32,13 +32,13 @@ namespace SimpleAfter
 
     public class Sample : IDisposable
     {
-        MemoryStream stream;
+        Disposable stream;
         volatile int disposeSignaled;
         bool disposed;
 
         public Sample()
         {
-            stream = new MemoryStream();
+            stream = new Disposable();
         }
 
         public void Method()
@@ -61,13 +61,31 @@ namespace SimpleAfter
             {
                 return;
             }
-            if (stream != null)
+            //if (stream != null)
             {
-                stream.Dispose();
-                stream = null;
+               ((IDisposable) stream).Dispose();
+            //    stream = null;
             }
             disposed = true;
         }
+        public struct Disposable : IDisposable
+        {
+            private int disposeSignaled;
+
+#pragma warning disable 414
+            private bool disposed;
+#pragma warning restore 414
+
+            public void Dispose()
+            {
+                if (Interlocked.Exchange(ref this.disposeSignaled, 1) != 0)
+                {
+                    return;
+                }
+                this.disposed = true;
+            }
+        }
+
 
     }
 }

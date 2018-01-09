@@ -2,10 +2,13 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.4;net452</TargetFrameworks>
     <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>$(SolutionDir)key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>Fody add-in that helps with implementing IDisposable.</Description>
+    <PackageTags>IDisposable, Dispose, ILWeaving, Fody, Cecil</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs" Link="CommonAssemblyInfo.cs" />
+    <PackageReference Include="Fody" Version="2.3.17" />
+    <PackageReference Include="FodyPackaging" Version="2.3.17" PrivateAssets="All" />
   </ItemGroup>
 </Project>
