@@ -4,8 +4,8 @@
 
 ## This is an add-in for [Fody](https://github.com/Fody/Fody/)
 
-![Icon](https://raw.github.com/Fody/Janitor/master/package_icon.png)
-![Icon](https://raw.github.com/Fody/Janitor/master/Janitor.jpg)
+![Icon](https://raw.githubusercontent.com/Fody/Janitor/master/package_icon.png)
+![Icon](https://raw.githubusercontent.com/Fody/Janitor/master/Janitor.jpg)
 
 Simplifies the implementation of [IDisposable](http://msdn.microsoft.com/en-us/library/system.idisposable.aspx).
 
