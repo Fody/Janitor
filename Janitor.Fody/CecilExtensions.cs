@@ -146,7 +146,17 @@ public static class CecilExtensions
 
     public static bool IsGeneratedCode(this ICustomAttributeProvider value)
     {
-        return value.CustomAttributes.Any(a => a.AttributeType.Name == "CompilerGeneratedAttribute" || a.AttributeType.Name == "GeneratedCodeAttribute");
+        if (value == null)
+        {
+            return false;
+        }
+
+        if (value.CustomAttributes.Any(a => a.AttributeType.Name == "CompilerGeneratedAttribute" || a.AttributeType.Name == "GeneratedCodeAttribute"))
+        {
+            return true;
+        }
+
+        return IsGeneratedCode((value as TypeDefinition)?.DeclaringType);
     }
 
     public static bool IsEmptyOrNotImplemented(this MethodDefinition method)

@@ -381,6 +381,15 @@ public class ModuleWeaverTests
         Assert.True(GetIsDisposed(instance));
     }
 
+    [Fact]
+    public void WithDisposableLocalFunction()
+    {
+        var instance = testResult.GetInstance("WithDisposableLocalFunction");
+        var types = instance.MethodWithLocalFunction();
+        Assert.NotNull(types);
+        Assert.NotEmpty(types);
+    }
+
     bool GetIsDisposed(dynamic instance)
     {
         Type type = instance.GetType();
