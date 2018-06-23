@@ -4,7 +4,8 @@ public partial class ModuleWeaver
 {
     public void FindCoreReferences()
     {
-        ObjectFinalizeReference = ModuleDefinition.ImportReference(ModuleDefinition.TypeSystem.Object.Resolve().Find("Finalize"));
+        var objectTypeDefinition = FindType("System.Object");
+        ObjectFinalizeReference = ModuleDefinition.ImportReference(objectTypeDefinition.Find("Finalize"));
 
         var gcTypeDefinition = FindType("System.GC");
         SuppressFinalizeMethodReference = ModuleDefinition.ImportReference(gcTypeDefinition.Find("SuppressFinalize", "Object"));
