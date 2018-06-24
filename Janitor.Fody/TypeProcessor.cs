@@ -3,6 +3,7 @@ using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
+using TypeSystem = Fody.TypeSystem;
 
 public class TypeProcessor
 {
@@ -16,7 +17,7 @@ public class TypeProcessor
 
     public void Process()
     {
-        typeSystem = ModuleWeaver.ModuleDefinition.TypeSystem;
+        typeSystem = ModuleWeaver.TypeSystem;
         var disposeManagedMethod = TargetType.Methods
             .FirstOrDefault(x => !x.IsStatic && x.IsMatch("DisposeManaged"));
         var disposeUnmanagedMethod = TargetType.Methods
@@ -95,7 +96,7 @@ public class TypeProcessor
             //TODO: should support injecting into existing finalizer
             return;
         }
-        var finalizeMethod = new MethodDefinition("Finalize", MethodAttributes.HideBySig | MethodAttributes.Family | MethodAttributes.Virtual, typeSystem.Void);
+        var finalizeMethod = new MethodDefinition("Finalize", MethodAttributes.HideBySig | MethodAttributes.Family | MethodAttributes.Virtual, typeSystem.VoidReference);
         var instructions = finalizeMethod.Body.Instructions;
 
         var ret = Instruction.Create(OpCodes.Ret);
@@ -133,7 +134,7 @@ public class TypeProcessor
         {
             return null;
         }
-        var disposeManagedMethod = new MethodDefinition("DisposeManaged", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.Void);
+        var disposeManagedMethod = new MethodDefinition("DisposeManaged", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.VoidReference);
         TargetType.Methods.Add(disposeManagedMethod);
         var collection = disposeManagedMethod.Body.Instructions;
         collection.Add(instructions);
@@ -277,21 +278,21 @@ public class TypeProcessor
 
     void CreateSignaledField()
     {
-        var field = new FieldDefinition("disposeSignaled", FieldAttributes.Private, typeSystem.Int32);
+        var field = new FieldDefinition("disposeSignaled", FieldAttributes.Private, typeSystem.Int32Reference);
         TargetType.Fields.Add(field);
         signaledField = field.GetGeneric();
     }
 
     void CreateDisposedField()
     {
-        var field = new FieldDefinition("disposed", FieldAttributes.Private, typeSystem.Boolean);
+        var field = new FieldDefinition("disposed", FieldAttributes.Private, typeSystem.BooleanReference);
         TargetType.Fields.Add(field);
         disposedField = field.GetGeneric();
     }
 
     public void CreateThrowIfDisposed()
     {
-        var method = new MethodDefinition("ThrowIfDisposed", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.Void);
+        var method = new MethodDefinition("ThrowIfDisposed", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.VoidReference);
         TargetType.Methods.Add(method);
         var collection = method.Body.Instructions;
         var returnInstruction = Instruction.Create(OpCodes.Ret);

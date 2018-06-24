@@ -28,9 +28,9 @@ public class OnlyUnmanagedProcessor
 
     void CreateDisposeBoolMethod()
     {
-        var typeSystem = TypeProcessor.ModuleWeaver.ModuleDefinition.TypeSystem;
-        disposeBoolMethod = new MethodDefinition("Dispose", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.Void);
-        var disposingParameter = new ParameterDefinition("disposing", ParameterAttributes.None, typeSystem.Boolean);
+        var typeSystem = TypeProcessor.ModuleWeaver.TypeSystem;
+        disposeBoolMethod = new MethodDefinition("Dispose", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.VoidReference);
+        var disposingParameter = new ParameterDefinition("disposing", ParameterAttributes.None, typeSystem.BooleanReference);
         disposeBoolMethod.Parameters.Add(disposingParameter);
 
         var instructions = disposeBoolMethod.Body.Instructions;

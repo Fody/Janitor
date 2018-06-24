@@ -68,10 +68,7 @@ public partial class ModuleWeaver : BaseModuleWeaver
 
     public override IEnumerable<string> GetAssembliesForScanning()
     {
-        yield return "mscorlib";
-        yield return "System.Runtime";
         yield return "System.Threading";
-        yield return "netstandard";
     }
 
     public override bool ShouldCleanReference => true;

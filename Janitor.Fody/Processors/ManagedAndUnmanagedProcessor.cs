@@ -1,5 +1,6 @@
 ﻿using Mono.Cecil;
 using Mono.Cecil.Cil;
+using TypeSystem = Fody.TypeSystem;
 
 public class ManagedAndUnmanagedProcessor
 {
@@ -11,7 +12,7 @@ public class ManagedAndUnmanagedProcessor
 
     public void Process()
     {
-        typeSystem = TypeProcessor.ModuleWeaver.ModuleDefinition.TypeSystem;
+        typeSystem = TypeProcessor.ModuleWeaver.TypeSystem;
         CreateDisposeBoolMethod();
         InjectIntoDispose();
         TypeProcessor.AddFinalizer(DisposeBoolMethod);
@@ -33,8 +34,8 @@ public class ManagedAndUnmanagedProcessor
 
     void CreateDisposeBoolMethod()
     {
-        DisposeBoolMethod = new MethodDefinition("Dispose", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.Void);
-        var disposingParameter = new ParameterDefinition("disposing", ParameterAttributes.None, typeSystem.Boolean);
+        DisposeBoolMethod = new MethodDefinition("Dispose", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.VoidReference);
+        var disposingParameter = new ParameterDefinition("disposing", ParameterAttributes.None, typeSystem.BooleanReference);
         DisposeBoolMethod.Parameters.Add(disposingParameter);
 
         var instructions = DisposeBoolMethod.Body.Instructions;
