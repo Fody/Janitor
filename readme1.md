@@ -2,19 +2,17 @@
 [![NuGet Status](http://img.shields.io/nuget/v/Janitor.Fody.svg?style=flat&max-age=86400)](https://www.nuget.org/packages/Janitor.Fody/)
 
 
-## This is an add-in for [Fody](https://github.com/Fody/Fody/)
+## This is an add-in for [Fody](https://github.com/Fody/Home/)
 
 ![Icon](https://raw.githubusercontent.com/Fody/Janitor/master/package_icon.png)
 ![Icon](https://raw.githubusercontent.com/Fody/Janitor/master/Janitor.jpg)
 
 Simplifies the implementation of [IDisposable](http://msdn.microsoft.com/en-us/library/system.idisposable.aspx).
 
-[Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
-
 
 ## Usage
 
-See also [Fody usage](https://github.com/Fody/Fody#usage).
+See also [Fody usage](https://github.com/Fody/Home/blob/master/pages/usage.md).
 
 
 ### NuGet installation
@@ -31,7 +29,7 @@ The `Install-Package Fody` is required since NuGet always defaults to the oldest
 
 ### Add to FodyWeavers.xml
 
-Add `<Janitor/>` to [FodyWeavers.xml](https://github.com/Fody/Fody#add-fodyweaversxml)
+Add `<Janitor/>` to [FodyWeavers.xml](https://github.com/Fody/Home/blob/master/pages/usage.md#add-fodyweaversxml)
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
