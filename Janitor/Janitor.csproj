@@ -6,6 +6,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>Fody add-in that helps with implementing IDisposable.</Description>
     <PackageTags>IDisposable, Dispose, ILWeaving, Fody, Cecil</PackageTags>
+    <PackageOutputPath>$(SolutionDir)nugets</PackageOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Fody" Version="4.0.2" PrivateAssets="None" />
