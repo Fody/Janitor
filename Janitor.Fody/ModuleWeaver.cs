@@ -8,7 +8,7 @@ public partial class ModuleWeaver : BaseModuleWeaver
     {
         FindCoreReferences();
 
-        var namespacesToSkip = GetNamespacesToSkip();
+        var namespacesToSkip = GetNamespacesToSkip().ToList();
 
         foreach (var type in ModuleDefinition
             .GetTypes()
@@ -55,7 +55,6 @@ public partial class ModuleWeaver : BaseModuleWeaver
             methodProcessor.Process();
         }
 
-        ModuleDefinition.Assembly.CustomAttributes.RemoveSkipWeavingNamespace();
         foreach (var typeDefinition in ModuleDefinition.GetTypes())
         {
             typeDefinition.CustomAttributes.RemoveSkipWeaving();
@@ -73,11 +72,14 @@ public partial class ModuleWeaver : BaseModuleWeaver
 
     public override bool ShouldCleanReference => true;
 
-    HashSet<string> GetNamespacesToSkip()
+    IEnumerable<object> GetNamespacesToSkip()
     {
-        var collection = ModuleDefinition.Assembly.CustomAttributes
-            .Where(a => a.AttributeType.FullName == "Janitor.SkipWeavingNamespace")
-            .Select(a => (string)a.ConstructorArguments[0].Value);
-        return new HashSet<string>(collection);
+        var attributes = ModuleDefinition.Assembly.CustomAttributes;
+        foreach (var attribute in attributes
+            .Where(a => a.AttributeType.FullName == "Janitor.SkipWeavingNamespace").ToList())
+        {
+            attributes.Remove(attribute);
+            yield return attribute.ConstructorArguments[0].Value;
+        }
     }
 }
