@@ -8,6 +8,8 @@
     <PackageTags>IDisposable, Dispose, ILWeaving, Fody, Cecil</PackageTags>
     <PackageOutputPath>$(SolutionDir)nugets</PackageOutputPath>
     <PackageIconUrl>https://raw.githubusercontent.com/Fody/Janitor/master/package_icon.png</PackageIconUrl>
+    <PackageProjectUrl>http://github.com/Fody/Janitor</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Fody" Version="4.0.2" PrivateAssets="None" />
