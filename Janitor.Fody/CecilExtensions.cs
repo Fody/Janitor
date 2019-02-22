@@ -15,16 +15,7 @@ public static class CecilExtensions
 
     public static void RemoveSkipWeaving(this Collection<CustomAttribute> attributes)
     {
-        var attribute = attributes.FirstOrDefault(x => x.AttributeType.FullName == "Janitor.SkipWeaving");
-        if (attribute != null)
-        {
-            attributes.Remove(attribute);
-        }
-    }
-
-    public static void RemoveSkipWeavingNamespace(this Collection<CustomAttribute> attributes)
-    {
-        var attribute = attributes.FirstOrDefault(x => x.AttributeType.FullName == "Janitor.SkipWeavingNamespace");
+        var attribute = attributes.SingleOrDefault(x => x.AttributeType.FullName == "Janitor.SkipWeaving");
         if (attribute != null)
         {
             attributes.Remove(attribute);
@@ -33,20 +24,12 @@ public static class CecilExtensions
 
     public static bool MethodExists(this TypeDefinition typeDefinition, string method)
     {
-        if (typeDefinition.Methods.Any(x => x.Name == method))
-        {
-            return true;
-        }
-        return false;
+        return typeDefinition.Methods.Any(x => x.Name == method);
     }
 
     public static bool FieldExists(this TypeDefinition typeDefinition, string field)
     {
-        if (typeDefinition.Fields.Any(x => x.Name == field))
-        {
-            return true;
-        }
-        return false;
+        return typeDefinition.Fields.Any(x => x.Name == field);
     }
 
     public static bool IsClass(this TypeDefinition x)
@@ -64,7 +47,7 @@ public static class CecilExtensions
         }
         if (typeRef.IsGenericParameter)
         {
-            var genericParameter = ((GenericParameter)typeRef);
+            var genericParameter = (GenericParameter)typeRef;
             return genericParameter.Constraints.Any(c => c.IsIDisposable());
         }
         var type = typeRef.Resolve();
@@ -76,7 +59,8 @@ public static class CecilExtensions
         {
             return true;
         }
-        return type.BaseType != null && type.BaseType.IsIDisposable();
+        return type.BaseType != null &&
+               type.BaseType.IsIDisposable();
     }
 
     public static void InsertAtStart(this Collection<Instruction> collection, params Instruction[] instructions)
@@ -132,9 +116,11 @@ public static class CecilExtensions
         {
             return false;
         }
-        for (var index = 0; index < methodReference.Parameters.Count; index++)
+
+        var parameters = methodReference.Parameters;
+        for (var index = 0; index < parameters.Count; index++)
         {
-            var parameterDefinition = methodReference.Parameters[index];
+            var parameterDefinition = parameters[index];
             var paramType = paramTypes[index];
             if (parameterDefinition.ParameterType.Name != paramType)
             {
@@ -151,7 +137,10 @@ public static class CecilExtensions
             return false;
         }
 
-        if (value.CustomAttributes.Any(a => a.AttributeType.Name == "CompilerGeneratedAttribute" || a.AttributeType.Name == "GeneratedCodeAttribute"))
+        if (value.CustomAttributes
+            .Select(x => x.AttributeType)
+            .Any(a => a.Name == "CompilerGeneratedAttribute" ||
+                      a.Name == "GeneratedCodeAttribute"))
         {
             return true;
         }
@@ -161,14 +150,18 @@ public static class CecilExtensions
 
     public static bool IsEmptyOrNotImplemented(this MethodDefinition method)
     {
-        var instructions = method.Body.Instructions.Where(i => i.OpCode != OpCodes.Nop && i.OpCode != OpCodes.Ret).ToList();
+        var instructions = method.Body.Instructions
+            .Where(i => i.OpCode != OpCodes.Nop &&
+                        i.OpCode != OpCodes.Ret).ToList();
 
         if (instructions.Count == 0)
         {
             return true;
         }
 
-        if (instructions.Count != 2 || instructions[0].OpCode != OpCodes.Newobj || instructions[1].OpCode != OpCodes.Throw)
+        if (instructions.Count != 2 ||
+            instructions[0].OpCode != OpCodes.Newobj ||
+            instructions[1].OpCode != OpCodes.Throw)
         {
             return false;
         }
@@ -184,38 +177,39 @@ public static class CecilExtensions
 
     public static FieldReference GetGeneric(this FieldDefinition definition)
     {
-        if (definition.DeclaringType.HasGenericParameters)
+        if (!definition.DeclaringType.HasGenericParameters)
         {
-            var declaringType = new GenericInstanceType(definition.DeclaringType);
-            foreach (var parameter in definition.DeclaringType.GenericParameters)
-            {
-                declaringType.GenericArguments.Add(parameter);
-            }
-            return new FieldReference(definition.Name, definition.FieldType, declaringType);
+            return definition;
         }
-
-        return definition;
+        var declaringType = new GenericInstanceType(definition.DeclaringType);
+        foreach (var parameter in definition.DeclaringType.GenericParameters)
+        {
+            declaringType.GenericArguments.Add(parameter);
+        }
+        return new FieldReference(definition.Name, definition.FieldType, declaringType);
     }
 
     public static MethodReference GetGeneric(this MethodReference reference)
     {
-        if (reference.DeclaringType.HasGenericParameters)
+        if (!reference.DeclaringType.HasGenericParameters)
         {
-            var declaringType = new GenericInstanceType(reference.DeclaringType);
-            foreach (var parameter in reference.DeclaringType.GenericParameters)
-            {
-                declaringType.GenericArguments.Add(parameter);
-            }
-            var methodReference = new MethodReference(reference.Name, reference.MethodReturnType.ReturnType, declaringType);
-            foreach (var parameterDefinition in reference.Parameters)
-            {
-                methodReference.Parameters.Add(parameterDefinition);
-            }
-            methodReference.HasThis = reference.HasThis;
-            return methodReference;
+            return reference;
+        }
+        var declaringType = new GenericInstanceType(reference.DeclaringType);
+        foreach (var parameter in reference.DeclaringType.GenericParameters)
+        {
+            declaringType.GenericArguments.Add(parameter);
         }
 
-        return reference;
+        var methodReference = new MethodReference(reference.Name, reference.MethodReturnType.ReturnType, declaringType)
+        {
+            HasThis = reference.HasThis
+        };
+        foreach (var parameterDefinition in reference.Parameters)
+        {
+            methodReference.Parameters.Add(parameterDefinition);
+        }
+        return methodReference;
     }
 
     public static void HideLineFromDebugger(SequencePoint seqPoint)
@@ -236,7 +230,11 @@ public static class CecilExtensions
 
     public static OpCode GetCallingConvention(this MethodReference method)
     {
-        return method.Resolve().IsVirtual ? OpCodes.Callvirt : OpCodes.Call;
+        if (method.Resolve().IsVirtual)
+        {
+            return OpCodes.Callvirt;
+        }
+        return OpCodes.Call;
     }
 
     public static MethodReference MakeGeneric(this MethodReference method, params TypeReference[] args)
@@ -253,7 +251,9 @@ public static class CecilExtensions
 
         var genericTypeRef = new GenericInstanceMethod(method);
         foreach (var arg in args)
+        {
             genericTypeRef.GenericArguments.Add(arg);
+        }
 
         return genericTypeRef;
     }
@@ -262,7 +262,8 @@ public static class CecilExtensions
     {
         if (reference.IsGenericParameter)
         {
-            return ((GenericParameter)reference).Constraints.First(c => c.IsIDisposable());
+            var genericParameter = (GenericParameter)reference;
+            return genericParameter.Constraints.First(c => c.IsIDisposable());
         }
 
         return reference;
