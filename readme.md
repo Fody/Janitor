@@ -58,7 +58,7 @@ All instance fields will be cleaned up in the `Dispose` method.
 
 #### Your Code
 
-```
+```cs
 public class Sample : IDisposable
 {
     MemoryStream stream;
@@ -83,7 +83,7 @@ public class Sample : IDisposable
 
 #### What gets compiled
 
-```
+```cs
 public class Sample : IDisposable
 {
     MemoryStream stream;
@@ -133,7 +133,7 @@ In some cases you may want to have custom code that cleans up your managed resou
 
 #### Your Code
 
-```
+```cs
 public class Sample : IDisposable
 {
     MemoryStream stream;
@@ -167,7 +167,7 @@ public class Sample : IDisposable
 
 #### What gets compiled
 
-```
+```cs
 public class Sample : IDisposable
 {
     MemoryStream stream;
@@ -222,7 +222,7 @@ In some cases you may want to have custom code that cleans up your unmanaged res
 
 #### Your Code
 
-```
+```cs
 public class Sample : IDisposable
 {
     IntPtr handle;
@@ -256,7 +256,7 @@ public class Sample : IDisposable
 
 #### What gets compiled
 
-```
+```cs
 public class Sample : IDisposable
 {
     IntPtr handle;
@@ -317,7 +317,7 @@ Combining the above two scenarios will give you the following
 
 #### Your code
 
-```
+```cs
 public class Sample : IDisposable
 {
     MemoryStream stream;
@@ -362,7 +362,7 @@ public class Sample : IDisposable
 
 #### What gets compiled
 
-```
+```cs
 public class Sample : IDisposable
 {
     MemoryStream stream;
