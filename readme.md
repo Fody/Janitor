@@ -55,7 +55,7 @@ Add `<Janitor/>` to [FodyWeavers.xml](https://github.com/Fody/Home/blob/master/p
 All instance fields will be cleaned up in the `Dispose` method.
 
 
-#### Your Code
+#### The Code
 
 ```cs
 public class Sample : IDisposable
@@ -219,7 +219,7 @@ public class Sample : IDisposable
 In some cases you may want to have custom code that cleans up your unmanaged resources. If this is the case add a method `void DisposeUnmanaged()`
 
 
-#### Your Code
+#### The Code
 
 ```cs
 public class Sample : IDisposable
@@ -309,12 +309,12 @@ public class Sample : IDisposable
 ```
 
 
-### Custom managed and unmanaged handling 
+### Custom managed and unmanaged handling
 
 Combining the above two scenarios will give you the following
 
 
-#### Your code
+#### The code
 
 ```cs
 public class Sample : IDisposable
@@ -435,7 +435,7 @@ public class Sample : IDisposable
 
 ## What's with the empty `Dispose()`
 
-You will notice that the `Dispose()` is empty in all of the above cases. This is because Janitor controls what goes in there. In fact if you put any code in there Janitor will throw an exception. If you want to control `IDisposable` for specific types use `[Janitor.SkipWeaving]` attribute applied to the type or `[Janitor.SkipWeavingNamespace("namespaceToSkip"]` to the assembly. Then Janitor wont touch it.
+Notice that the `Dispose()` is empty in all of the above cases. This is because Janitor controls what goes in there. In fact if you put any code in there Janitor will throw an exception. If you want to control `IDisposable` for specific types use `[Janitor.SkipWeaving]` attribute applied to the type or `[Janitor.SkipWeavingNamespace("namespaceToSkip"]` to the assembly. Then Janitor wont touch it.
 
 
 ## Why not weave in `IDisposable`
@@ -450,4 +450,4 @@ Not currently supported.
 
 ## Icon
 
-<a href="http://thenounproject.com/noun/spray-bottle/#icon-No7154" target="_blank">Spray Bottle</a> designed by <a href="http://thenounproject.com/julietafelix" target="_blank">Julieta Felix</a> from The Noun Project.
+[Spray Bottle](https://thenounproject.com/noun/spray-bottle/#icon-No7154) designed by [Julieta Felix](https://thenounproject.com/julietafelix) from [The Noun Project](https://thenounproject.com).
