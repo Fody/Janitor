@@ -78,14 +78,12 @@ namespace SimpleAfter
 
             public void Dispose()
             {
-                if (Interlocked.Exchange(ref this.disposeSignaled, 1) != 0)
+                if (Interlocked.Exchange(ref disposeSignaled, 1) != 0)
                 {
                     return;
                 }
-                this.disposed = true;
+                disposed = true;
             }
         }
-
-
     }
 }

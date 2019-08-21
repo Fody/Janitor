@@ -196,7 +196,7 @@ public class TypeProcessor
                 continue;
             }
 
-            if (field.FieldType.HasGenericParameters || this.TargetType.HasGenericParameters)
+            if (field.FieldType.HasGenericParameters || TargetType.HasGenericParameters)
             {
                 ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it is a value type.");
                 continue;
