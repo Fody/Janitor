@@ -3,7 +3,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class ReadonlyFieldTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void Verity_throws_an_exception()

@@ -6,7 +6,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class ModuleWeaverTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     static TestResult testResult;
 
