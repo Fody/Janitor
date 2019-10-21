@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>net48;netcoreapp2.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FodyHelpers" Version="6.0.0" />
+    <PackageReference Include="FodyHelpers" Version="6.0.2" />
     <PackageReference Include="Xunit" Version="2.4.1" />
     <PackageReference Include="XunitLogger" Version="4.0.0" />
     <PackageReference Include="Xunit.ApprovalTests" Version="4.0.0" />
