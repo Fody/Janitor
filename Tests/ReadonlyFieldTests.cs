@@ -1,9 +1,10 @@
 ﻿using Fody;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class ReadonlyFieldTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
     public void Verity_throws_an_exception()
