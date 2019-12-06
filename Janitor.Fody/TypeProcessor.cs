@@ -198,7 +198,7 @@ public class TypeProcessor
 
             if (field.FieldType.HasGenericParameters || TargetType.HasGenericParameters)
             {
-                ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it is a value type.");
+                ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it has generic parameters.");
                 continue;
             }
             if (field.FieldType.FullName.StartsWith("System.Threading.Tasks.Task"))
