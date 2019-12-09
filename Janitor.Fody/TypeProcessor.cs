@@ -86,6 +86,7 @@ public class TypeProcessor
             };
             methodProcessor.Process();
         }
+
         AddGuards();
     }
 
@@ -96,6 +97,7 @@ public class TypeProcessor
             //TODO: should support injecting into existing finalizer
             return;
         }
+
         var finalizeMethod = new MethodDefinition("Finalize", MethodAttributes.HideBySig | MethodAttributes.Family | MethodAttributes.Virtual, typeSystem.VoidReference);
         var instructions = finalizeMethod.Body.Instructions;
 
@@ -107,6 +109,7 @@ public class TypeProcessor
         {
             instructions.Add(Instruction.Create(OpCodes.Ldc_I4_0));
         }
+
         instructions.Add(Instruction.Create(OpCodes.Call, disposeBoolMethod));
         instructions.Add(Instruction.Create(OpCodes.Leave, ret));
         var tryEnd = Instruction.Create(OpCodes.Ldarg_0);
@@ -134,6 +137,7 @@ public class TypeProcessor
         {
             return null;
         }
+
         var disposeManagedMethod = new MethodDefinition("DisposeManaged", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.VoidReference);
         TargetType.Methods.Add(disposeManagedMethod);
         var collection = disposeManagedMethod.Body.Instructions;
@@ -169,27 +173,33 @@ public class TypeProcessor
             {
                 continue;
             }
+
             if (field == signaledField)
             {
                 continue;
             }
+
             if (field.CustomAttributes.ContainsSkipWeaving())
             {
                 continue;
             }
+
             if (field.IsStatic)
             {
                 continue;
             }
+
             if (!field.FieldType.IsIDisposable())
             {
                 continue;
             }
+
             if (field.IsInitOnly)
             {
                 ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it is marked as readonly. Change this field to not be readonly.");
                 continue;
             }
+
             if (field.FieldType.IsValueType)
             {
                 ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it is a value type.");
@@ -201,6 +211,7 @@ public class TypeProcessor
                 ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it has generic parameters.");
                 continue;
             }
+
             if (field.FieldType.FullName.StartsWith("System.Threading.Tasks.Task"))
             {
                 // do not dispose tasks, see https://blogs.msdn.microsoft.com/pfxteam/2012/03/25/do-i-need-to-dispose-of-tasks/
@@ -233,30 +244,37 @@ public class TypeProcessor
             {
                 continue;
             }
+
             if (method.IsMatch("Finalize"))
             {
                 continue;
             }
+
             if (method.IsStatic)
             {
                 continue;
             }
+
             if (method.Name.StartsWith("Dispose"))
             {
                 continue;
             }
+
             if (method.Name == "ThrowIfDisposed")
             {
                 continue;
             }
+
             if (method.Name == "IsDisposed")
             {
                 continue;
             }
+
             if (!method.HasBody)
             {
                 continue;
             }
+
             if (method.IsPrivate)
             {
                 continue;
@@ -272,6 +290,7 @@ public class TypeProcessor
             {
                 CecilExtensions.HideLineFromDebugger(validSequencePoint);
             }
+
             method.Body.OptimizeMacros();
         }
     }
