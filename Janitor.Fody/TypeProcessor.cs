@@ -194,12 +194,6 @@ public class TypeProcessor
                 continue;
             }
 
-            if (field.IsInitOnly)
-            {
-                ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it is marked as readonly. Change this field to not be readonly.");
-                continue;
-            }
-
             if (field.FieldType.IsValueType)
             {
                 ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it is a value type.");

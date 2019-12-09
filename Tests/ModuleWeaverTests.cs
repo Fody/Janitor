@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Fody;
 using VerifyXunit;
@@ -354,6 +355,16 @@ public class ModuleWeaverTests :
         Assert.False(GetIsDisposed(instance));
         instance.Dispose();
         Assert.True(GetIsDisposed(instance));
+    }
+
+    [Fact]
+    public void Verity_throws_an_exception()
+    {
+        var instance = testResult.GetInstance("WithReadOnly");
+        Assert.False(GetIsDisposed(instance));
+        instance.Dispose();
+        Assert.True(GetIsDisposed(instance));
+        Assert.DoesNotContain(testResult.Errors.Select(x => x.Text), x => x.Contains("WithReadOnly"));
     }
 
     [Fact]
