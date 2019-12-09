@@ -1,6 +1,7 @@
 ﻿using System;
 
-public class WithProtectedDisposeManaged : IDisposable
+public class WithProtectedDisposeManaged :
+    IDisposable
 {
     public void Dispose()
     {
@@ -12,7 +13,8 @@ public class WithProtectedDisposeManaged : IDisposable
     }
 }
 
-public class WithProtectedDisposeUnmanaged : IDisposable
+public class WithProtectedDisposeUnmanaged :
+    IDisposable
 {
     public void Dispose()
     {
@@ -24,7 +26,8 @@ public class WithProtectedDisposeUnmanaged : IDisposable
     }
 }
 
-public class WithProtectedDisposeManagedAndDisposeUnmanaged : IDisposable
+public class WithProtectedDisposeManagedAndDisposeUnmanaged :
+    IDisposable
 {
     public void Dispose()
     {
@@ -41,7 +44,8 @@ public class WithProtectedDisposeManagedAndDisposeUnmanaged : IDisposable
     }
 }
 
-public abstract class AbstractWithProtectedDisposeManaged : IDisposable
+public abstract class AbstractWithProtectedDisposeManaged :
+    IDisposable
 {
     public void Dispose()
     {
@@ -53,7 +57,8 @@ public abstract class AbstractWithProtectedDisposeManaged : IDisposable
     }
 }
 
-public abstract class AbstractWithAbstractDisposeManaged : IDisposable
+public abstract class AbstractWithAbstractDisposeManaged :
+    IDisposable
 {
     public void Dispose()
     {

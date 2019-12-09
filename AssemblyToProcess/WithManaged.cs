@@ -1,6 +1,7 @@
 ﻿using System;
 
-public class WithManaged:IDisposable
+public class WithManaged :
+    IDisposable
 {
     public void Dispose()
     {

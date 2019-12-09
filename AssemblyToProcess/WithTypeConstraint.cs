@@ -1,6 +1,7 @@
 ﻿using System;
 
-public class WithTypeConstraint<T> : IDisposable
+public class WithTypeConstraint<T> :
+    IDisposable
     where T : IComparable
 {
     public void Dispose() { }

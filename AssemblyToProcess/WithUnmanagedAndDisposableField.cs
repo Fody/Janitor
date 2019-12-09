@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
 
-public class WithUnmanagedAndDisposableField : IDisposable
+public class WithUnmanagedAndDisposableField :
+    IDisposable
 {
     public MemoryStream DisposableField;
 

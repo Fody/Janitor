@@ -1,6 +1,7 @@
 ﻿using System;
 
-public class WhereFieldIsIDisposable : IDisposable
+public class WhereFieldIsIDisposable :
+    IDisposable
 {
     public IDisposable Field = new Disposable();
 

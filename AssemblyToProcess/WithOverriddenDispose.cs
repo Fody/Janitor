@@ -1,6 +1,7 @@
 ﻿using System;
 
-public class WithOverriddenDisposeManaged : WithProtectedDisposeManaged
+public class WithOverriddenDisposeManaged :
+    WithProtectedDisposeManaged
 {
     protected override void DisposeManaged()
     {
@@ -9,7 +10,8 @@ public class WithOverriddenDisposeManaged : WithProtectedDisposeManaged
     }
 }
 
-public class WithOverriddenDisposeUnmanaged : WithProtectedDisposeUnmanaged
+public class WithOverriddenDisposeUnmanaged :
+    WithProtectedDisposeUnmanaged
 {
     protected override void DisposeUnmanaged()
     {
@@ -18,7 +20,8 @@ public class WithOverriddenDisposeUnmanaged : WithProtectedDisposeUnmanaged
     }
 }
 
-public class WithOverriddenDisposeManagedAndDisposeUnmanaged : WithProtectedDisposeManagedAndDisposeUnmanaged
+public class WithOverriddenDisposeManagedAndDisposeUnmanaged :
+    WithProtectedDisposeManagedAndDisposeUnmanaged
 {
     protected override void DisposeManaged()
     {
@@ -33,7 +36,8 @@ public class WithOverriddenDisposeManagedAndDisposeUnmanaged : WithProtectedDisp
     }
 }
 
-public class WithAbstractBaseClass : AbstractWithProtectedDisposeManaged
+public class WithAbstractBaseClass :
+    AbstractWithProtectedDisposeManaged
 {
     protected override void DisposeManaged()
     {
@@ -42,7 +46,8 @@ public class WithAbstractBaseClass : AbstractWithProtectedDisposeManaged
     }
 }
 
-public class WithAbstractDisposeManaged : AbstractWithAbstractDisposeManaged
+public class WithAbstractDisposeManaged :
+    AbstractWithAbstractDisposeManaged
 {
     protected override void DisposeManaged()
     {

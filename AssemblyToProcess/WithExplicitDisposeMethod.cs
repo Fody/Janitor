@@ -1,6 +1,7 @@
 ﻿using System;
 
-public class WithExplicitDisposeMethod : IDisposable
+public class WithExplicitDisposeMethod :
+    IDisposable
 {
     public Explicit Child = new Explicit();
 

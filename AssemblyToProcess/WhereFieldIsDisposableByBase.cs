@@ -1,7 +1,8 @@
 ﻿using System;
 using DisposeInBase;
 
-public class WhereFieldIsDisposableByBase:IDisposable
+public class WhereFieldIsDisposableByBase :
+    IDisposable
 {
     public Child Child;
 

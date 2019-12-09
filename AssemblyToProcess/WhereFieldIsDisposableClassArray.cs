@@ -1,6 +1,7 @@
 ﻿using System;
 
-public class WhereFieldIsDisposableClassArray : IDisposable
+public class WhereFieldIsDisposableClassArray :
+    IDisposable
 {
     public Disposable[] Field = new Disposable[0];
 

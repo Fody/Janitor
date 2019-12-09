@@ -2,7 +2,8 @@
 using System.IO;
 // ReSharper disable NotAccessedField.Local
 
-public class WithReadOnly:IDisposable
+public class WithReadOnly :
+    IDisposable
 {
     readonly MemoryStream stream;
 

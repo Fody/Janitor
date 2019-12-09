@@ -1,6 +1,7 @@
 ﻿using System;
 
-public class WithUnmanagedAndGenericIDisposableField<T> : IDisposable
+public class WithUnmanagedAndGenericIDisposableField<T> :
+    IDisposable
     where T : IDisposable
 {
     public void Dispose()

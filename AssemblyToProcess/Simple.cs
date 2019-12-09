@@ -3,7 +3,8 @@ using System.IO;
 // ReSharper disable UnusedMember.Local
 // ReSharper disable NotAccessedField.Local
 
-public class Simple:IDisposable
+public class Simple :
+    IDisposable
 {
     MemoryStream stream;
 
@@ -11,10 +12,12 @@ public class Simple:IDisposable
     {
         throw new NotImplementedException();
     }
+
     public Simple()
     {
         stream = new MemoryStream();
     }
+
     public string PublicProperty { get; set; }
     internal string InternalProperty { get; set; }
     string PrivateProperty { get; set; }
@@ -24,15 +27,19 @@ public class Simple:IDisposable
     public void PublicMethod()
     {
     }
+
     internal void InternalMethod()
     {
     }
+
     void PrivateMethod()
     {
     }
+
     public static void StaticMethod()
     {
     }
+
     protected void ProtectedMethod()
     {
     }
