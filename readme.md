@@ -1,13 +1,14 @@
+# <img src="/package_icon.png" height="30px"> Janitor.Fody
+
 [![Chat on Gitter](https://img.shields.io/gitter/room/fody/fody.svg)](https://gitter.im/Fody/Fody)
 [![NuGet Status](https://img.shields.io/nuget/v/Janitor.Fody.svg)](https://www.nuget.org/packages/Janitor.Fody/)
 
-
-## This is an add-in for [Fody](https://github.com/Fody/Home/)
-
-![Icon](https://raw.githubusercontent.com/Fody/Janitor/master/package_icon.png)
-![Icon](https://raw.githubusercontent.com/Fody/Janitor/master/Janitor.jpg)
-
 Simplifies the implementation of [IDisposable](http://msdn.microsoft.com/en-us/library/system.idisposable.aspx).
+
+
+### This is an add-in for [Fody](https://github.com/Fody/Home/)
+
+**It is expected that all developers using Fody either [become a Patron on OpenCollective](https://opencollective.com/fody/), or have a [Tidelift Subscription](https://tidelift.com/subscription/pkg/nuget-fody?utm_source=nuget-fody&utm_medium=referral&utm_campaign=enterprise).**
 
 
 ## Usage
