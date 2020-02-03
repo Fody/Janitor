@@ -29,7 +29,7 @@ public partial class ModuleWeaver : BaseModuleWeaver
             if (disposeMethods.Count > 1)
             {
                 var message = $"Type `{type.FullName}` contains more than one `Dispose` method. Either remove one or add a `[Janitor.SkipWeaving]` attribute to the type.";
-                LogError(message);
+                WriteError(message);
             }
 
             var disposeMethod = disposeMethods.First();
@@ -37,13 +37,13 @@ public partial class ModuleWeaver : BaseModuleWeaver
             if (!disposeMethod.IsEmptyOrNotImplemented())
             {
                 var message = $"Type `{type.FullName}` contains a `Dispose` method with code. Either remove the code or add a `[Janitor.SkipWeaving]` attribute to the type.";
-                LogError(message);
+                WriteError(message);
             }
 
             if (type.BaseType.Name != "Object")
             {
                 var message = $"Type `{type.FullName}` has a base class which is not currently supported. Either remove the base class or add a `[Janitor.SkipWeaving]` attribute to the type.";
-                LogError(message);
+                WriteError(message);
             }
 
             var methodProcessor = new TypeProcessor

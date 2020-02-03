@@ -30,19 +30,19 @@ public class TypeProcessor
 
         if (TargetType.FieldExists("disposeSignaled"))
         {
-            ModuleWeaver.LogError($"Type `{TargetType.FullName}` contains a `disposeSignaled` field. Either remove this field or add a `[Janitor.SkipWeaving]` attribute to the type.");
+            ModuleWeaver.WriteError($"Type `{TargetType.FullName}` contains a `disposeSignaled` field. Either remove this field or add a `[Janitor.SkipWeaving]` attribute to the type.");
             return;
         }
 
         if (TargetType.FieldExists("disposed"))
         {
-            ModuleWeaver.LogError($"Type `{TargetType.FullName}` contains a `disposed` field. Either remove this field or add a `[Janitor.SkipWeaving]` attribute to the type.");
+            ModuleWeaver.WriteError($"Type `{TargetType.FullName}` contains a `disposed` field. Either remove this field or add a `[Janitor.SkipWeaving]` attribute to the type.");
             return;
         }
 
         if (TargetType.MethodExists("ThrowIfDisposed"))
         {
-            ModuleWeaver.LogError($"Type `{TargetType.FullName}` contains a `ThrowIfDisposed` method. Either remove this method or add a `[Janitor.SkipWeaving]` attribute to the type.");
+            ModuleWeaver.WriteError($"Type `{TargetType.FullName}` contains a `ThrowIfDisposed` method. Either remove this method or add a `[Janitor.SkipWeaving]` attribute to the type.");
             return;
         }
 
@@ -196,13 +196,13 @@ public class TypeProcessor
 
             if (field.FieldType.IsValueType)
             {
-                ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it is a value type.");
+                ModuleWeaver.WriteError($"Could not add dispose for field '{field.GetName()}' since it is a value type.");
                 continue;
             }
 
             if (field.FieldType.HasGenericParameters || TargetType.HasGenericParameters)
             {
-                ModuleWeaver.LogError($"Could not add dispose for field '{field.GetName()}' since it has generic parameters.");
+                ModuleWeaver.WriteError($"Could not add dispose for field '{field.GetName()}' since it has generic parameters.");
                 continue;
             }
 
