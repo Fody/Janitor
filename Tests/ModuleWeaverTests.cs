@@ -7,8 +7,7 @@ using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
-public class ModuleWeaverTests :
-    VerifyBase
+public class ModuleWeaverTests
 {
     static TestResult testResult;
 
