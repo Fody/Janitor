@@ -3,9 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Fody;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
 public class ModuleWeaverTests
 {
@@ -420,10 +418,5 @@ public class ModuleWeaverTests
         }
 
         return fieldInfo;
-    }
-
-    public ModuleWeaverTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }
