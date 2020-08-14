@@ -436,7 +436,7 @@ public class Sample : IDisposable
 
 ## What's with the empty `Dispose()`
 
-Notice that the `Dispose()` is empty in all of the above cases. This is because Janitor controls what goes in there. In fact if you put any code in there Janitor will throw an exception. If you want to control `IDisposable` for specific types use `[Janitor.SkipWeaving]` attribute applied to the type or `[Janitor.SkipWeavingNamespace("namespaceToSkip"]` to the assembly. Then Janitor wont touch it.
+Notice that the `Dispose()` is empty in all of the above cases. This is because Janitor controls what goes in there. In fact if you put any code in there Janitor will throw an exception. If you want to control `IDisposable` for specific types use `[Janitor.SkipWeaving]` attribute applied to the type or `[Janitor.SkipWeavingNamespace("namespaceToSkip")]` to the assembly. Then Janitor wont touch it.
 
 
 ## Why not weave in `IDisposable`
