@@ -43,7 +43,7 @@ Add `<Janitor/>` to [FodyWeavers.xml](https://github.com/Fody/Home/blob/master/p
 
  * Looks for all classes with a `Dispose` method.
  * Finds all instance fields that are `IDisposable` and cleans them up.
- * Adds a `volatile int disposeSignaled` field that is `Interlocked.Exchange`ed inside `Dispose`.
+ * Adds an `int disposeSignaled` field that is `Interlocked.Exchange`ed inside `Dispose`.
  * Uses `disposeSignaled` to add an exit clause to `Dispose`.
  * Uses `disposeSignaled` to add a guard clause to all non-private instance methods. This will cause an `ObjectDisposedException` to be thrown if the class has been disposed.
  * Supports convention based overrides for custom disposing of managed and unmanaged resources.
@@ -87,7 +87,7 @@ public class Sample : IDisposable
 public class Sample : IDisposable
 {
     MemoryStream stream;
-    volatile int disposeSignaled;
+    int disposeSignaled;
     bool disposed;
 
     public Sample()
@@ -171,7 +171,7 @@ public class Sample : IDisposable
 public class Sample : IDisposable
 {
     MemoryStream stream;
-    volatile int disposeSignaled;
+    int disposeSignaled;
     bool disposed;
 
     public Sample()
@@ -260,7 +260,7 @@ public class Sample : IDisposable
 public class Sample : IDisposable
 {
     IntPtr handle;
-    volatile int disposeSignaled;
+    int disposeSignaled;
     bool disposed;
 
     public Sample()
@@ -367,7 +367,7 @@ public class Sample : IDisposable
 {
     MemoryStream stream;
     IntPtr handle;
-    volatile int disposeSignaled;
+    int disposeSignaled;
 
     public Sample()
     {
