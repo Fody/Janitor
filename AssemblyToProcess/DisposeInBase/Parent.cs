@@ -6,7 +6,6 @@ namespace DisposeInBase
     {
         public void Dispose()
         {
-            
         }
     }
 }

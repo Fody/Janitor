@@ -400,7 +400,7 @@ public class ModuleWeaverTests
         Assert.NotEmpty(types);
     }
 
-    bool GetIsDisposed(dynamic instance)
+    static bool GetIsDisposed(dynamic instance)
     {
         Type type = instance.GetType();
         var fieldInfo = GetSignaledField(type);
