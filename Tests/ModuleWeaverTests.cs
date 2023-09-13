@@ -272,7 +272,7 @@ public class ModuleWeaverTests
     [Fact]
     public void WhereFieldIsValueType()
     {
-        Assert.Contains(testResult.Errors, x => x.Text.Contains("WhereFieldIsValueType"));
+        Assert.Contains(testResult.Errors, _ => _.Text.Contains("WhereFieldIsValueType"));
     }
 
     [Fact]
@@ -361,7 +361,7 @@ public class ModuleWeaverTests
         Assert.False(GetIsDisposed(instance));
         instance.Dispose();
         Assert.True(GetIsDisposed(instance));
-        Assert.DoesNotContain(testResult.Errors.Select(x => x.Text), x => x.Contains("WithReadOnly"));
+        Assert.DoesNotContain(testResult.Errors.Select(_ => _.Text), _ => _.Contains("WithReadOnly"));
     }
 
     [Fact]

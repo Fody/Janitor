@@ -10,12 +10,12 @@ public static class CecilExtensions
 {
     public static bool ContainsSkipWeaving(this IEnumerable<CustomAttribute> attributes)
     {
-        return attributes.Any(x => x.AttributeType.FullName == "Janitor.SkipWeaving");
+        return attributes.Any(_ => _.AttributeType.FullName == "Janitor.SkipWeaving");
     }
 
     public static void RemoveSkipWeaving(this Collection<CustomAttribute> attributes)
     {
-        var attribute = attributes.SingleOrDefault(x => x.AttributeType.FullName == "Janitor.SkipWeaving");
+        var attribute = attributes.SingleOrDefault(_ => _.AttributeType.FullName == "Janitor.SkipWeaving");
         if (attribute != null)
         {
             attributes.Remove(attribute);
@@ -24,12 +24,12 @@ public static class CecilExtensions
 
     public static bool MethodExists(this TypeDefinition typeDefinition, string method)
     {
-        return typeDefinition.Methods.Any(x => x.Name == method);
+        return typeDefinition.Methods.Any(_ => _.Name == method);
     }
 
     public static bool FieldExists(this TypeDefinition typeDefinition, string field)
     {
-        return typeDefinition.Fields.Any(x => x.Name == field);
+        return typeDefinition.Fields.Any(_ => _.Name == field);
     }
 
     public static bool IsClass(this TypeDefinition x)
@@ -48,10 +48,10 @@ public static class CecilExtensions
         if (typeRef.IsGenericParameter)
         {
             var genericParameter = (GenericParameter)typeRef;
-            return genericParameter.Constraints.Any(c => c.ConstraintType.IsIDisposable());
+            return genericParameter.Constraints.Any(_ => _.ConstraintType.IsIDisposable());
         }
         var type = typeRef.Resolve();
-        if (type.Interfaces.Any(i => i.InterfaceType.FullName.Equals("System.IDisposable")))
+        if (type.Interfaces.Any(_ => _.InterfaceType.FullName.Equals("System.IDisposable")))
         {
             return true;
         }
@@ -138,7 +138,7 @@ public static class CecilExtensions
         }
 
         if (value.CustomAttributes
-            .Select(x => x.AttributeType)
+            .Select(_ => _.AttributeType)
             .Any(a => a.Name == "CompilerGeneratedAttribute" ||
                       a.Name == "GeneratedCodeAttribute"))
         {
@@ -151,7 +151,7 @@ public static class CecilExtensions
     public static bool IsEmptyOrNotImplemented(this MethodDefinition method)
     {
         var instructions = method.Body.Instructions
-            .Where(i => i.OpCode != OpCodes.Nop &&
+            .Where(_ => _.OpCode != OpCodes.Nop &&
                         i.OpCode != OpCodes.Ret).ToList();
 
         if (instructions.Count == 0)
@@ -263,7 +263,7 @@ public static class CecilExtensions
         if (reference.IsGenericParameter)
         {
             var genericParameter = (GenericParameter)reference;
-            return genericParameter.Constraints.First(c => c.ConstraintType.IsIDisposable()).ConstraintType;
+            return genericParameter.Constraints.First(_ => _.ConstraintType.IsIDisposable()).ConstraintType;
         }
 
         return reference;
