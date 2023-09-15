@@ -152,7 +152,7 @@ public static class CecilExtensions
     {
         var instructions = method.Body.Instructions
             .Where(_ => _.OpCode != OpCodes.Nop &&
-                        i.OpCode != OpCodes.Ret).ToList();
+                        _.OpCode != OpCodes.Ret).ToList();
 
         if (instructions.Count == 0)
         {
