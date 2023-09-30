@@ -34,7 +34,6 @@ namespace UnmanagedBefore
             //must be empty
         }
     }
-
 }
 
 namespace UnmanagedAfter
