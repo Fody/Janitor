@@ -1,6 +1,4 @@
-﻿namespace DisposeInBase
-{
-    public class Child:Parent
-    {
-    }
-}
+﻿namespace DisposeInBase;
+
+public class Child :
+    Parent;

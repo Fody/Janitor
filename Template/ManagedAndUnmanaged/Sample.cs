@@ -8,14 +8,8 @@ namespace ManagedAndUnmanagedBefore
 {
     public class Sample : IDisposable
     {
-        MemoryStream stream;
-        IntPtr handle;
-
-        public Sample()
-        {
-            stream = new MemoryStream();
-            handle = new IntPtr();
-        }
+        MemoryStream stream = new();
+        IntPtr handle = new();
 
         void DisposeUnmanaged()
         {
@@ -53,16 +47,10 @@ namespace ManagedAndUnmanagedAfter
 
     public class Sample : IDisposable
     {
-        MemoryStream stream;
-        IntPtr handle;
+        MemoryStream stream = new();
+        IntPtr handle = new();
         volatile int disposeSignaled;
         bool disposed;
-
-        public Sample()
-        {
-            stream = new MemoryStream();
-            handle = new IntPtr();
-        }
 
         public void Method()
         {

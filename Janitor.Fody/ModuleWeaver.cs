@@ -19,7 +19,7 @@ public partial class ModuleWeaver : BaseModuleWeaver
                 !namespacesToSkip.Contains(x.Namespace)))
         {
             var disposeMethods = type.Methods
-                .Where(x => !x.IsStatic && (x.Name == "Dispose" || x.Name == "System.IDisposable.Dispose"))
+                .Where(x => !x.IsStatic && x.Name is "Dispose" or "System.IDisposable.Dispose")
                 .ToList();
             if (disposeMethods.Count == 0)
             {

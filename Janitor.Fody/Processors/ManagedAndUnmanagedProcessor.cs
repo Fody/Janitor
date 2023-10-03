@@ -34,7 +34,7 @@ public class ManagedAndUnmanagedProcessor
 
     void CreateDisposeBoolMethod()
     {
-        DisposeBoolMethod = new MethodDefinition("Dispose", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.VoidReference);
+        DisposeBoolMethod = new("Dispose", MethodAttributes.HideBySig | MethodAttributes.Private, typeSystem.VoidReference);
         var disposingParameter = new ParameterDefinition("disposing", ParameterAttributes.None, typeSystem.BooleanReference);
         DisposeBoolMethod.Parameters.Add(disposingParameter);
 

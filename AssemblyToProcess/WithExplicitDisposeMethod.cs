@@ -3,7 +3,7 @@
 public class WithExplicitDisposeMethod :
     IDisposable
 {
-    public Explicit Child = new Explicit();
+    public Explicit Child = new();
 
     void IDisposable.Dispose()
     {

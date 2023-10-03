@@ -9,7 +9,7 @@ public class WithTask :
 
     public WithTask()
     {
-        taskCompletionSource = new TaskCompletionSource<int>();
+        taskCompletionSource = new();
         taskField = taskCompletionSource.Task;
     }
 

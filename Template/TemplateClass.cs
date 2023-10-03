@@ -5,16 +5,10 @@ using System.Threading;
 
 public class TemplateClass : IDisposable
 {
-    MemoryStream stream;
-    IntPtr handle;
+    MemoryStream stream = new();
+    IntPtr handle = new();
     volatile int disposeSignaled;
     bool disposed;
-
-    public TemplateClass()
-    {
-        stream = new MemoryStream();
-        handle = new IntPtr();
-    }
 
     public void Method()
     {

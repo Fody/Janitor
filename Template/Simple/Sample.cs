@@ -5,15 +5,10 @@ using System.Threading;
 // ReSharper disable NotAccessedField.Local
 namespace SimpleBefore
 {
-
-    public class Sample : IDisposable
+    public class Sample :
+        IDisposable
     {
-        MemoryStream stream;
-
-        public Sample()
-        {
-            stream = new MemoryStream();
-        }
+        MemoryStream stream = new();
 
         public void Method()
         {
@@ -29,17 +24,12 @@ namespace SimpleBefore
 
 namespace SimpleAfter
 {
-
-    public class Sample : IDisposable
+    public class Sample :
+        IDisposable
     {
-        Disposable stream;
+        Disposable stream = new();
         volatile int disposeSignaled;
         bool disposed;
-
-        public Sample()
-        {
-            stream = new Disposable();
-        }
 
         public void Method()
         {
@@ -63,7 +53,7 @@ namespace SimpleAfter
             }
             //if (stream != null)
             {
-               ((IDisposable) stream).Dispose();
+               stream.Dispose();
             //    stream = null;
             }
             disposed = true;

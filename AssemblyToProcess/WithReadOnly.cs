@@ -5,14 +5,9 @@ using System.IO;
 public class WithReadOnly :
     IDisposable
 {
-    readonly MemoryStream stream;
+    readonly MemoryStream stream = new();
 
     public void Dispose()
     {
-    }
-
-    public WithReadOnly()
-    {
-        stream = new MemoryStream();
     }
 }

@@ -45,20 +45,24 @@ public static class CecilExtensions
         {
             return false;
         }
+
         if (typeRef.IsGenericParameter)
         {
             var genericParameter = (GenericParameter)typeRef;
             return genericParameter.Constraints.Any(_ => _.ConstraintType.IsIDisposable());
         }
+
         var type = typeRef.Resolve();
         if (type.Interfaces.Any(_ => _.InterfaceType.FullName.Equals("System.IDisposable")))
         {
             return true;
         }
+
         if (type.FullName.Equals("System.IDisposable"))
         {
             return true;
         }
+
         return type.BaseType != null &&
                type.BaseType.IsIDisposable();
     }
@@ -98,6 +102,7 @@ public static class CecilExtensions
                 return method;
             }
         }
+
         throw new WeavingException($"Could not find '{name}' on '{typeReference.Name}'");
     }
 
@@ -112,6 +117,7 @@ public static class CecilExtensions
         {
             return false;
         }
+
         if (methodReference.Name != name)
         {
             return false;
@@ -127,6 +133,7 @@ public static class CecilExtensions
                 return false;
             }
         }
+
         return true;
     }
 
@@ -139,8 +146,7 @@ public static class CecilExtensions
 
         if (value.CustomAttributes
             .Select(_ => _.AttributeType)
-            .Any(a => a.Name == "CompilerGeneratedAttribute" ||
-                      a.Name == "GeneratedCodeAttribute"))
+            .Any(a => a.Name is "CompilerGeneratedAttribute" or "GeneratedCodeAttribute"))
         {
             return true;
         }
@@ -181,12 +187,14 @@ public static class CecilExtensions
         {
             return definition;
         }
+
         var declaringType = new GenericInstanceType(definition.DeclaringType);
         foreach (var parameter in definition.DeclaringType.GenericParameters)
         {
             declaringType.GenericArguments.Add(parameter);
         }
-        return new FieldReference(definition.Name, definition.FieldType, declaringType);
+
+        return new(definition.Name, definition.FieldType, declaringType);
     }
 
     public static MethodReference GetGeneric(this MethodReference reference)
@@ -195,6 +203,7 @@ public static class CecilExtensions
         {
             return reference;
         }
+
         var declaringType = new GenericInstanceType(reference.DeclaringType);
         foreach (var parameter in reference.DeclaringType.GenericParameters)
         {
@@ -209,6 +218,7 @@ public static class CecilExtensions
         {
             methodReference.Parameters.Add(parameterDefinition);
         }
+
         return methodReference;
     }
 
@@ -234,6 +244,7 @@ public static class CecilExtensions
         {
             return OpCodes.Callvirt;
         }
+
         return OpCodes.Call;
     }
 

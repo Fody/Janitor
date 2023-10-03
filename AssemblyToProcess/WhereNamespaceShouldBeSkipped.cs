@@ -1,15 +1,14 @@
 ﻿using System;
 using System.IO;
 
-namespace NamespaceToSkip
-{
-    public class WhereNamespaceShouldBeSkipped :
-        IDisposable
-    {
-        public MemoryStream disposableField = new MemoryStream();
+namespace NamespaceToSkip;
 
-        public void Dispose()
-        {
-        }
+public class WhereNamespaceShouldBeSkipped :
+    IDisposable
+{
+    public MemoryStream disposableField = new();
+
+    public void Dispose()
+    {
     }
 }

@@ -6,16 +6,11 @@ using System.IO;
 public class Simple :
     IDisposable
 {
-    MemoryStream stream;
+    MemoryStream stream = new();
 
     public void Dispose()
     {
         throw new NotImplementedException();
-    }
-
-    public Simple()
-    {
-        stream = new MemoryStream();
     }
 
     public string PublicProperty { get; set; }

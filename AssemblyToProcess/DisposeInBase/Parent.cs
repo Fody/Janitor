@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace DisposeInBase
+namespace DisposeInBase;
+
+public class Parent:IDisposable
 {
-    public class Parent:IDisposable
+    public void Dispose()
     {
-        public void Dispose()
-        {
-        }
     }
 }

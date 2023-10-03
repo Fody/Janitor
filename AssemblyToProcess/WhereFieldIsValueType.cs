@@ -3,7 +3,7 @@
 public class WhereFieldIsValueType :
     IDisposable
 {
-    public Disposable Field = new Disposable();
+    public Disposable Field = new();
 
     public void Dispose()
     {

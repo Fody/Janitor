@@ -3,7 +3,7 @@
 public class WhereFieldIsIDisposableArray :
     IDisposable
 {
-    public IDisposable[] Field = new IDisposable[0];
+    public IDisposable[] Field = Array.Empty<IDisposable>();
 
     public void Dispose()
     {

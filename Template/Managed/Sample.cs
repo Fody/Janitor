@@ -6,12 +6,7 @@ namespace ManagedBefore
 {
     public class Sample : IDisposable
     {
-        MemoryStream stream;
-
-        public Sample()
-        {
-            stream = new MemoryStream();
-        }
+        MemoryStream stream = new();
 
         // ReSharper disable once UnusedMember.Local
         void DisposeManaged()
@@ -39,14 +34,9 @@ namespace ManagedAfter
 {
     public class Sample : IDisposable
     {
-        MemoryStream stream;
+        MemoryStream stream = new();
         volatile int disposeSignaled;
         bool disposed;
-
-        public Sample()
-        {
-            stream = new MemoryStream();
-        }
 
         void DisposeManaged()
         {

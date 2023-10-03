@@ -4,15 +4,10 @@ using DisposeInBase;
 public class WhereFieldIsDisposableByBase :
     IDisposable
 {
-    public Child Child;
+    public Child Child = new();
 
     public void Dispose()
     {
-    }
-
-    public WhereFieldIsDisposableByBase()
-    {
-        Child = new Child();
     }
 
     public void Method()

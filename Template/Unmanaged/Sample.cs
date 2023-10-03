@@ -4,15 +4,10 @@ using System.Threading;
 
 namespace UnmanagedBefore
 {
-
-    public class Sample : IDisposable
+    public class Sample :
+        IDisposable
     {
-        IntPtr handle;
-
-        public Sample()
-        {
-            handle = new IntPtr();
-        }
+        IntPtr handle = new();
 
         // ReSharper disable once UnusedMember.Local
         void DisposeUnmanaged()
@@ -39,17 +34,12 @@ namespace UnmanagedBefore
 
 namespace UnmanagedAfter
 {
-
-    public class Sample : IDisposable
+    public class Sample :
+        IDisposable
     {
-        IntPtr handle;
+        IntPtr handle = new();
         volatile int disposeSignaled;
         bool disposed;
-
-        public Sample()
-        {
-            handle = new IntPtr();
-        }
 
         void DisposeUnmanaged()
         {
