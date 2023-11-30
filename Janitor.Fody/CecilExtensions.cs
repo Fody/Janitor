@@ -146,7 +146,7 @@ public static class CecilExtensions
 
         if (value.CustomAttributes
             .Select(_ => _.AttributeType)
-            .Any(a => a.Name is "CompilerGeneratedAttribute" or "GeneratedCodeAttribute"))
+            .Any(_ => _.Name is "CompilerGeneratedAttribute" or "GeneratedCodeAttribute"))
         {
             return true;
         }
