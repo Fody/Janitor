@@ -11,11 +11,11 @@ public class ModuleWeaverTests
 
     static ModuleWeaverTests()
     {
-        var weavingTask = new ModuleWeaver();
+        var weaver = new ModuleWeaver();
 #if(NET46)
-        testResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll");
+        testResult = weaver.ExecuteTestRun("AssemblyToProcess.dll");
 #else
-        testResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll",false);
+        testResult = weaver.ExecuteTestRun("AssemblyToProcess.dll",false);
 #endif
     }
 
