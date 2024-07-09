@@ -114,7 +114,7 @@ public class ModuleWeaverTests
         var type = (Type)instance.GetType();
         var setMethodInfo = type.GetMethod("set_StaticProperty", BindingFlags.Static | BindingFlags.Public);
         var getMethodInfo = type.GetMethod("get_StaticProperty", BindingFlags.Static | BindingFlags.Public);
-        setMethodInfo.Invoke(null, new object[] {"aString"});
+        setMethodInfo.Invoke(null, ["aString"]);
         getMethodInfo.Invoke(null, null);
     }
 
