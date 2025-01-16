@@ -1,6 +1,5 @@
 # <img src="/package_icon.png" height="30px"> Janitor.Fody
 
-[![Chat on Gitter](https://img.shields.io/gitter/room/fody/fody.svg)](https://gitter.im/Fody/Fody)
 [![NuGet Status](https://img.shields.io/nuget/v/Janitor.Fody.svg)](https://www.nuget.org/packages/Janitor.Fody/)
 
 Simplifies the implementation of [IDisposable](http://msdn.microsoft.com/en-us/library/system.idisposable.aspx).
