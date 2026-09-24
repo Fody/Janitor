@@ -2,15 +2,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net472;net6.0</TargetFrameworks>
+    <OutputType>Exe</OutputType>
     <DisableFody>true</DisableFody>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="FodyHelpers" Version="6.8.1" />
-    <PackageReference Include="Xunit" Version="2.9.0" />
-    <PackageReference Include="Verify.Xunit" Version="25.3.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <Using Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" />
+    <PackageReference Include="FodyHelpers" />
+    <PackageReference Include="TUnit.Core" />
+    <PackageReference Include="TUnit.Assertions" />
+    <PackageReference Include="TUnit.Engine" />
+    <PackageReference Include="Verify.TUnit" />
     <ProjectReference Include="..\Janitor.Fody\Janitor.Fody.csproj" />
     <ProjectReference Include="..\Janitor\Janitor.csproj" />
     <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj" />

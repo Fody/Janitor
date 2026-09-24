@@ -1,8 +1,6 @@
-﻿using Xunit;
-
 public class TemplateTest
 {
-    [Fact]
+    [Test]
     public void Run()
     {
         var templateClass = new TemplateClass();
