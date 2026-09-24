@@ -3,7 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Fody" Version="6.8.1" />
+    <PackageVersion Include="Fody" Version="6.9.3" />
     <PackageVersion Include="FodyHelpers" Version="6.8.1" />
     <PackageVersion Include="FodyPackaging" Version="6.8.1" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
