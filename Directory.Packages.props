@@ -11,6 +11,10 @@
     <PackageVersion Include="TUnit.Core" Version="1.72.16" />
     <PackageVersion Include="TUnit.Assertions" Version="1.72.16" />
     <PackageVersion Include="TUnit.Engine" Version="1.72.16" />
+<<<<<<< HEAD
     <PackageVersion Include="Verify.TUnit" Version="33.3.2-beta.1" />
+=======
+    <PackageVersion Include="Verify.TUnit" Version="33.3.1" />
+>>>>>>> aacf79d2672671a918bd8b422d381df3dcb0b1d0
   </ItemGroup>
 </Project>
