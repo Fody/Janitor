@@ -407,9 +407,9 @@ public class ModuleWeaverTests
 
     static bool GetIsDisposed(object instance)
     {
-        Type type = instance.GetType();
+        var type = instance.GetType();
         var fieldInfo = GetSignaledField(type);
-        var disposeCount = (int)fieldInfo.GetValue(instance);
+        var disposeCount = (int)fieldInfo.GetValue(instance)!;
         return disposeCount > 0;
     }
 
@@ -422,6 +422,6 @@ public class ModuleWeaverTests
             type = type.BaseType;
         }
 
-        return fieldInfo;
+        return fieldInfo!;
     }
 }

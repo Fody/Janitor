@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;net6.0</TargetFrameworks>
+    <TargetFrameworks>net472;net10.0</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <DisableFody>true</DisableFody>
     <Nullable>annotations</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <Using Include="System.Threading.Tasks" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" />
     <PackageReference Include="FodyHelpers" />
     <PackageReference Include="TUnit.Core" />
